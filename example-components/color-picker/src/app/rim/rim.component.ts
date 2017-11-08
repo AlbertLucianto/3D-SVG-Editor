@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { rimComponentReducer } from './rim.reducers';
-import { SelectAction } from './rim.actions';
+import { SelectAttributeAction } from './rim.actions';
 
 @WithSubStore({
   basePathMethodName: 'getBasePath',
@@ -15,9 +15,9 @@ import { SelectAction } from './rim.actions';
   styleUrls: ['./rim.component.scss'],
 })
 export class RimComponent {
-  @select('attribute') readonly selectedAttribute$: Observable<string>;
+  @select('activeAttribute') readonly selectedAttribute$: Observable<string>;
   getBasePath = () => ['rim'];
   @dispatch() selectAttribute = (attribute: string) => {
-    return new SelectAction(attribute);
+    return new SelectAttributeAction(attribute);
   }
 }
