@@ -1,6 +1,8 @@
 <div>
   rim works!
   {{ selectedAttribute$ | async }}
+  {{ fillColor$ | async }}
+  {{ outlineColor$ | async }}
   <button
     (click)="selectAttribute('outline')"
   >Change to outline</button>
