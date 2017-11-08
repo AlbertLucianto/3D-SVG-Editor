@@ -4,12 +4,12 @@ import { NgReduxModule } from '@angular-redux/store';
 
 import { StoreModule } from './store/store.module';
 import { AppComponent } from './app.component';
-import { CircleComponent } from './circle/circle.component';
+import { RimComponent } from './rim/rim.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CircleComponent,
+    RimComponent,
   ],
   imports: [
     BrowserModule,

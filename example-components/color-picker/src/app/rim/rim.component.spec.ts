@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CircleComponent } from './circle.component';
+import { RimComponent } from './rim.component';
 
-describe('CircleComponent', () => {
-  let component: CircleComponent;
-  let fixture: ComponentFixture<CircleComponent>;
+describe('rimComponent', () => {
+  let component: RimComponent;
+  let fixture: ComponentFixture<RimComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CircleComponent ]
+      declarations: [ RimComponent ],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CircleComponent);
+    fixture = TestBed.createComponent(RimComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

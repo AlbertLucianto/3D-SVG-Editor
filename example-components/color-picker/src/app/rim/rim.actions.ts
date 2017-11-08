@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 export const actionTypes = {
-  SELECT: 'CIRCLE_SELECT',
+  SELECT: 'RIM_SELECT',
 };
 
 export class SelectAction implements Action {
