@@ -39,6 +39,10 @@ export class ColorRGB {
       this._b = b;
     } else { console.error('Valid color rgb must be between 0 and 255'); }
   }
+
+  public toString() { // Since String.toString() is also valid method
+    return `rgb(${this._r}, ${this._g}, ${this._b})`;
+  }
 }
 
 export type ColorType = string | ColorRGB;

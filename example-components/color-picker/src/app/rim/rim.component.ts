@@ -12,7 +12,7 @@ import { SelectAction } from './rim.actions';
 @Component({
   selector: 'app-rim-color',
   templateUrl: './rim.component.html',
-  styleUrls: ['./rim.component.css'],
+  styleUrls: ['./rim.component.scss'],
 })
 export class RimComponent {
   @select('attribute') readonly selectedAttribute$: Observable<string>;
