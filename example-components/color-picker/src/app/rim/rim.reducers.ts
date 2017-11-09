@@ -6,7 +6,7 @@ import {
   ChangeOutlineColorAction,
   ChangeOutlineWidthAction,
 } from './rim.actions';
-import { IRim, InitRim, Fill, IFill, Outline, IOutline, ColorRGB } from './rim.model';
+import { IRim, InitRim, Fill, IFill, Outline, IOutline, ColorRGB, ColorHex } from './rim.model';
 
 export const attributeReducer: Reducer<string> = (state, action: Action): string => {
   switch (action.type) {
@@ -44,8 +44,8 @@ export const outlineReducer: Reducer<IOutline> = (state: IOutline, action: Actio
 
 export const rimComponentReducer: Reducer<IRim> = (state: IRim = new InitRim(
     'fill',
-    new Fill('#000'),
-    new Outline(new ColorRGB(255, 255, 255), 0),
+    new Fill(new ColorHex('#000')),
+    new Outline(new ColorRGB({ r: 255, g: 100, b: 100 }), 0),
   ), action: Action): any => {
   return <IRim>{
     ...state,

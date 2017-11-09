@@ -1,4 +1,5 @@
 <div>
+  test: {{ test }}
   rim works!
   {{ selectedAttribute$ | async }}
   {{ fillColor$ | async }}
@@ -15,8 +16,14 @@
   <div class="rim">
     <div
       class="circle-fill"
-      [style.background]="fillColor$ | async"
+      [ngStyle]="fillStyle$ | async"
     ></div>
-    <div class="circle-outline"></div>
+    <div
+      class="circle-outline"
+      [style.border-color]="outlineColor$ | async"
+    ></div>
   </div>
+  <button
+    (click)="incTest()"
+  >increase test</button>
 </div>
