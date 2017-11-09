@@ -105,17 +105,17 @@ export interface IOutline {
 }
 
 export interface IRim {
-  activeAttribute: string;
+  active: string;
   fill: IFill;
   outline: IOutline;
 }
 
 export class InitRim implements IRim {
-  activeAttribute: string;
+  active: string;
   fill: IFill;
   outline: IOutline;
-  constructor(activeAttribute: string, fill: IFill, outline: IOutline) {
-    this.activeAttribute = activeAttribute;
+  constructor(active: string, fill: IFill, outline: IOutline) {
+    this.active = active;
     this.fill = fill;
     this.outline = outline;
   }

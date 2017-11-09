@@ -12,7 +12,11 @@ export class SelectAttributeAction implements Action {
   type = actionTypes.SELECT_ATTRIBUTE;
   attribute: string;
   constructor(attribute: string) {
-    this.attribute = attribute;
+    if (attribute === 'fill' || attribute === 'outline') {
+      this.attribute = attribute;
+    } else {
+      console.error(`Attribute must be 'fill' or 'outline'`);
+    }
   }
 }
 

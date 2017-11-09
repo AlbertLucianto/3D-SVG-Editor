@@ -21,18 +21,12 @@ export class BaseSliderComponent {
   down = false;
   dragging = false;
   @Input() parameter: string;
-  @select('activeAttribute')     readonly selectedAttribute$: Observable<string>;
+  @select('active')     readonly selectedAttribute$: Observable<string>;
   @select(['fill', 'color'])     readonly fillColor$: Observable<ColorType>;
   @select(['outline', 'color'])  readonly outlineColor$: Observable<ColorType>;
   get localValue$(): Observable<number> {
     return this.selectedAttribute$
-              .mergeMap(att => {
-                if (att === 'fill') {
-                  return this.fillColor$.map(color => color[this.parameter]);
-                } else if (att === 'outline') {
-                  return this.outlineColor$.map(color => color[this.parameter]);
-                }
-              });
+              .mergeMap(att => this[`${att}Color$`].map(color => color[this.parameter]));
   }
   getBasePath = () => ['rim'];
   startDrag() {}

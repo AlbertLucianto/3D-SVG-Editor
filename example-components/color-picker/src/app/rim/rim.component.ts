@@ -24,7 +24,7 @@ export const getColor = (fill$: Observable<IFill|IOutline>): Observable<string> 
 export class RimComponent {
   constructor(private sanitizer: DomSanitizer) {} // Injectable can be used for inline 'string' styling
   test = 10;
-  @select('activeAttribute')      readonly selectedAttribute$: Observable<string>;
+  @select('active')      readonly selectedAttribute$: Observable<string>;
   @select$('fill', getColor)      readonly fillColor$: Observable<string>;
   @select$('outline', getColor)   readonly outlineColor$: Observable<string>;
   get fillStyle$(): Observable<Object> {

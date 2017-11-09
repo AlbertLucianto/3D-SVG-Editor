@@ -49,7 +49,7 @@ export const rimComponentReducer: Reducer<IRim> = (state: IRim = new InitRim(
   ), action: Action): any => {
   return <IRim>{
     ...state,
-    activeAttribute: attributeReducer(state.activeAttribute, action),
+    active: attributeReducer(state.active, action),
     fill: fillReducer(state.fill, action),
     outline: outlineReducer(state.outline, action),
   };
