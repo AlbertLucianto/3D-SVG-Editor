@@ -4,8 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
 import { rimComponentReducer } from './rim.reducers';
-import { SelectAttributeAction } from './rim.actions';
-import { ColorType, IFill } from './rim.model';
+import { SelectAttributeAction, ChangeFillColorAction } from './rim.actions';
+import { ColorType, ColorRGB, IFill } from './rim.model';
 
 export const getColor = (fill$: Observable<IFill>): Observable<ColorType> =>
   fill$.map(fill => fill.color.toString());
@@ -26,5 +26,8 @@ export class RimComponent {
   getBasePath = () => ['rim'];
   @dispatch() selectAttribute = (attribute: string) => {
     return new SelectAttributeAction(attribute);
+  }
+  @dispatch() changeFillColor = () => {
+    return new ChangeFillColorAction(new ColorRGB(300, 100, 100));
   }
 }

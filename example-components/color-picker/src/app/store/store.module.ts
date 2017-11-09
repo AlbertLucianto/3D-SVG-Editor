@@ -21,12 +21,9 @@ export class StoreModule {
   ) {
     store.configureStore(
       rootReducer,
-      {
-        circle: { attribute: 'fill' },
-      },
+      {},
       [...rootEpics.createEpics()],
       devTools.isEnabled() ? [ devTools.enhancer() ] : [],
     );
-    console.log(store);
   }
 }

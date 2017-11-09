@@ -2,9 +2,9 @@ import { Reducer, Action } from 'redux';
 import {
   actionTypes,
   SelectAttributeAction,
-  ChangeFillColor,
-  ChangeOutlineColor,
-  ChangeOutlineWidth,
+  ChangeFillColorAction,
+  ChangeOutlineColorAction,
+  ChangeOutlineWidthAction,
 } from './rim.actions';
 import { IRim, InitRim, Fill, IFill, Outline, IOutline, ColorRGB } from './rim.model';
 
@@ -20,7 +20,7 @@ export const fillReducer: Reducer<IFill> = (state: IFill, action: Action): IFill
     case actionTypes.CHANGE_FILL_COLOR:
       return <IFill>{
         ...state,
-        color: (<ChangeFillColor>action).color,
+        color: (<ChangeFillColorAction>action).color,
       };
   }
   return state;
@@ -31,12 +31,12 @@ export const outlineReducer: Reducer<IOutline> = (state: IOutline, action: Actio
     case actionTypes.CHANGE_OUTLINE_COLOR:
       return <IOutline>{
         ...state,
-        color: (<ChangeOutlineColor>action).color,
+        color: (<ChangeOutlineColorAction>action).color,
       };
     case actionTypes.CHANGE_OUTLINE_WIDTH:
       return <IOutline>{
         ...state,
-        width: (<ChangeOutlineWidth>action).width,
+        width: (<ChangeOutlineWidthAction>action).width,
       };
   }
   return state;

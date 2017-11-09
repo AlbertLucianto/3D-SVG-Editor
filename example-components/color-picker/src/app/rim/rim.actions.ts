@@ -16,7 +16,7 @@ export class SelectAttributeAction implements Action {
   }
 }
 
-export class ChangeFillColor implements Action {
+export class ChangeFillColorAction implements Action {
   type = actionTypes.CHANGE_FILL_COLOR;
   color: ColorType;
   constructor(color: ColorType) {
@@ -24,7 +24,7 @@ export class ChangeFillColor implements Action {
   }
 }
 
-export class ChangeOutlineColor implements Action {
+export class ChangeOutlineColorAction implements Action {
   type = actionTypes.CHANGE_OUTLINE_COLOR;
   color: ColorType;
   constructor(color: ColorType) {
@@ -32,7 +32,7 @@ export class ChangeOutlineColor implements Action {
   }
 }
 
-export class ChangeOutlineWidth implements Action {
+export class ChangeOutlineWidthAction implements Action {
   type = actionTypes.CHANGE_OUTLINE_WIDTH;
   width: number;
   constructor(width: number) {

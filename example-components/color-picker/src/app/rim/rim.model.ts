@@ -1,5 +1,12 @@
 const inColorRange = (value: number): boolean => {
-  return value > 0 && value < 255;
+  return (
+    value >= 0 && value < 256
+    && Number.isInteger(value)
+  );
+};
+
+const createClamp = (min: number, max: number): (value: number) => number => {
+  return num => Math.round(num <= min ? min : num >= max ? max : num);
 };
 
 export class ColorRGB {
@@ -13,11 +20,15 @@ export class ColorRGB {
       && inColorRange(g)
       && inColorRange(b)
     ) {
-      console.error('Valid color rgb must be between 0 and 255 each');
-    } else {
       this._r = r;
       this._g = g;
       this._b = b;
+    } else {
+      const clampColor = createClamp(0, 255);
+      this._r = clampColor(r);
+      this._g = clampColor(g);
+      this._b = clampColor(b);
+      console.error('Valid color rgb must be integer between 0 and 255 each');
     }
   }
 

@@ -9,4 +9,14 @@
   <button
     (click)="selectAttribute('fill')"
   >Change to fill</button>
+  <button
+    (click)="changeFillColor()"
+  >Change fill color</button>
+  <div class="rim">
+    <div
+      class="circle-fill"
+      [style.background]="fillColor$ | async"
+    ></div>
+    <div class="circle-outline"></div>
+  </div>
 </div>

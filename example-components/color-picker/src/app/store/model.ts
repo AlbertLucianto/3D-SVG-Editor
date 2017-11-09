@@ -1,4 +1,6 @@
+import { IRim } from '../rim/rim.model';
+
 export interface IAppState {
-  circle: Object;
+  rim?: IRim;
   routes?: any;
 }
