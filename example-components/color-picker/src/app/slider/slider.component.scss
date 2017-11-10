@@ -1,0 +1,16 @@
+.slider-container {
+  user-select: none;
+}
+.slider {
+  position: relative;
+  .handle {
+    position: absolute;
+    width: 5px;
+    height: 10px;
+    background: black;
+  }
+  .bar {
+    width: 255px;
+    height: 5px;
+  }
+}

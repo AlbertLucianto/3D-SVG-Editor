@@ -1,8 +1,5 @@
 const inColorRange = (value: number): boolean => {
-  return (
-    value >= 0 && value < 256
-    && Number.isInteger(value)
-  );
+  return (value >= 0 && value < 256);
 };
 
 const validateColorHex = (hex: string): boolean => {
@@ -23,7 +20,13 @@ const createClamp = (min: number, max: number): (value: number) => number => {
   return num => Math.round(num <= min ? min : num >= max ? max : num);
 };
 
-export abstract class ColorMixin {
+export interface IRGBObject {
+  r: number;
+  g: number;
+  b: number;
+}
+
+export abstract class ColorProxyMixin {
   protected _r: number;
   protected _g: number;
   protected _b: number;
@@ -45,16 +48,16 @@ export abstract class ColorMixin {
       this._b = b;
     } else { console.error('Valid color rgb must be between 0 and 255'); }
   }
-  public toRGB() { // Since String.toString() is also valid method
+  public toRGBString() { // Since String.toString() is also valid method
     return `rgb(${this._r}, ${this._g}, ${this._b})`;
   }
-  public toHex() {
+  public toHexString() {
     return rgbToHex(this._r, this._g, this._b);
   }
 }
 
-export class ColorRGB extends ColorMixin {
-  constructor(rgb: { r: number; g: number; b: number }) {
+export class ColorRGB extends ColorProxyMixin {
+  constructor(rgb: IRGBObject) {
     super();
     if (
       inColorRange(rgb.r)
@@ -74,7 +77,7 @@ export class ColorRGB extends ColorMixin {
   }
 }
 
-export class ColorHex extends ColorMixin {
+export class ColorHex extends ColorProxyMixin {
   constructor(hex: string) {
     super();
     // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
@@ -93,7 +96,38 @@ export class ColorHex extends ColorMixin {
   }
 }
 
-export type ColorType = ColorHex | ColorRGB;
+/**
+ * Combination of ColorRGB and ColorHex
+ */
+export class Color extends ColorProxyMixin {
+  constructor(color: IRGBObject|string) {
+    super();
+    if (typeof color === 'string') {
+      ColorHex.call(this, color);
+    } else if (<IRGBObject>color !== undefined) {
+      const colorRGB = <IRGBObject>color;
+      ColorRGB.call(this, colorRGB);
+    } else {
+      console.error('Invalid color instantiation');
+    }
+  }
+  /**
+   * Set a local color value and return as clone
+   * @param {{local: string, value: number}|string} payload - local can be 'r', 'g', or 'b'
+   */
+  public setColor(payload: { local: string, value: number }|string) {
+    if (typeof payload === 'string') {
+      return new Color(payload);
+    } else if (payload.local in ['r', 'g', 'b']) {
+      return new Color({
+        ...{ r: this._r, g: this._g, b: this._b },
+        [payload.local]: payload.value,
+      });
+    }
+  }
+}
+
+export type ColorType = ColorHex | ColorRGB | Color;
 
 export interface IFill {
   color: ColorType;
@@ -121,7 +155,7 @@ export class InitRim implements IRim {
   }
 }
 
-export abstract class AttributeColorMixin {
+export abstract class AttributeColorProxyMixin {
   protected _color: ColorType;
   get color(): ColorType {
     return this._color;
@@ -135,14 +169,14 @@ export abstract class AttributeColorMixin {
   }
 }
 
-export class Fill extends AttributeColorMixin implements IFill {
+export class Fill extends AttributeColorProxyMixin implements IFill {
   constructor(color: ColorType) {
     super();
     this.color = color;
   }
 }
 
-export class Outline extends AttributeColorMixin implements IOutline {
+export class Outline extends AttributeColorProxyMixin implements IOutline {
   public width: number;
   constructor(color: ColorType, width: number) {
     super();

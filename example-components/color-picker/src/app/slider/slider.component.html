@@ -1,4 +1,11 @@
-<div>
+<div class="slider-container">
   {{ parameter }}
   {{ localValue$ | async }}
+  <div class="slider">
+    <div
+      class="handle"
+      (mousedown)="startDrag($event)"
+      [ngStyle]="handleStyle$ | async"></div>
+    <div class="bar" [style.background]="barColor$ | async"></div>
+  </div>
 </div>

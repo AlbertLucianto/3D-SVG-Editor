@@ -9,7 +9,7 @@ import { SelectAttributeAction, ChangeFillColorAction } from './rim.actions';
 import { ColorType, ColorRGB, IFill, IOutline } from './rim.model';
 
 export const getColor = (fill$: Observable<IFill|IOutline>): Observable<string> =>
-  fill$.map(fill => fill.color.toRGB());
+  fill$.map(fill => fill.color.toRGBString());
 
 @WithSubStore({
   basePathMethodName: 'getBasePath',
@@ -24,7 +24,7 @@ export const getColor = (fill$: Observable<IFill|IOutline>): Observable<string> 
 export class RimComponent {
   constructor(private sanitizer: DomSanitizer) {} // Injectable can be used for inline 'string' styling
   test = 10;
-  @select('active')      readonly selectedAttribute$: Observable<string>;
+  @select('active')               readonly selectedAttribute$: Observable<string>;
   @select$('fill', getColor)      readonly fillColor$: Observable<string>;
   @select$('outline', getColor)   readonly outlineColor$: Observable<string>;
   get fillStyle$(): Observable<Object> {
