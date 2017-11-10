@@ -54,6 +54,9 @@ export abstract class ColorProxyMixin {
   public toHexString() {
     return rgbToHex(this._r, this._g, this._b);
   }
+  public toObject(): IRGBObject {
+    return { r: this._r, g: this._g, b: this._b };
+  }
 }
 
 export class ColorRGB extends ColorProxyMixin {
