@@ -6,6 +6,6 @@
       class="handle"
       (mousedown)="startDrag($event)"
       [ngStyle]="handleStyle$ | async"></div>
-    <div class="bar" [style.background]="barColor$ | async"></div>
+    <div  #barSlider class="bar" [style.background]="barColor$ | async"></div>
   </div>
 </div>

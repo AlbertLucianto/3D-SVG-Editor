@@ -67,9 +67,9 @@ export class ColorRGB extends ColorProxyMixin {
       && inColorRange(rgb.g)
       && inColorRange(rgb.b)
     ) {
-      this._r = rgb.r;
-      this._g = rgb.g;
-      this._b = rgb.b;
+      this._r = Math.round(rgb.r);
+      this._g = Math.round(rgb.g);
+      this._b = Math.round(rgb.b);
     } else {
       const clampColor = createClamp(0, 255);
       this._r = clampColor(rgb.r);
@@ -118,14 +118,16 @@ export class Color extends ColorProxyMixin {
    * Set a local color value and return as clone
    * @param {{local: string, value: number}|string} payload - local can be 'r', 'g', or 'b'
    */
-  public setColor(payload: { local: string, value: number }|string) {
+  public setColor(payload: { local: 'r'|'g'|'b'|string, value: number }|string) {
     if (typeof payload === 'string') {
       return new Color(payload);
-    } else if (payload.local in ['r', 'g', 'b']) {
+    } else if (['r', 'g', 'b'].includes(payload.local)) {
       return new Color({
         ...{ r: this._r, g: this._g, b: this._b },
         [payload.local]: payload.value,
       });
+    } else {
+      console.error('Invalid payload for setting color in Color class');
     }
   }
 }
