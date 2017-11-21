@@ -3,3 +3,17 @@
 > An open source project for building 3D svg graphic assets
 
 See UI mockup [here](https://albertlucianto.github.io/3d-svg-builder-ui.pdf)
+
+## Main Dependencies
+
+1. [Angular 5](https://angular.io/)
+2. [Redux](https://redux.js.org/)
+3. [RxJS](http://reactivex.io/rxjs/)
+4. [Angular Redux](https://github.com/angular-redux/store)
+5. [Redux Observable (middleware)](https://redux-observable.js.org/)
+6. [Electron](https://electronjs.org/)
+7. [ImmutableJS](https://facebook.github.io/immutable-js/)
+
+### Submodule in Development:
+#### [Draw Path](https://github.com/AlbertLucianto/draw-path)
+#### [Color Picker](https://github.com/AlbertLucianto/color-picker)
