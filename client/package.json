@@ -36,6 +36,7 @@
     "e2e": "protractor ./protractor.conf.js"
   },
   "dependencies": {
+    "@angular-redux/store": "^6.6.0",
     "@angular/common": "4.4.3",
     "@angular/compiler": "4.4.3",
     "@angular/core": "4.4.3",
@@ -46,6 +47,9 @@
     "@angular/router": "4.4.3",
     "core-js": "2.4.1",
     "enhanced-resolve": "3.3.0",
+    "flux-standard-action": "^2.0.0",
+    "immutable": "^3.8.2",
+    "redux": "^3.7.2",
     "rxjs": "5.4.3",
     "zone.js": "0.8.17"
   },
@@ -86,6 +90,7 @@
     "postcss-url": "7.1.2",
     "protractor": "5.1.2",
     "raw-loader": "0.5.1",
+    "redux-observable": "^0.17.0",
     "sass-loader": "6.0.6",
     "script-loader": "0.7.1",
     "source-map-loader": "0.2.1",
