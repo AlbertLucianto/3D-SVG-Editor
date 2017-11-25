@@ -1,0 +1,3 @@
+<div class="toolbox">
+  <app-tool-container *ngFor="let tool of toolList" [type]="tool" [context]="{ toolName: tool, isActive: tool === (selected$ | async) }"></app-tool-container>
+</div>
