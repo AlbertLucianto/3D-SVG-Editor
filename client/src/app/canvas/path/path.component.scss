@@ -1,0 +1,17 @@
+.path {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	.line {
+		fill: #888;
+		stroke: #80F;
+		stroke-width: 1px;
+		width: 100%;
+		height: 100%;
+	}
+	.anchor-group {
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+}
