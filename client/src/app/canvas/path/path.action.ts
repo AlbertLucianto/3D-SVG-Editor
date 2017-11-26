@@ -13,6 +13,7 @@ export enum PathActionType {
 	PATH_ADD_ANCHOR = 'PATH_ADD_ANCHOR',
 	PATH_UPDATE_ANCHOR = 'PATH_UPDATE_ANCHOR',
 	PATH_CHANGE_ANCHOR_TYPE = 'PATH_CHANGE_ANCHOR_TYPE',
+	PATH_UPDATE_BEZIER_HANDLE = 'PATH_UPDATE_BEZIER_HANDLE',
 	PATH_REMOVE_ANCHOR = 'PATH_REMOVE_ANCHOR',
 	PATH_REMOVE_LAST_ANCHOR = 'PATH_REMOVE_LAST_ANCHOR',
 	PATH_ZIP_PATH = 'PATH_ZIP_PATH',
@@ -34,6 +35,11 @@ export interface IChangeAnchorTypePayload {
 	idx: number;
 	anchorType: AnchorType;
 }
+export interface IUpdateBezierHandlePayload {
+	targetIn: Array<number>;
+	idx: number;
+	handlePosition: IPosition;
+}
 
 export type IAddAnchorAction = FluxStandardAction<IAddAnchorPayload, undefined>;
 export type IUpdateAnchorAction = FluxStandardAction<IUpdateAnchorPayload, undefined>;
@@ -41,6 +47,7 @@ export type IRemoveAnchorAction = FluxStandardAction<IRemoveAnchorPayload, undef
 export type IRemoveLastAnchorAction = FluxStandardAction<Array<number>, undefined>;
 export type IZipPathAction = FluxStandardAction<Array<number>, undefined>;
 export type IChangeAnchorTypeAction = FluxStandardAction<IChangeAnchorTypePayload, undefined>;
+export type IUpdateBezierHandleAction = FluxStandardAction<IUpdateBezierHandlePayload, undefined>;
 
 @Injectable()
 export class PathActions {
@@ -59,7 +66,7 @@ export class PathActions {
 		};
 	}
 
-	@dispatch()
+	@dispatch() // LATER move Anchor specific actions to `anchor.actions`
 	updateAnchorAction = (targetIn: Array<number>, idx: number, anchorPosition: IPosition): IUpdateAnchorAction => {
 		return {
 			type: PathActionType.PATH_UPDATE_ANCHOR,
@@ -68,11 +75,20 @@ export class PathActions {
 		};
 	}
 
-	@dispatch()
+	@dispatch() // LATER move Anchor specific actions to `anchor.actions`
 	changeAnchorTypeAction = (targetIn: Array<number>, idx: number, anchorType: AnchorType): IChangeAnchorTypeAction => {
 		return {
 			type: PathActionType.PATH_CHANGE_ANCHOR_TYPE,
 			payload: { targetIn, idx, anchorType },
+			meta: undefined,
+		};
+	}
+
+	@dispatch()
+	updateBezierHandleAction = (targetIn: Array<number>, idx: number, handlePosition: IPosition): IUpdateBezierHandleAction => {
+		return {
+			type: PathActionType.PATH_UPDATE_BEZIER_HANDLE,
+			payload: { targetIn, idx, handlePosition },
 			meta: undefined,
 		};
 	}

@@ -3,11 +3,13 @@ import { FluxStandardAction } from 'flux-standard-action';
 import { createEpicMiddleware, Epic } from 'redux-observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mapTo';
-import 'rxjs/add/operator/skip';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/takeUntil';
+// import { raceStatic } from 'rxjs/operator/race';
 import { Subject } from 'rxjs/Subject';
 
+import { AnchorType } from '../../canvas/anchor/anchor.model';
 import { IBoard, IPosition } from '../../canvas/canvas.model';
 import { PathActions, PathActionType } from '../../canvas/path/path.action';
 import { IAppState } from '../../store/model';
@@ -57,7 +59,39 @@ export class PentoolEpics {
 				const position = calcPositionInCanvas(<IPosition>action.payload.absPoint, boardState);
 				return this.pathActions.addAnchorAction(action.payload.targetIn, position);
 			})
-			.map(action => this.pathActions.addAnchorAction(action.payload.targetIn, action.payload.anchorPosition))
+			.switchMap(() => action$
+				.ofType(PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS)
+				.take(1)
+				.map(action => this.pathActions.changeAnchorTypeAction(
+					action.payload.targetIn,
+					action.payload.idx,
+					AnchorType.QuadraticBezierCurve,
+				))
+				.switchMap(() => action$
+					.ofType(PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS)
+					.map(action => {
+						console.log('curving');
+						const boardState = <IBoard>store.getState().canvas.get('board').toJS();
+						const position = calcPositionInCanvas(<IPosition>action.payload.absPoint, boardState);
+						return this.pathActions.updateBezierHandleAction(
+							action.payload.targetIn,
+							action.payload.idx,
+							position,
+						);
+					}),
+				)
+				.takeUntil(action$
+					.ofType(PentoolActionType.PENTOOL_MOUSE_UP_ON_CANVAS),
+				),
+			)
+			.switchMap(() => action$
+				.ofType(PentoolActionType.PENTOOL_MOUSE_UP_ON_CANVAS)
+				.map(action => {
+					const boardState = <IBoard>store.getState().canvas.get('board').toJS();
+					const position = calcPositionInCanvas(<IPosition>action.payload.absPoint, boardState);
+					return this.pathActions.addAnchorAction(action.payload.targetIn, position);
+				}),
+			)
 			.switchMap(() => action$
 				.ofType(PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS)
 				.map(action => {
