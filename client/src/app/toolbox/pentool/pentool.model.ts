@@ -14,6 +14,11 @@ export const createPentool = (): ToolBase => {
 		return actions.mouseDownOnCanvasAction(pathFromRoot, { x: e.clientX, y: e.clientY });
 	};
 
+	const mouseUpOnCanvas: ActionFromEvent = (e: MouseEvent, triggeringDrawable: Drawable) => {
+		const pathFromRoot = [ ...triggeringDrawable.routeParentPath.toJS(), triggeringDrawable.idx ];
+		return actions.mouseUpOnCanvasAction(pathFromRoot, { x: e.clientX, y: e.clientY });
+	};
+
 	const mouseMoveOnCanvas: ActionFromEvent = (e: MouseEvent, triggeringDrawable: Drawable) => {
 		const pathFromRoot = [ ...triggeringDrawable.routeParentPath.toJS(), triggeringDrawable.idx ];
 		return actions.moveCursorOnCanvasAction(pathFromRoot, triggeringDrawable.get('children').size - 1, { x: e.clientX, y: e.clientY });
@@ -29,6 +34,7 @@ export const createPentool = (): ToolBase => {
 		name: ToolName.Pentool,
 		listeners: List<RegisteredListener>([
 			{ name: 'mousedown', handler: mouseDownOnCanvas, target: 'canvas' },
+			{ name: 'mouseup', handler: mouseUpOnCanvas, target: 'canvas' },
 			{ name: 'mousemove', handler: mouseMoveOnCanvas, target: 'canvas' },
 			{ name: 'mousedown', handler: mouseDownOnHeadAnchor, target: 'anchor' },
 		]),

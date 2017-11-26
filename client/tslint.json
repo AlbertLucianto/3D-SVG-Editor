@@ -148,7 +148,8 @@
       true,
       {
         "multiline": "always",
-        "singleline": "never"
+        "singleline": "never",
+        "functions": "never"
       }
     ],
     "no-consecutive-blank-lines": true,

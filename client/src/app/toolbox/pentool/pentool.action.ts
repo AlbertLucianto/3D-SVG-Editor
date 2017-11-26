@@ -7,15 +7,18 @@ import { FluxStandardAction } from 'flux-standard-action';
  */
 export enum PentoolActionType {
 	PENTOOL_MOUSE_DOWN_ON_CANVAS = 'PENTOOL_MOUSE_DOWN_ON_CANVAS',
+	PENTOOL_MOUSE_UP_ON_CANVAS = 'PENTOOL_MOUSE_UP_ON_CANVAS',
 	PENTOOL_MOUSE_MOVE_ON_CANVAS = 'PENTOOL_MOUSE_MOVE_ON_CANVAS',
 	PENTOOL_MOUSE_DOWN_ON_ANCHOR = 'PENTOOL_MOUSE_DOWN_ON_ANCHOR',
 }
 
 export interface IMouseDownOnCanvasPayload { targetIn: Array<number>; absPoint: { x: number, y: number }; }
+export type IMouseUpOnCanvasPayload = IMouseDownOnCanvasPayload;
 export interface IMoveCursorPayload extends IMouseDownOnCanvasPayload { idx: number; }
 export interface IMouseDownOnAnchorPayload { targetIn: Array<number>; idx: number; }
 
 export type IMouseDownOnCanvasAction = FluxStandardAction<IMouseDownOnCanvasPayload, undefined>;
+export type IMouseUpOnCanvasAction = FluxStandardAction<IMouseUpOnCanvasPayload, undefined>;
 export type IMoveCursorOnCanvasAction = FluxStandardAction<IMoveCursorPayload, undefined>;
 export type IMouseDownOnAnchorAction = FluxStandardAction<IMouseDownOnAnchorPayload, undefined>;
 
@@ -30,6 +33,12 @@ export class PentoolActions {
 	 */
 	mouseDownOnCanvasAction = (targetIn: Array<number>, absPoint: { x: number, y: number }): IMouseDownOnCanvasAction => ({
 		type: PentoolActionType.PENTOOL_MOUSE_DOWN_ON_CANVAS,
+		payload: { targetIn, absPoint },
+		meta: undefined,
+	})
+
+	mouseUpOnCanvasAction = (targetIn: Array<number>, absPoint: { x: number, y: number }): IMouseUpOnCanvasAction => ({
+		type: PentoolActionType.PENTOOL_MOUSE_UP_ON_CANVAS,
 		payload: { targetIn, absPoint },
 		meta: undefined,
 	})

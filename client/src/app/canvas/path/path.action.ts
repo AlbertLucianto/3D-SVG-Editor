@@ -1,8 +1,9 @@
 import { dispatch } from '@angular-redux/store';
 import { Injectable } from '@angular/core';
 import { FluxStandardAction } from 'flux-standard-action';
+
+import { AnchorType } from '../anchor/anchor.model';
 import { IPosition } from '../canvas.model';
-// import { Path } from './path.model';
 
 /**
  * Using CONSTANT naming convention and holding same value
@@ -11,6 +12,7 @@ import { IPosition } from '../canvas.model';
 export enum PathActionType {
 	PATH_ADD_ANCHOR = 'PATH_ADD_ANCHOR',
 	PATH_UPDATE_ANCHOR = 'PATH_UPDATE_ANCHOR',
+	PATH_CHANGE_ANCHOR_TYPE = 'PATH_CHANGE_ANCHOR_TYPE',
 	PATH_REMOVE_ANCHOR = 'PATH_REMOVE_ANCHOR',
 	PATH_REMOVE_LAST_ANCHOR = 'PATH_REMOVE_LAST_ANCHOR',
 	PATH_ZIP_PATH = 'PATH_ZIP_PATH',
@@ -27,12 +29,18 @@ export interface IRemoveAnchorPayload {
 	targetIn: Array<number>;
 	idx: number;
 }
+export interface IChangeAnchorTypePayload {
+	targetIn: Array<number>;
+	idx: number;
+	anchorType: AnchorType;
+}
 
 export type IAddAnchorAction = FluxStandardAction<IAddAnchorPayload, undefined>;
 export type IUpdateAnchorAction = FluxStandardAction<IUpdateAnchorPayload, undefined>;
 export type IRemoveAnchorAction = FluxStandardAction<IRemoveAnchorPayload, undefined>;
 export type IRemoveLastAnchorAction = FluxStandardAction<Array<number>, undefined>;
 export type IZipPathAction = FluxStandardAction<Array<number>, undefined>;
+export type IChangeAnchorTypeAction = FluxStandardAction<IChangeAnchorTypePayload, undefined>;
 
 @Injectable()
 export class PathActions {
@@ -56,6 +64,15 @@ export class PathActions {
 		return {
 			type: PathActionType.PATH_UPDATE_ANCHOR,
 			payload: { targetIn, idx, anchorPosition },
+			meta: undefined,
+		};
+	}
+
+	@dispatch()
+	changeAnchorTypeAction = (targetIn: Array<number>, idx: number, anchorType: AnchorType): IChangeAnchorTypeAction => {
+		return {
+			type: PathActionType.PATH_CHANGE_ANCHOR_TYPE,
+			payload: { targetIn, idx, anchorType },
 			meta: undefined,
 		};
 	}

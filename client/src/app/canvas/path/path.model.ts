@@ -1,5 +1,6 @@
 import { List } from 'immutable';
-import { BaseAnchor } from '../anchor/anchor.model';
+import { AnchorFactory } from '../anchor/anchor.factory';
+import { AnchorType, BaseAnchor } from '../anchor/anchor.model';
 import { IPosition, Position } from '../canvas.model';
 import { Drawable, DrawableType, IinitDrawable } from '../drawable/drawable.model';
 
@@ -39,18 +40,21 @@ export class Path extends Drawable {
 	 * Push an anchor and return NEW Path (old path is not mutated)
 	 * @param { Position } absPosition - object containing x, y, and optional z
 	 */
-	public addAnchor = (absPosition: Position|IPosition): Path => {
+	public addAnchor = (absPosition: Position|IPosition, anchorType: AnchorType = AnchorType.LineTo): Path => {
 		let position = absPosition;
 		if (!(absPosition instanceof Position)) {
 			position = new Position(absPosition);
 		}
 		return new Path({
 			...(<IinitPath>this.toObject()),
-			children: this.children.push(new BaseAnchor({
-				absPosition: <Position>position,
-				routeParentPath: this.routeParentPath.push(this.idx),
-				idx: this.children.size,
-			})),
+			children: this.children.push(AnchorFactory.createAnchor(
+				anchorType,
+				{
+					absPosition: <Position>position,
+					routeParentPath: this.routeParentPath.push(this.idx),
+					idx: this.children.size,
+				},
+			)),
 		});
 	}
 
