@@ -1,25 +1,31 @@
-import { dispatch, select$ } from '@angular-redux/store';
-import { ChangeDetectionStrategy,
+import {
+	ChangeDetectionStrategy,
 	Component,
-	ElementRef,
+	ComponentFactoryResolver,
+	ComponentRef,
 	Input,
+	OnDestroy,
 	OnInit,
-	Renderer2,
 	ViewChild,
+	ViewContainerRef,
 	ViewEncapsulation,
 } from '@angular/core';
-import { List } from 'immutable';
-import 'rxjs/add/operator/filter';
-import { Observable } from 'rxjs/Observable';
 
-import { BaseAnchor } from '../anchor/anchor.model';
-import { RegisteredListener } from '../canvas.model';
 import { DrawableBaseComponent } from '../drawable/drawable.base.component';
-import { Drawable } from '../drawable/drawable.model';
+import { AnchorBaseComponent } from './anchor.base.component';
+import { AnchorDirective } from './anchor.directive';
+import { AnchorType, BaseAnchor } from './anchor.model';
+import { BasicAnchorComponent } from './basic/basic.component';
 
-const filterListener = (listeners$: Observable<List<RegisteredListener>>) =>
-	listeners$.map(listeners => <List<RegisteredListener>>listeners
-		.filter(listener => listener.target === 'anchor'));
+const mappings = {
+	[AnchorType.LineTo]: BasicAnchorComponent,
+	[AnchorType.MoveTo]: BasicAnchorComponent,
+};
+
+const getComponentType = (typeName: AnchorType) => {
+	const type = mappings[typeName];
+	return type;
+};
 
 @Component({
 	selector: 'app-anchor',
@@ -28,41 +34,28 @@ const filterListener = (listeners$: Observable<List<RegisteredListener>>) =>
 	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AnchorComponent extends DrawableBaseComponent implements OnInit {
-	listeners: Array<Function> = [];
-	@ViewChild('anchor') anchorRef: ElementRef;
+export class AnchorComponent extends DrawableBaseComponent implements OnInit, OnDestroy {
+	componentRef: ComponentRef<AnchorBaseComponent>;
+	instance: AnchorBaseComponent;
+	@ViewChild(AnchorDirective, { read: ViewContainerRef }) anchorHost: ViewContainerRef;
 	@Input() drawable: BaseAnchor;
-	@select$(['toolbox', 'selected', 'listeners'], filterListener)	readonly listeners$: Observable<List<RegisteredListener>>;
 
-	constructor(private rd: Renderer2) {
-		super();
-	}
-
-	get style() {
-		return {
-			transform: this.drawable.toTransform(),
-			display: this.drawable.idx === 0 ? 'block' : 'none', // Test only for stopping cursor following
-		};
-	}
+	constructor(private componentFactoryResolver: ComponentFactoryResolver) { super(); }
 
 	ngOnInit() {
-		// Attach listeners as dictated by toolbox
-		this.listeners$.subscribe(listeners => {
-			// clear listener from pevious tool
-			this.listeners.forEach((listenerToDestroy: Function) => listenerToDestroy());
-			listeners.forEach(listener => {
-				this.listeners.push(this.rd.listen(this.anchorRef.nativeElement, listener.name,
-					(e: MouseEvent) => this.dispatchRegisteredAction(listener.handler, e, this.drawable),
-				));
-			});
-		});
+		if (this.drawable.anchorType) {
+			const anchorType = getComponentType(this.drawable.anchorType);
+			const factory = this.componentFactoryResolver.resolveComponentFactory<AnchorBaseComponent>(anchorType);
+			this.componentRef = this.anchorHost.createComponent(factory);
+			this.instance = this.componentRef.instance;
+			this.instance.anchor = this.drawable;
+		}
 	}
 
-	/**
-	 * Need to pass `drawableRef` because calling `this` in the function
-	 * will refer the drawable from the currentTarget (last anchor)
-	 */
-	@dispatch() dispatchRegisteredAction = (handler: Function, e: MouseEvent, drawableRef: Drawable) => {
-		return handler(e, drawableRef);
+	ngOnDestroy() {
+		if (this.componentRef) {
+			this.componentRef.destroy();
+			this.componentRef = undefined;
+		}
 	}
 }

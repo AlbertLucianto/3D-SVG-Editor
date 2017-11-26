@@ -1,5 +1,5 @@
 import { List } from 'immutable';
-import { IPosition, Position } from '../canvas.model';
+import { IPosition } from '../canvas.model';
 import { Drawable, DrawableType, IinitDrawable } from '../drawable/drawable.model';
 
 export enum AnchorType {
@@ -15,7 +15,7 @@ export enum AnchorType {
 	ClosePath = 'Z',
 }
 
-export class BaseAnchor extends Drawable {
+export abstract class BaseAnchor extends Drawable {
 	idx: number;
 	anchorType: AnchorType;
 
@@ -24,28 +24,14 @@ export class BaseAnchor extends Drawable {
 			...params,
 			type: DrawableType.Anchor,
 		});
-		this.anchorType = this.idx === 0 ? AnchorType.MoveTo : AnchorType.LineTo;
+		this.anchorType = AnchorType.LineTo;
 	}
 
-	setRouteParentPath = (path: List<number>): BaseAnchor => {
-		return new BaseAnchor({
-			idx: this.idx,
-			routeParentPath: path,
-			absPosition: this.absPosition,
-		});
-	}
+	abstract setRouteParentPath: (path: List<number>) => BaseAnchor;
 
-	setPosition = (absPosition: IPosition): BaseAnchor => {
-		return new BaseAnchor({
-			idx: this.idx,
-			routeParentPath: this.routeParentPath,
-			absPosition: new Position(absPosition),
-		});
-	}
+	abstract setPosition: (absPosition: IPosition) => BaseAnchor;
 
-	toTransform = (): string =>
-		`translate(${this.absPosition.get('x')}px, ${this.absPosition.get('y')}px)`
+	abstract toTransform: () => string;
 
-	toPath = (): string =>
-		`${this.anchorType} ${this.absPosition.get('x')} ${this.absPosition.get('y')}`
+	abstract toPath: () => string;
 }
