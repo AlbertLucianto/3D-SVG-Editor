@@ -7,7 +7,16 @@ import { AnchorType, BaseAnchor } from '../anchor.model';
 export class BasicAnchor extends BaseAnchor {
 	constructor(params: IinitDrawable) {
 		super(params);
-		this.anchorType = this.idx === 0 ? AnchorType.MoveTo : AnchorType.LineTo;
+		switch (true) {
+			case this.idx === 0:
+				this.anchorType = AnchorType.MoveTo;
+				break;
+			case !!params.anchorType:
+				this.anchorType = params.anchorType;
+				break;
+			default:
+				this.anchorType = AnchorType.LineTo;
+		}
 	}
 
 	setRouteParentPath = (path: List<number>): BasicAnchor => {
@@ -15,6 +24,7 @@ export class BasicAnchor extends BaseAnchor {
 			idx: this.idx,
 			routeParentPath: path,
 			absPosition: this.absPosition,
+			anchorType: this.anchorType,
 		});
 	}
 
@@ -23,6 +33,7 @@ export class BasicAnchor extends BaseAnchor {
 			idx: this.idx,
 			routeParentPath: this.routeParentPath,
 			absPosition: new Position(absPosition),
+			anchorType: this.anchorType,
 		});
 	}
 

@@ -10,6 +10,11 @@ export class AnchorFactory {
 				return new BasicAnchor(params);
 			case AnchorType.QuadraticBezierCurve:
 				return new QuadraticBezierAnchor(params);
+			case AnchorType.SmoothQuadraticBezierCurveTo:
+				return new BasicAnchor({
+					...params,
+					anchorType: AnchorType.SmoothQuadraticBezierCurveTo,
+				});
 			default:
 				console.error('Invalid anchor type passed to AnchorFactory');
 		}

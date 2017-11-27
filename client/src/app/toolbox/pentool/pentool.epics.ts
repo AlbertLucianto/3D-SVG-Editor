@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FluxStandardAction } from 'flux-standard-action';
 import { createEpicMiddleware, Epic } from 'redux-observable';
+import 'rxjs/add/operator/concatMap';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mapTo';
@@ -53,7 +54,9 @@ export class PentoolEpics {
 	}
 
 	private addThenListenUpdateUntilAnchorPlaced = (): Epic<FluxStandardAction<any, undefined>, IAppState> => {
-		const afterDown = new Subject<FluxStandardAction<any, undefined>>();
+		const afterDown$ = new Subject<FluxStandardAction<any, undefined>>();
+		let lastDownPosition: IPosition;
+		let movingAnchorIdx: number;
 		return (action$, store) => {
 			const createAddAnchorMapper = (action: FluxStandardAction<any, undefined>) => {
 				const boardState = <IBoard>store.getState().canvas.get('board').toJS();
@@ -62,17 +65,16 @@ export class PentoolEpics {
 			};
 			return action$
 				.ofType(PentoolActionType.PENTOOL_MOUSE_DOWN_ON_CANVAS)
-				.do(action => afterDown.next(action))
+				.do(action => {
+					afterDown$.next(action);
+					lastDownPosition = <IPosition>action.payload.absPoint;
+				})
 				.map(createAddAnchorMapper)
 				.switchMap(() => raceStatic<FluxStandardAction<any, undefined>>(
-					action$
+					action$ // Releasing right after mousedown create basic line
 						.ofType(PentoolActionType.PENTOOL_MOUSE_UP_ON_CANVAS)
-						.map(action => {
-							const boardState = <IBoard>store.getState().canvas.get('board').toJS();
-							const position = calcPositionInCanvas(<IPosition>action.payload.absPoint, boardState);
-							return this.pathActions.addAnchorAction(action.payload.targetIn, position);
-						}),
-					action$
+						.map(createAddAnchorMapper),
+					action$ // Dragging before release creating bezier curve
 						.ofType(PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS)
 						.take(1)
 						.map(action => {
@@ -86,17 +88,27 @@ export class PentoolEpics {
 							.ofType(PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS)
 							.map(action => {
 								const boardState = <IBoard>store.getState().canvas.get('board').toJS();
-								const position = calcPositionInCanvas(<IPosition>action.payload.absPoint, boardState);
+								const reversePosition: IPosition = {
+									x: (lastDownPosition.x * 2) - action.payload.absPoint.x,
+									y: (lastDownPosition.y * 2) - action.payload.absPoint.y,
+								};
+								const position = calcPositionInCanvas(reversePosition, boardState);
 								return this.anchorActions.updateBezierHandle(
 									action.payload.targetIn,
 									action.payload.idx,
 									position,
 								);
-							}),
+							})
+							.do(action => movingAnchorIdx = action.payload.idx),
 						)
 						.takeUntil(action$
 							.ofType(PentoolActionType.PENTOOL_MOUSE_UP_ON_CANVAS)
-							.map(createAddAnchorMapper),
+							.map(createAddAnchorMapper)
+							.map(action => this.anchorActions.changeType(
+								action.payload.targetIn,
+								movingAnchorIdx,
+								AnchorType.SmoothQuadraticBezierCurveTo,
+							)),
 						),
 				))
 				.switchMap(() => action$
@@ -106,7 +118,7 @@ export class PentoolEpics {
 						const position = calcPositionInCanvas(<IPosition>action.payload.absPoint, boardState);
 						return this.anchorActions.updatePosition(action.payload.targetIn, action.payload.idx, position);
 					})
-					.takeUntil(afterDown
+					.takeUntil(afterDown$
 						.map(action => this.pathActions.removeLastAnchorAction(action.payload.targetIn)),
 					),
 				)

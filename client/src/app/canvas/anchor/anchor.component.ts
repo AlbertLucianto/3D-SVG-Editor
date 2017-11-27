@@ -22,6 +22,7 @@ const mappings = {
 	[AnchorType.LineTo]: BasicAnchorComponent,
 	[AnchorType.MoveTo]: BasicAnchorComponent,
 	[AnchorType.QuadraticBezierCurve]: BezierAnchorComponent,
+	[AnchorType.SmoothQuadraticBezierCurveTo]: BasicAnchorComponent, // This type is exactly the same with BasicAnchor, except it starts with T
 };
 
 const getComponentType = (typeName: AnchorType) => {

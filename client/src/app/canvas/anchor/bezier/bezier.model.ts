@@ -10,8 +10,7 @@ export class QuadraticBezierAnchor extends BaseAnchor {
 
 	constructor(params: IinitDrawable) {
 		super(params);
-		this.anchorType = AnchorType.QuadraticBezierCurve;
-		// console.log('hell yeah', params.handlePosition);
+		this.anchorType = this.idx === 0 ? AnchorType.MoveTo : AnchorType.QuadraticBezierCurve;
 		this.handlePosition = params.handlePosition || this.absPosition;
 	}
 
