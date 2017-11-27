@@ -3,9 +3,10 @@ import { NgModule } from '@angular/core';
 
 import { CanvastoolComponent } from './canvastool/canvastool.component';
 import { CanvastoolEpics } from './canvastool/canvastool.epics';
+import { PentoolDrawEpics } from './pentool/epics/pentool.draw.epics';
+import { PentoolEpics } from './pentool/epics/pentool.epics';
 import { PentoolActions } from './pentool/pentool.action';
 import { PentoolComponent } from './pentool/pentool.component';
-import { PentoolEpics } from './pentool/pentool.epics';
 import { SelectiontoolActions } from './selectiontool/selectiontool.action';
 import { SelectiontoolComponent } from './selectiontool/selectiontool.component';
 import { SelectiontoolEpics } from './selectiontool/selectiontool.epics';
@@ -38,6 +39,7 @@ import { ToolboxEpics } from './toolbox.epics';
 		ToolboxEpics,
 		PentoolActions,
 		PentoolEpics,
+		PentoolDrawEpics,
 		SelectiontoolEpics,
 		SelectiontoolActions,
 	],

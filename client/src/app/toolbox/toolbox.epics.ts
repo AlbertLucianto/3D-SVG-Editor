@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { CanvastoolEpics } from './canvastool/canvastool.epics';
-import { PentoolEpics } from './pentool/pentool.epics';
+import { PentoolEpics } from './pentool/epics/pentool.epics';
 import { SelectiontoolEpics } from './selectiontool/selectiontool.epics';
 
 @Injectable()
