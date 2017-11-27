@@ -5,12 +5,14 @@ import { IinitDrawable } from '../../drawable/drawable.model';
 import { AnchorType, BaseAnchor } from '../anchor.model';
 
 export class QuadraticBezierAnchor extends BaseAnchor {
-	anchorType = AnchorType.QuadraticBezierCurve;
+	anchorType: AnchorType;
 	handlePosition: Position;
 
 	constructor(params: IinitDrawable) {
 		super(params);
-		this.handlePosition = this.absPosition;
+		this.anchorType = AnchorType.QuadraticBezierCurve;
+		// console.log('hell yeah', params.handlePosition);
+		this.handlePosition = params.handlePosition || this.absPosition;
 	}
 
 	setRouteParentPath = (path: List<number>): QuadraticBezierAnchor => {
@@ -18,6 +20,7 @@ export class QuadraticBezierAnchor extends BaseAnchor {
 			idx: this.idx,
 			routeParentPath: path,
 			absPosition: this.absPosition,
+			handlePosition: this.handlePosition,
 		});
 	}
 
@@ -26,6 +29,7 @@ export class QuadraticBezierAnchor extends BaseAnchor {
 			idx: this.idx,
 			routeParentPath: this.routeParentPath,
 			absPosition: new Position(absPosition),
+			handlePosition: this.handlePosition,
 		});
 	}
 

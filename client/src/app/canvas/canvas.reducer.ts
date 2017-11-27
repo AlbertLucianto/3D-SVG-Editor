@@ -1,5 +1,8 @@
 import { List } from 'immutable';
 import { Action, Reducer } from 'redux';
+
+import { AnchorActionType } from './anchor/anchor.action';
+import { anchorReducer } from './anchor/anchor.reducer';
 import {
 	CanvasActionType,
 	IUpdateMovedAction,
@@ -25,6 +28,8 @@ export const canvasReducer: Reducer<CanvasState> = (
 		switch (true) {
 			case action.type in PathActionType:
 				return pathReducer(state, action);
+			case action.type in AnchorActionType:
+				return anchorReducer(state, action);
 		}
 		switch (action.type) {
 			case CanvasActionType.CANVAS_UPDATE_TOP_LEFT:

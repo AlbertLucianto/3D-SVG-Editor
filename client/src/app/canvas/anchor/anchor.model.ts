@@ -24,7 +24,6 @@ export abstract class BaseAnchor extends Drawable {
 			...params,
 			type: DrawableType.Anchor,
 		});
-		this.anchorType = AnchorType.LineTo;
 	}
 
 	abstract setRouteParentPath: (path: List<number>) => BaseAnchor;

@@ -2,7 +2,6 @@ import { dispatch } from '@angular-redux/store';
 import { Injectable } from '@angular/core';
 import { FluxStandardAction } from 'flux-standard-action';
 
-import { AnchorType } from '../anchor/anchor.model';
 import { IPosition } from '../canvas.model';
 
 /**
@@ -23,31 +22,15 @@ export interface IAddAnchorPayload {
 	targetIn: Array<number>;
 	anchorPosition: IPosition;
 }
-export interface IUpdateAnchorPayload extends IAddAnchorPayload {
-	idx: number;
-}
 export interface IRemoveAnchorPayload {
 	targetIn: Array<number>;
 	idx: number;
 }
-export interface IChangeAnchorTypePayload {
-	targetIn: Array<number>;
-	idx: number;
-	anchorType: AnchorType;
-}
-export interface IUpdateBezierHandlePayload {
-	targetIn: Array<number>;
-	idx: number;
-	handlePosition: IPosition;
-}
 
 export type IAddAnchorAction = FluxStandardAction<IAddAnchorPayload, undefined>;
-export type IUpdateAnchorAction = FluxStandardAction<IUpdateAnchorPayload, undefined>;
 export type IRemoveAnchorAction = FluxStandardAction<IRemoveAnchorPayload, undefined>;
 export type IRemoveLastAnchorAction = FluxStandardAction<Array<number>, undefined>;
 export type IZipPathAction = FluxStandardAction<Array<number>, undefined>;
-export type IChangeAnchorTypeAction = FluxStandardAction<IChangeAnchorTypePayload, undefined>;
-export type IUpdateBezierHandleAction = FluxStandardAction<IUpdateBezierHandlePayload, undefined>;
 
 @Injectable()
 export class PathActions {
@@ -62,33 +45,6 @@ export class PathActions {
 		return {
 			type: PathActionType.PATH_ADD_ANCHOR,
 			payload: { targetIn, anchorPosition },
-			meta: undefined,
-		};
-	}
-
-	@dispatch() // LATER move Anchor specific actions to `anchor.actions`
-	updateAnchorAction = (targetIn: Array<number>, idx: number, anchorPosition: IPosition): IUpdateAnchorAction => {
-		return {
-			type: PathActionType.PATH_UPDATE_ANCHOR,
-			payload: { targetIn, idx, anchorPosition },
-			meta: undefined,
-		};
-	}
-
-	@dispatch() // LATER move Anchor specific actions to `anchor.actions`
-	changeAnchorTypeAction = (targetIn: Array<number>, idx: number, anchorType: AnchorType): IChangeAnchorTypeAction => {
-		return {
-			type: PathActionType.PATH_CHANGE_ANCHOR_TYPE,
-			payload: { targetIn, idx, anchorType },
-			meta: undefined,
-		};
-	}
-
-	@dispatch()
-	updateBezierHandleAction = (targetIn: Array<number>, idx: number, handlePosition: IPosition): IUpdateBezierHandleAction => {
-		return {
-			type: PathActionType.PATH_UPDATE_BEZIER_HANDLE,
-			payload: { targetIn, idx, handlePosition },
 			meta: undefined,
 		};
 	}
@@ -112,7 +68,7 @@ export class PathActions {
 	}
 
 	@dispatch()
-	zipPathAction = (targetIn: Array<number>) => {
+	zipPathAction = (targetIn: Array<number>): IZipPathAction => {
 		return {
 			type: PathActionType.PATH_ZIP_PATH,
 			payload: targetIn,

@@ -16,10 +16,12 @@ import { AnchorBaseComponent } from './anchor.base.component';
 import { AnchorDirective } from './anchor.directive';
 import { AnchorType, BaseAnchor } from './anchor.model';
 import { BasicAnchorComponent } from './basic/basic.component';
+import { BezierAnchorComponent } from './bezier/bezier.component';
 
 const mappings = {
 	[AnchorType.LineTo]: BasicAnchorComponent,
 	[AnchorType.MoveTo]: BasicAnchorComponent,
+	[AnchorType.QuadraticBezierCurve]: BezierAnchorComponent,
 };
 
 const getComponentType = (typeName: AnchorType) => {

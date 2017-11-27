@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+
+import { AnchorActions } from './anchor.action';
 import { AnchorComponent } from './anchor.component';
 import { AnchorDirective } from './anchor.directive';
 import { BasicAnchorComponent } from './basic/basic.component';
@@ -23,6 +25,9 @@ import { InvisibleComponent } from './invisible/invisible.component';
 		BezierAnchorComponent,
 		BasicAnchorComponent,
 		CubicAnchorComponent,
+	],
+	providers: [
+		AnchorActions,
 	],
 	exports: [
 		AnchorComponent,

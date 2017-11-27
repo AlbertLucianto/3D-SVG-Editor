@@ -10,6 +10,7 @@ import 'rxjs/add/operator/takeUntil';
 import { raceStatic } from 'rxjs/operator/race';
 import { Subject } from 'rxjs/Subject';
 
+import { AnchorActions } from '../../canvas/anchor/anchor.action';
 import { AnchorType } from '../../canvas/anchor/anchor.model';
 import { IBoard, IPosition } from '../../canvas/canvas.model';
 import { PathActions, PathActionType } from '../../canvas/path/path.action';
@@ -33,7 +34,8 @@ const calcPositionInCanvas = (input: IPosition, boardState: IBoard): IPosition =
 export class PentoolEpics {
 	constructor(
 		private toolboxActions: ToolboxActions,
-		private pathActions: PathActions) { }
+		private pathActions: PathActions,
+		private anchorActions: AnchorActions) { }
 
 	public createEpics = () => {
 		return [
@@ -62,11 +64,10 @@ export class PentoolEpics {
 				.ofType(PentoolActionType.PENTOOL_MOUSE_DOWN_ON_CANVAS)
 				.do(action => afterDown.next(action))
 				.map(createAddAnchorMapper)
-				.switchMap(() => raceStatic<any>(
+				.switchMap(() => raceStatic<FluxStandardAction<any, undefined>>(
 					action$
 						.ofType(PentoolActionType.PENTOOL_MOUSE_UP_ON_CANVAS)
 						.map(action => {
-							console.log('hello');
 							const boardState = <IBoard>store.getState().canvas.get('board').toJS();
 							const position = calcPositionInCanvas(<IPosition>action.payload.absPoint, boardState);
 							return this.pathActions.addAnchorAction(action.payload.targetIn, position);
@@ -75,7 +76,7 @@ export class PentoolEpics {
 						.ofType(PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS)
 						.take(1)
 						.map(action => {
-							return this.pathActions.changeAnchorTypeAction(
+							return this.anchorActions.changeType(
 								action.payload.targetIn,
 								action.payload.idx,
 								AnchorType.QuadraticBezierCurve,
@@ -84,10 +85,9 @@ export class PentoolEpics {
 						.switchMap(() => action$
 							.ofType(PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS)
 							.map(action => {
-								console.log('curving');
 								const boardState = <IBoard>store.getState().canvas.get('board').toJS();
 								const position = calcPositionInCanvas(<IPosition>action.payload.absPoint, boardState);
-								return this.pathActions.updateBezierHandleAction(
+								return this.anchorActions.updateBezierHandle(
 									action.payload.targetIn,
 									action.payload.idx,
 									position,
@@ -104,7 +104,7 @@ export class PentoolEpics {
 					.map(action => {
 						const boardState = <IBoard>store.getState().canvas.get('board').toJS();
 						const position = calcPositionInCanvas(<IPosition>action.payload.absPoint, boardState);
-						return this.pathActions.updateAnchorAction(action.payload.targetIn, action.payload.idx, position);
+						return this.anchorActions.updatePosition(action.payload.targetIn, action.payload.idx, position);
 					})
 					.takeUntil(afterDown
 						.map(action => this.pathActions.removeLastAnchorAction(action.payload.targetIn)),
