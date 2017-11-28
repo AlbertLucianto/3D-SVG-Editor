@@ -54,10 +54,13 @@ export class PentoolDrawEpics {
 				})
 				.map(createAddAnchorMapper)
 				.switchMap(() => raceStatic<FluxStandardAction<any, undefined>>(
-					action$ // Releasing right after mousedown create basic line
+					// Releasing right after mousedown create basic line
+					action$
 						.ofType(PentoolActionType.PENTOOL_MOUSE_UP_ON_CANVAS)
 						.map(createAddAnchorMapper),
-					action$ // Dragging before release creating bezier curve
+					// Dragging before release creating bezier curve
+					// Should have used CubicBezier instead of Quadratic
+					action$
 						.ofType(PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS)
 						.take(1)
 						.map(action => {
