@@ -1,4 +1,4 @@
-# 3D SVG Builder
+# 3D SVG Builder &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/AlbertLucianto/3D-SVG-Editor/blob/master/LICENSE) [![TravisCI Status](https://travis-ci.org/AlbertLucianto/3D-SVG-Editor.svg?branch=master)](https://travis-ci.org/AlbertLucianto/3D-SVG-Editor)
 
 > An open source project for building 3D svg graphic assets
 
@@ -13,6 +13,10 @@ See UI mockup [here](https://albertlucianto.github.io/3d-svg-builder-ui.pdf)
 5. [Redux Observable (middleware)](https://redux-observable.js.org/)
 6. [Electron](https://electronjs.org/)
 7. [ImmutableJS](https://facebook.github.io/immutable-js/)
+
+## Architecture in Brief
+
+![architecture](https://albertlucianto.github.io/draw-path/draw-path-architecture.png)
 
 ### Submodule in Development:
 #### [Draw Path](https://github.com/AlbertLucianto/draw-path)
