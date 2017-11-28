@@ -7,7 +7,7 @@ export enum AnchorType {
 	LineTo = 'L',
 	HorizontalLineTo = 'H',
 	VerticalLineTo = 'V',
-	CurveTo = 'C',
+	CubicBezierCurve = 'C',
 	SmoothCurveTo = 'S',
 	QuadraticBezierCurve = 'Q',
 	SmoothQuadraticBezierCurveTo = 'T',

@@ -6,7 +6,6 @@ import { AnchorComponent } from './anchor.component';
 import { AnchorDirective } from './anchor.directive';
 import { BasicAnchorComponent } from './basic/basic.component';
 import { BezierAnchorComponent } from './bezier/bezier.component';
-import { CubicAnchorComponent } from './cubic/cubic.component';
 import { InvisibleComponent } from './invisible/invisible.component';
 
 @NgModule({
@@ -17,14 +16,12 @@ import { InvisibleComponent } from './invisible/invisible.component';
 		BezierAnchorComponent,
 		BasicAnchorComponent,
 		AnchorComponent,
-		CubicAnchorComponent,
 		InvisibleComponent,
 		AnchorDirective,
 	],
 	entryComponents: [
 		BezierAnchorComponent,
 		BasicAnchorComponent,
-		CubicAnchorComponent,
 	],
 	providers: [
 		AnchorActions,

@@ -34,6 +34,7 @@ export const anchorReducer: Reducer<CanvasState> = (state: CanvasState, action: 
 				updateBezierAction.payload.targetIn,
 				updateBezierAction.payload.idx,
 				updateBezierAction.payload.position,
+				updateBezierAction.payload.which, // Should be ignored if Quadratic Bezier
 			);
 	}
 	return state;

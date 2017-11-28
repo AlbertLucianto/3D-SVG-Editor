@@ -59,7 +59,7 @@ export class PentoolDrawEpics {
 						.ofType(PentoolActionType.PENTOOL_MOUSE_UP_ON_CANVAS)
 						.map(createAddAnchorMapper),
 					// Dragging before release creating bezier curve
-					// Should have used CubicBezier instead of Quadratic
+					// Should have used CubicBezier + SmoothCurveto instead of Quadratic
 					action$
 						.ofType(PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS)
 						.take(1)

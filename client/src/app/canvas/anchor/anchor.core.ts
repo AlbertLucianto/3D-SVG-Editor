@@ -2,8 +2,8 @@ import { CanvasState, IPosition } from '../canvas.model';
 import { IinitDrawable } from '../drawable/drawable.model';
 import { Path } from '../path/path.model';
 import { AnchorFactory } from './anchor.factory';
-import { AnchorType } from './anchor.model';
-import { QuadraticBezierAnchor } from './bezier/bezier.model';
+import { AnchorType, BaseAnchor } from './anchor.model';
+import { CubicBezierAnchor, QuadraticBezierAnchor } from './bezier/bezier.model';
 
 export const updatePosition = (state: CanvasState, targetIn: Array<number>, idx: number, newPosition: IPosition) => {
 	return state.updateIn(['root', ...targetIn], (accessedPath: Path): Path => {
@@ -18,13 +18,17 @@ export const changeType = (state: CanvasState, targetIn: Array<number>, idx: num
 	});
 };
 
-export const updateBezierHandle = (state: CanvasState, targetIn: Array<number>, idx: number, newPosition: IPosition) => {
+export const updateBezierHandle = (state: CanvasState, targetIn: Array<number>, idx: number,
+	newPosition: IPosition, which: 'start'|'end' = 'start') => {
 	return state.updateIn(['root', ...targetIn], (accessedPath: Path): Path => {
-		const bezierAnchor = <QuadraticBezierAnchor>accessedPath.children.get(idx);
-		if (typeof bezierAnchor === 'undefined') {
-			console.error(`Anchor accessed by ${targetIn} with index ${idx} is not a Bezier Anchor`);
-		} else {
-			return accessedPath.replaceAnchor(idx, bezierAnchor.updateHandle(newPosition));
+		const anchor = (<BaseAnchor>accessedPath.children.get(idx));
+		switch (anchor.anchorType) {
+			case AnchorType.QuadraticBezierCurve:
+				return accessedPath.replaceAnchor(idx, (<QuadraticBezierAnchor>anchor).updateHandle(newPosition));
+			case AnchorType.CubicBezierCurve:
+				return accessedPath.replaceAnchor(idx, (<CubicBezierAnchor>anchor).updateHandle(newPosition, which));
+			default:
+				console.error(`Anchor accessed by ${targetIn} with index ${idx} is not a Bezier Anchor`);
 		}
 	});
 };

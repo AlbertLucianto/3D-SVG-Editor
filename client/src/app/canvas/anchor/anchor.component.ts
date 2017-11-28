@@ -19,10 +19,12 @@ import { BasicAnchorComponent } from './basic/basic.component';
 import { BezierAnchorComponent } from './bezier/bezier.component';
 
 const mappings = {
-	[AnchorType.LineTo]: BasicAnchorComponent,
 	[AnchorType.MoveTo]: BasicAnchorComponent,
-	[AnchorType.QuadraticBezierCurve]: BezierAnchorComponent,
+	[AnchorType.LineTo]: BasicAnchorComponent,
 	[AnchorType.SmoothQuadraticBezierCurveTo]: BasicAnchorComponent, // This type is exactly the same with BasicAnchor, except it starts with T
+	[AnchorType.SmoothCurveTo]: BasicAnchorComponent,
+	[AnchorType.QuadraticBezierCurve]: BezierAnchorComponent,
+	[AnchorType.CubicBezierCurve]: BezierAnchorComponent,
 };
 
 const getComponentType = (typeName: AnchorType) => {
