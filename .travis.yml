@@ -5,8 +5,6 @@ before_install:
   - cd client
 install:
   - npm install
-before_script:
-  - cd client
 script:
   - npm run build
 cache:
