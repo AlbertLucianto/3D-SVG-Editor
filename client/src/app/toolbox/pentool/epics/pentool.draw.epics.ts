@@ -89,7 +89,7 @@ export class PentoolDrawEpics {
 				.last()
 				.switchMap(() => action$ // For next movements
 					.ofType(PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS)
-					.throttle(() => { // First will execute the `switchMap()` below and skip while dragging
+					.throttle(() => { // Do this after the `switchMap()` below and skip that while this executing (dragging)
 						let lastIdx: number;
 						return action$
 						.ofType(PentoolActionType.PENTOOL_MOUSE_DOWN_ON_CANVAS)
@@ -132,7 +132,6 @@ export class PentoolDrawEpics {
 						.map(action => this.anchorActions.updateBezierHandle(action.payload.targetIn, anchorIdx, action.payload.position, 'end'))
 						.takeUntil(action$.ofType(PentoolActionType.PENTOOL_MOUSE_DOWN_ON_CANVAS));
 					}),
-					// .takeUntil(action$.ofType(PathActionType.PATH_ZIP_PATH)),
 				)
 				.takeUntil(action$.ofType(PathActionType.PATH_ZIP_PATH)),
 			)

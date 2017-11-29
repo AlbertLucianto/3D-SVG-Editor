@@ -40,8 +40,8 @@ export class BasicAnchorComponent extends AnchorBaseComponent implements OnInit 
 
 	get style() {
 		return {
-			transform: this.anchor.toTransform(),
-			display: this.anchor.idx === 0 ? 'block' : 'none', // Test only for stopping cursor following
+			transform: this.anchor.transformStyle,
+			'pointer-events': this.anchor.idx === 0 ? 'auto' : 'none', // Test only for stopping cursor following
 		};
 	}
 

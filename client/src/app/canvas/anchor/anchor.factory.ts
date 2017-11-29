@@ -1,7 +1,8 @@
 import { IinitDrawable } from '../drawable/drawable.model';
 import { AnchorType, BaseAnchor } from './anchor.model';
-import { BasicAnchor, SmoothAnchor } from './basic/basic.model';
+import { BasicAnchor } from './basic/basic.model';
 import { CubicBezierAnchor, QuadraticBezierAnchor } from './bezier/bezier.model';
+import { SmoothAnchor } from './smooth/smooth.model';
 
 export class AnchorFactory {
 	static createAnchor = (type: AnchorType, params: IinitDrawable): BaseAnchor => {

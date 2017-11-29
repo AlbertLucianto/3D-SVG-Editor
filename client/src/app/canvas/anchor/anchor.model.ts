@@ -18,6 +18,7 @@ export enum AnchorType {
 export abstract class BaseAnchor extends Drawable {
 	idx: number;
 	anchorType: AnchorType;
+	transformStyle: string;
 
 	constructor(params: IinitDrawable) {
 		super({
@@ -30,7 +31,10 @@ export abstract class BaseAnchor extends Drawable {
 
 	abstract setPosition: (absPosition: IPosition) => BaseAnchor;
 
-	abstract toTransform: () => string;
-
 	abstract toPath: () => string;
+}
+
+export interface WithHandles {
+	handleLines: Array<{ path: string, headTransformStyle: string }>;
+	updateHandle: (absPosition: IPosition, which?: string) => WithHandles&BaseAnchor;
 }

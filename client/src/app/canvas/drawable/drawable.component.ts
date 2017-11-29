@@ -11,7 +11,7 @@ import {
 	ViewEncapsulation,
 } from '@angular/core';
 
-import { AnchorComponent } from '../anchor/anchor.component';
+import { AnchorComponent } from '../anchor/anchor.container.component';
 import { GroupComponent } from '../group/group.component';
 import { PathComponent } from '../path/path.component';
 import { DrawableBaseComponent } from './drawable.base.component';
@@ -60,5 +60,4 @@ export class DrawableComponent implements OnInit, OnDestroy {
 			this.componentRef = undefined;
 		}
 	}
-
 }

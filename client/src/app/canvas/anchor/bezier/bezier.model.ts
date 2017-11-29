@@ -2,13 +2,13 @@ import { List } from 'immutable';
 
 import { IPosition, Position } from '../../canvas.model';
 import { IinitDrawable } from '../../drawable/drawable.model';
-import { AnchorType, BaseAnchor } from '../anchor.model';
+import { AnchorType, BaseAnchor, WithHandles } from '../anchor.model';
 
 /**
  * It might be better to use composition rather than inheritance
  * However, it will be more difficult to make use of Immutable methods
  */
-export class QuadraticBezierAnchor extends BaseAnchor {
+export class QuadraticBezierAnchor extends BaseAnchor implements WithHandles {
 	anchorType: AnchorType;
 	handlePosition: Position;
 
@@ -43,14 +43,19 @@ export class QuadraticBezierAnchor extends BaseAnchor {
 		});
 	}
 
-	toTransform = (): string =>
-		`translate(${this.absPosition.get('x')}px, ${this.absPosition.get('y')}px)`
+	get transformStyle(): string {
+		return`translate(${this.absPosition.x}px, ${this.absPosition.y}px)`;
+	}
+
+	get handleLines() {
+		return [];
+	}
 
 	toPath = (): string =>
 		`
 		${this.anchorType}
-		${this.handlePosition.get('x')}, ${this.handlePosition.get('y')}
-		${this.absPosition.get('x')}, ${this.absPosition.get('y')}
+		${this.handlePosition.x}, ${this.handlePosition.y}
+		${this.absPosition.x}, ${this.absPosition.y}
 		`
 }
 
@@ -58,7 +63,7 @@ export class QuadraticBezierAnchor extends BaseAnchor {
  * It might be better to use composition rather than inheritance
  * However, it will be more difficult to make use of Immutable methods
  */
-export class CubicBezierAnchor extends BaseAnchor {
+export class CubicBezierAnchor extends BaseAnchor implements WithHandles {
 	anchorType: AnchorType;
 	handlePositions: { start: Position, end: Position };
 
@@ -87,26 +92,32 @@ export class CubicBezierAnchor extends BaseAnchor {
 	}
 
 	updateHandle = (absPosition: IPosition, which: 'start'|'end'|'both' = 'start') => {
+		const position = new Position(absPosition);
 		return new CubicBezierAnchor({
 			idx: this.idx,
 			absPosition: this.absPosition,
 			routeParentPath: this.routeParentPath,
 			handlePositions: {
 				...this.handlePositions,
-				[which === 'both' ? 'start' : which]: new Position(absPosition),
-				[which === 'both' ? 'end' : which]: new Position(absPosition),
+				[which === 'both' ? 'start' : which]: position,
+				[which === 'both' ? 'end' : which]: position,
 			},
 		});
 	}
 
-	toTransform = (): string =>
-	`translate(${this.absPosition.get('x')}px, ${this.absPosition.get('y')}px)`
+	get transformStyle() {
+		return `translate(${this.absPosition.x}px, ${this.absPosition.y}px)`;
+	}
+
+	get handleLines() {
+		return [];
+	}
 
 	toPath = (): string =>
 		`
 		${this.anchorType}
-		${this.handlePositions.start.get('x')}, ${this.handlePositions.start.get('y')}
-		${this.handlePositions.end.get('x')}, ${this.handlePositions.end.get('y')}
-		${this.absPosition.get('x')}, ${this.absPosition.get('y')}
+		${this.handlePositions.start.x}, ${this.handlePositions.start.y}
+		${this.handlePositions.end.x}, ${this.handlePositions.end.y}
+		${this.absPosition.x}, ${this.absPosition.y}
 		`
 }

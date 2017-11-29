@@ -17,12 +17,13 @@ import { AnchorDirective } from './anchor.directive';
 import { AnchorType, BaseAnchor } from './anchor.model';
 import { BasicAnchorComponent } from './basic/basic.component';
 import { BezierAnchorComponent } from './bezier/bezier.component';
+import { SmoothAnchorComponent } from './smooth/smooth.component';
 
 const mappings = {
 	[AnchorType.MoveTo]: BasicAnchorComponent,
 	[AnchorType.LineTo]: BasicAnchorComponent,
 	[AnchorType.SmoothQuadraticBezierCurveTo]: BasicAnchorComponent, // This type is exactly the same with BasicAnchor, except it starts with T
-	[AnchorType.SmoothCurveTo]: BasicAnchorComponent,
+	[AnchorType.SmoothCurveTo]: SmoothAnchorComponent,
 	[AnchorType.QuadraticBezierCurve]: BezierAnchorComponent,
 	[AnchorType.CubicBezierCurve]: BezierAnchorComponent,
 };

@@ -17,19 +17,20 @@ import { BaseAnchor } from '../../anchor/anchor.model';
 import { RegisteredListener } from '../../canvas.model';
 import { Drawable } from '../../drawable/drawable.model';
 import { AnchorBaseComponent } from '../anchor.base.component';
+import { SmoothAnchor } from './smooth.model';
 
 const filterListener = (listeners$: Observable<List<RegisteredListener>>) =>
 listeners$.map(listeners => <List<RegisteredListener>>listeners
 	.filter(listener => listener.target === 'anchor'));
 
 @Component({
-	selector: 'app-anchor-bezier',
-	templateUrl: './bezier.component.html',
-	styleUrls: ['./bezier.component.scss'],
+	selector: 'app-anchor-smooth',
+	templateUrl: './smooth.component.html',
+	styleUrls: ['./smooth.component.scss'],
 	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BezierAnchorComponent extends AnchorBaseComponent implements OnInit {
+export class SmoothAnchorComponent extends AnchorBaseComponent implements OnInit {
 	listeners: Array<Function> = [];
 	@ViewChild('anchor') anchorRef: ElementRef;
 	@Input() anchor: BaseAnchor;
@@ -44,6 +45,10 @@ export class BezierAnchorComponent extends AnchorBaseComponent implements OnInit
 			transform: this.anchor.transformStyle,
 			'pointer-events': this.anchor.idx === 0 ? 'auto' : 'none', // Test only for stopping cursor following
 		};
+	}
+
+	get handles(): Array<Object> {
+		return (<SmoothAnchor>this.anchor).handleLines;
 	}
 
 	ngOnInit() {
