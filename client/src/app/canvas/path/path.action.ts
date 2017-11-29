@@ -2,6 +2,7 @@ import { dispatch } from '@angular-redux/store';
 import { Injectable } from '@angular/core';
 import { FluxStandardAction } from 'flux-standard-action';
 
+import { AnchorType } from '../anchor/anchor.model';
 import { IPosition } from '../canvas.model';
 
 /**
@@ -21,6 +22,7 @@ export enum PathActionType {
 export interface IAddAnchorPayload {
 	targetIn: Array<number>;
 	anchorPosition: IPosition;
+	anchorType?: AnchorType;
 }
 export interface IRemoveAnchorPayload {
 	targetIn: Array<number>;
@@ -41,10 +43,10 @@ export class PathActions {
 	 * Otherwise, it will be just passing to the next operator, and only the last action is dispatched
 	 */
 	@dispatch()
-	addAnchorAction = (targetIn: Array<number>, anchorPosition: IPosition): IAddAnchorAction => {
+	addAnchorAction = (targetIn: Array<number>, anchorPosition: IPosition, anchorType?: AnchorType): IAddAnchorAction => {
 		return {
 			type: PathActionType.PATH_ADD_ANCHOR,
-			payload: { targetIn, anchorPosition },
+			payload: { targetIn, anchorPosition, anchorType },
 			meta: undefined,
 		};
 	}

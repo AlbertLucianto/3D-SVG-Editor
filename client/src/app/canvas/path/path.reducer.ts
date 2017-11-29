@@ -14,7 +14,8 @@ export const pathReducer: Reducer<CanvasState> = (state: CanvasState, action: Ac
 	switch (action.type) {
 		case PathActionType.PATH_ADD_ANCHOR:
 			const addAction = <IAddAnchorAction>action;
-			return <CanvasState>pathCore.addAnchor(state, addAction.payload.targetIn, addAction.payload.anchorPosition);
+			return <CanvasState>pathCore.addAnchor(
+				state, addAction.payload.targetIn, addAction.payload.anchorPosition, addAction.payload.anchorType);
 		case PathActionType.PATH_REMOVE_ANCHOR:
 			const removeAction = <IRemoveAnchorAction>action;
 			return <CanvasState>pathCore.removeAnchor(state, removeAction.payload.targetIn, removeAction.payload.idx);
