@@ -25,7 +25,7 @@ export interface IUpdateBezierHandlePayload {
 	targetIn: Array<number>;
 	idx: number;
 	position: IPosition;
-	which?: 'start'|'end';
+	which?: 'start'|'end'|'both';
 }
 
 export type IUpdatePositionAction = FluxStandardAction<IUpdatePositionPayload, undefined>;
@@ -60,7 +60,7 @@ export class AnchorActions {
 
 	@dispatch()
 	updateBezierHandle = (targetIn: Array<number>, idx: number, position: IPosition,
-		which: 'start'|'end' = 'start'): IUpdateBezierHandleAction => {
+		which: 'start'|'end'|'both' = 'start'): IUpdateBezierHandleAction => {
 			return {
 				type: AnchorActionType.ANCHOR_UPDATE_BEZIER_HANDLE,
 				payload: { targetIn, idx, position, which },

@@ -42,8 +42,7 @@ export class PentoolEpics {
 			.filter(action =>
 				action.type === PentoolActionType.PENTOOL_MOUSE_DOWN_ON_ANCHOR
 				&& action.payload.idx === 0)
-			// .map(action => this.pathActions.removeLastAnchorAction(action.payload.targetIn))
-			.map(action => this.pathActions.zipPathAction(action.payload))
+			.map(action => this.pathActions.zipPathAction(action.payload.targetIn))
 			.mapTo(doneAction); // Preventing double dispatch
 	}
 }

@@ -22,7 +22,7 @@ export class CanvasEpics {
 
 	private updateTopLeftAfterMoved = (): Epic<FluxStandardAction<any, undefined>, IAppState> => {
 		let lastMoved = { x: 0, y: 0 };
-		return (action$, store) => action$
+		return (action$, store) => action$ // Maybe can use `reduce` instead
 			.ofType(CanvasActionType.CANVAS_UPDATE_MOVED)
 			.map(action => {
 				const topLeft = <IPosition>store.getState().canvas.getIn(['board', 'topLeft']);

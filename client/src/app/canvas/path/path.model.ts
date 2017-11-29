@@ -55,6 +55,7 @@ export class Path extends Drawable {
 					idx: this.children.size,
 				},
 			)),
+			isZipped: this.isZipped,
 		});
 	}
 
@@ -65,6 +66,7 @@ export class Path extends Drawable {
 		return new Path({
 			...(<IinitPath>this.toObject()),
 			children,
+			isZipped: this.isZipped,
 		});
 	}
 
@@ -73,6 +75,7 @@ export class Path extends Drawable {
 		return new Path({
 			...(<IinitPath>this.toObject()),
 			children,
+			isZipped: this.isZipped,
 		});
 	}
 
@@ -81,6 +84,7 @@ export class Path extends Drawable {
 		return new Path({
 			...(<IinitPath>this.toObject()),
 			children,
+			isZipped: this.isZipped,
 		});
 	}
 

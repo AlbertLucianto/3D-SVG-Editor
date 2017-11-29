@@ -86,14 +86,15 @@ export class CubicBezierAnchor extends BaseAnchor {
 		});
 	}
 
-	updateHandle = (absPosition: IPosition, which: 'start'|'end' = 'start') => {
+	updateHandle = (absPosition: IPosition, which: 'start'|'end'|'both' = 'start') => {
 		return new CubicBezierAnchor({
 			idx: this.idx,
 			absPosition: this.absPosition,
 			routeParentPath: this.routeParentPath,
 			handlePositions: {
 				...this.handlePositions,
-				[which]: new Position(absPosition),
+				[which === 'both' ? 'start' : which]: new Position(absPosition),
+				[which === 'both' ? 'end' : which]: new Position(absPosition),
 			},
 		});
 	}

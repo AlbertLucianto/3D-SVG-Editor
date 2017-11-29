@@ -19,7 +19,7 @@ export const changeType = (state: CanvasState, targetIn: Array<number>, idx: num
 };
 
 export const updateBezierHandle = (state: CanvasState, targetIn: Array<number>, idx: number,
-	newPosition: IPosition, which: 'start'|'end' = 'start') => {
+	newPosition: IPosition, which: 'start'|'end'|'both' = 'start') => {
 	return state.updateIn(['root', ...targetIn], (accessedPath: Path): Path => {
 		const anchor = (<BaseAnchor>accessedPath.children.get(idx));
 		switch (anchor.anchorType) {

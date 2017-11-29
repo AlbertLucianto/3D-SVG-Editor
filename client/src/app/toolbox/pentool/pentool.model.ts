@@ -26,7 +26,7 @@ export const createPentool = (): ToolBase => {
 
 	const mouseDownOnHeadAnchor: ActionFromEvent = (e: MouseEvent, triggeringDrawable: Drawable) => {
 		// e.stopPropagation();
-		const pathFromRoot = [ ...triggeringDrawable.routeParentPath.toJS() ];
+		const pathFromRoot = triggeringDrawable.routeParentPath.toArray();
 		return actions.mouseDownOnAnchorAction(pathFromRoot, triggeringDrawable.idx);
 	};
 
