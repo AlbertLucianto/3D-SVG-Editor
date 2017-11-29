@@ -27,6 +27,8 @@ export const updateBezierHandle = (state: CanvasState, targetIn: Array<number>, 
 				return accessedPath.replaceAnchor(idx, (<QuadraticBezierAnchor>anchor).updateHandle(newPosition));
 			case AnchorType.CubicBezierCurve:
 				return accessedPath.replaceAnchor(idx, (<CubicBezierAnchor>anchor).updateHandle(newPosition, which));
+			case AnchorType.SmoothCurveTo:
+				return accessedPath.replaceAnchor(idx, (<QuadraticBezierAnchor>anchor).updateHandle(newPosition));
 			default:
 				console.error(`Anchor accessed by ${targetIn} with index ${idx} is not a Bezier Anchor`);
 		}
