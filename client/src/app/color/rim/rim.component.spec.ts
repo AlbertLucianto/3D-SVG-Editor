@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AnchorComponent } from './anchor.container.component';
+import { RimComponent } from './rim.component';
 
-describe('AnchorComponent', () => {
-	let component: AnchorComponent;
-	let fixture: ComponentFixture<AnchorComponent>;
+describe('RimComponent', () => {
+	let component: RimComponent;
+	let fixture: ComponentFixture<RimComponent>;
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [ AnchorComponent ],
+			declarations: [ RimComponent ],
 		})
 		.compileComponents();
 	}));
 
 	beforeEach(() => {
-		fixture = TestBed.createComponent(AnchorComponent);
+		fixture = TestBed.createComponent(RimComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});

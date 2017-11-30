@@ -2,7 +2,7 @@ import { IinitDrawable } from '../drawable/drawable.model';
 import { AnchorType, BaseAnchor } from './anchor.model';
 import { BasicAnchor } from './basic/basic.model';
 import { CubicBezierAnchor, QuadraticBezierAnchor } from './bezier/bezier.model';
-import { SmoothAnchor } from './smooth/smooth.model';
+import { SmoothAnchor, SmoothQuadraticAnchor } from './smooth/smooth.model';
 
 export class AnchorFactory {
 	static createAnchor = (type: AnchorType, params: IinitDrawable): BaseAnchor => {
@@ -16,10 +16,7 @@ export class AnchorFactory {
 			case AnchorType.CubicBezierCurve:
 				return new CubicBezierAnchor(params);
 			case AnchorType.SmoothQuadraticBezierCurveTo:
-				return new BasicAnchor({
-					...params,
-					anchorType: AnchorType.SmoothQuadraticBezierCurveTo,
-				});
+				return new SmoothQuadraticAnchor(params);
 			default:
 				console.error('Invalid anchor type passed to AnchorFactory');
 		}

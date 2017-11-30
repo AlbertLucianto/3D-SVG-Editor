@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InvisibleComponent } from './invisible.component';
+import { ColorComponent } from './color.component';
 
-describe('InvisibleComponent', () => {
-	let component: InvisibleComponent;
-	let fixture: ComponentFixture<InvisibleComponent>;
+describe('ColorComponent', () => {
+	let component: ColorComponent;
+	let fixture: ComponentFixture<ColorComponent>;
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [ InvisibleComponent ],
+			declarations: [ ColorComponent ],
 		})
 		.compileComponents();
 	}));
 
 	beforeEach(() => {
-		fixture = TestBed.createComponent(InvisibleComponent);
+		fixture = TestBed.createComponent(ColorComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});

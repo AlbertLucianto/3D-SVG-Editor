@@ -6,7 +6,6 @@ import { AnchorComponent } from './anchor.container.component';
 import { AnchorDirective } from './anchor.directive';
 import { BasicAnchorComponent } from './basic/basic.component';
 import { BezierAnchorComponent } from './bezier/bezier.component';
-import { InvisibleComponent } from './invisible/invisible.component';
 import { SmoothAnchorComponent } from './smooth/smooth.component';
 
 @NgModule({
@@ -17,7 +16,6 @@ import { SmoothAnchorComponent } from './smooth/smooth.component';
 		BezierAnchorComponent,
 		BasicAnchorComponent,
 		AnchorComponent,
-		InvisibleComponent,
 		AnchorDirective,
 		SmoothAnchorComponent,
 	],

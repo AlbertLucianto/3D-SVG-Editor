@@ -9,6 +9,7 @@ import 'zone.js/dist/zone-mix';
 
 import { AppComponent } from './app.component';
 import { CanvasModule } from './canvas/canvas.module';
+import { ColorModule } from './color/color.module';
 import { StoreModule } from './store/store.module';
 import { ToolboxModule } from './toolbox/toolbox.module';
 
@@ -29,6 +30,7 @@ import { ElectronService } from './providers/electron.service';
 		CanvasModule,
 		StoreModule,
 		ToolboxModule,
+		ColorModule,
 	],
 	providers: [ElectronService],
 	bootstrap: [AppComponent],

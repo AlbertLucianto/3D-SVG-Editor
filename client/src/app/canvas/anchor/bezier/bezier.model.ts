@@ -2,13 +2,13 @@ import { List } from 'immutable';
 
 import { IPosition, Position } from '../../canvas.model';
 import { IinitDrawable } from '../../drawable/drawable.model';
-import { AnchorType, BaseAnchor, WithHandles } from '../anchor.model';
+import { AnchorType, AnchorWithHandles, BaseAnchor } from '../anchor.model';
 
 /**
  * It might be better to use composition rather than inheritance
  * However, it will be more difficult to make use of Immutable methods
  */
-export class QuadraticBezierAnchor extends BaseAnchor implements WithHandles {
+export class QuadraticBezierAnchor extends BaseAnchor implements AnchorWithHandles {
 	anchorType: AnchorType;
 	handlePosition: Position;
 
@@ -63,7 +63,7 @@ export class QuadraticBezierAnchor extends BaseAnchor implements WithHandles {
  * It might be better to use composition rather than inheritance
  * However, it will be more difficult to make use of Immutable methods
  */
-export class CubicBezierAnchor extends BaseAnchor implements WithHandles {
+export class CubicBezierAnchor extends BaseAnchor implements AnchorWithHandles {
 	anchorType: AnchorType;
 	handlePositions: { start: Position, end: Position };
 

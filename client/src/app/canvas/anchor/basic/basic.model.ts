@@ -11,16 +11,7 @@ import { AnchorType, BaseAnchor } from '../anchor.model';
 export class BasicAnchor extends BaseAnchor {
 	constructor(params: IinitDrawable) {
 		super(params);
-		switch (true) {
-			case this.idx === 0:
-				this.anchorType = AnchorType.MoveTo;
-				break;
-			case !!params.anchorType:
-				this.anchorType = params.anchorType;
-				break;
-			default:
-				this.anchorType = AnchorType.LineTo;
-		}
+		this.anchorType = this.idx === 0 ? this.anchorType = AnchorType.MoveTo : AnchorType.LineTo;
 	}
 
 	setRouteParentPath = (path: List<number>): BasicAnchor => {

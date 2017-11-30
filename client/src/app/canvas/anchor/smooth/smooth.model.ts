@@ -2,13 +2,14 @@ import { List } from 'immutable';
 
 import { IPosition, Position } from '../../canvas.model';
 import { IinitDrawable } from '../../drawable/drawable.model';
-import { AnchorType, BaseAnchor, WithHandles } from '../anchor.model';
+import { AnchorType, AnchorWithHandles, BaseAnchor } from '../anchor.model';
+import { BasicAnchor } from '../basic/basic.model';
 
 /**
  * It might be better to use composition rather than inheritance
  * However, it will be more difficult to make use of Immutable methods
  */
-export class SmoothAnchor extends BaseAnchor implements WithHandles {
+export class SmoothAnchor extends BaseAnchor implements AnchorWithHandles {
 	anchorType: AnchorType;
 	handlePosition: Position;
 
@@ -53,6 +54,12 @@ export class SmoothAnchor extends BaseAnchor implements WithHandles {
 				path: `M${this.absPosition.x}, ${this.absPosition.y} L${this.handlePosition.x}, ${this.handlePosition.y}`,
 				headTransformStyle: `translate(${this.handlePosition.x}px, ${this.handlePosition.y}px)`,
 			},
+			{
+				path: `
+				M${this.absPosition.x}, ${this.absPosition.y}
+				L${(this.absPosition.x * 2) - this.handlePosition.x}, ${(this.absPosition.y * 2) - this.handlePosition.y}`,
+				headTransformStyle: `translate(${this.handlePosition.x}px, ${this.handlePosition.y}px)`,
+			},
 		];
 	}
 
@@ -62,4 +69,13 @@ export class SmoothAnchor extends BaseAnchor implements WithHandles {
 		${this.handlePosition.x}, ${this.handlePosition.y}
 		${this.absPosition.x}, ${this.absPosition.y}
 		`
+}
+
+export class SmoothQuadraticAnchor extends BasicAnchor { // Component still more representable with basic
+	constructor(params: IinitDrawable) {
+		super({
+			...params,
+			anchorType: AnchorType.SmoothQuadraticBezierCurveTo,
+		});
+	}
 }
