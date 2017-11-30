@@ -106,6 +106,7 @@ export class PentoolDrawEpics {
 								.switchMap(() => action$
 									.ofType(PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS)
 									.map(updateAnchorPosWithStore(store, 'absPoint', true))
+									.map(action => this.anchorActions.updateBezierHandle(action.payload.targetIn, action.payload.idx, action.payload.position))
 									.map(action => {
 										const boardState = <IBoard>store.getState().canvas.get('board').toJS();
 										const downOnCanvas = calcPositionOnCanvas(downAction.payload.absPoint, boardState);
