@@ -1,3 +1,10 @@
 <div>
-  
+  <app-rim-color></app-rim-color>
+  <app-slider-color channel="r"></app-slider-color>
+  <app-slider-color channel="g"></app-slider-color>
+  <app-slider-color channel="b"></app-slider-color>
+  <app-slider-opacity></app-slider-opacity>
+  <div *ngIf="isOutlineSelected">
+    <app-stroke-width-slider></app-stroke-width-slider>
+  </div>
 </div>
