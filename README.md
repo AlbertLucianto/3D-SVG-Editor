@@ -17,7 +17,3 @@ See UI mockup [here](https://albertlucianto.github.io/3d-svg-builder-ui.pdf)
 ## Architecture in Brief
 
 ![architecture](https://albertlucianto.github.io/draw-path/draw-path-architecture.png)
-
-### Submodule in Development:
-#### [Draw Path](https://github.com/AlbertLucianto/draw-path)
-#### [Color Picker](https://github.com/AlbertLucianto/color-picker)
