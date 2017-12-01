@@ -34,7 +34,9 @@ export abstract class BaseAnchor extends Drawable {
 	abstract toPath: () => string;
 }
 
+export interface IHandle { path: string; headTransformStyle: string; }
+
 export interface AnchorWithHandles {
-	handleLines: Array<{ path: string, headTransformStyle: string }>;
+	handleLines: Array<IHandle>;
 	updateHandle: (absPosition: IPosition, which?: string) => AnchorWithHandles&BaseAnchor;
 }

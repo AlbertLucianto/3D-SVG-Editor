@@ -1,1 +1,3 @@
-<div class="canvastool" (click)="selectTool()">C</div>
+<div class="canvastool" (click)="selectTool()">
+	<div class="canvastool__icon" [ngClass]="{ 'icon--active': context.isActive }"></div>
+</div>

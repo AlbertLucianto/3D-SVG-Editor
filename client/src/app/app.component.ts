@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ElectronService } from './providers/electron.service';
 
 @Component({
@@ -7,6 +7,7 @@ import { ElectronService } from './providers/electron.service';
 	styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+	@ViewChild('root') root: ElementRef;
 	constructor(public electronService: ElectronService) {
 
 		if (electronService.isElectron()) {

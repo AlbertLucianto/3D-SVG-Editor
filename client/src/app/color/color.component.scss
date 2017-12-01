@@ -1,7 +1,9 @@
 .color-picker {
-	width: 100%;
+	width: calc(100% - 10px);
 	height: 200px;
 	background: white;
 	border-radius: 10px;
 	box-shadow: 0 5px 50px -15px rgba(0,0,0,.2);
+	margin: 5px;
+	margin-bottom: 10px;
 }

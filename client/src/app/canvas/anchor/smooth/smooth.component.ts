@@ -13,7 +13,7 @@ import { List } from 'immutable';
 import 'rxjs/add/operator/filter';
 import { Observable } from 'rxjs/Observable';
 
-import { BaseAnchor } from '../../anchor/anchor.model';
+import { BaseAnchor, IHandle } from '../../anchor/anchor.model';
 import { RegisteredListener } from '../../canvas.model';
 import { Drawable } from '../../drawable/drawable.model';
 import { AnchorBaseComponent } from '../anchor.base.component';
@@ -47,7 +47,11 @@ export class SmoothAnchorComponent extends AnchorBaseComponent implements OnInit
 		};
 	}
 
-	get handles(): Array<Object> {
+	get handleStyles() {
+		return this.handles.map(value => ({ transform: value.headTransformStyle }));
+	}
+
+	get handles(): Array<IHandle> {
 		return (<SmoothAnchor>this.anchor).handleLines;
 	}
 

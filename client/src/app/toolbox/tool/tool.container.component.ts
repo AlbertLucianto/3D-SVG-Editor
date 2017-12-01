@@ -2,6 +2,7 @@ import {
 	Component,
 	ComponentFactoryResolver,
 	ComponentRef,
+	DoCheck,
 	Input,
 	OnDestroy,
 	OnInit,
@@ -32,7 +33,7 @@ const getComponentType = (typeName: ToolName) => {
 	templateUrl: './tool.container.component.html',
 	styleUrls: ['./tool.container.component.scss'],
 })
-export class ToolContainerComponent implements OnInit, OnDestroy {
+export class ToolContainerComponent implements OnInit, OnDestroy, DoCheck {
 	componentRef: ComponentRef<ToolBaseComponent>;
 	instance: ToolBaseComponent;
 	@ViewChild(ToolDirective, { read: ViewContainerRef }) toolHost: ViewContainerRef;
@@ -49,6 +50,10 @@ export class ToolContainerComponent implements OnInit, OnDestroy {
 			this.instance = <ToolBaseComponent>this.componentRef.instance;
 			this.instance.context = this.context;
 		}
+	}
+
+	ngDoCheck() {
+		this.instance.context = this.context;
 	}
 
 	ngOnDestroy() {

@@ -58,7 +58,9 @@ export class SmoothAnchor extends BaseAnchor implements AnchorWithHandles {
 				path: `
 				M${this.absPosition.x}, ${this.absPosition.y}
 				L${(this.absPosition.x * 2) - this.handlePosition.x}, ${(this.absPosition.y * 2) - this.handlePosition.y}`,
-				headTransformStyle: `translate(${this.handlePosition.x}px, ${this.handlePosition.y}px)`,
+				headTransformStyle: `
+				translate(${(this.absPosition.x * 2) - this.handlePosition.x}px, ${(this.absPosition.y * 2) - this.handlePosition.y}px)
+				`,
 			},
 		];
 	}

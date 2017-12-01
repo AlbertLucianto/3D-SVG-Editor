@@ -1,1 +1,3 @@
-<div class="selectiontool" (click)="selectTool()">S</div>
+<div class="selectiontool" (click)="selectTool()">
+	<div class="selectiontool__icon" [ngClass]="{ 'icon--active': context.isActive }"></div>
+</div>

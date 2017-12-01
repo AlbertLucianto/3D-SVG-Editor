@@ -1,4 +1,4 @@
-.tool-container {
+.tool {
 	width: 60px;
 	height: 60px;
 	display: flex;
@@ -10,12 +10,12 @@
 	box-shadow: 0 0 1px rgba(0,0,0,.2);
 	transition: box-shadow .25s ease, transform .4s ease-out;
 	&:hover {
-		box-shadow: 0 5px 30px -5px rgba(0, 122, 255,.3);
+		box-shadow: 0 5px 30px -5px rgba(0, 122, 255,.5);
 		background: white;
 		transform: scale(1.01) translateY(-1px);
 	}
-	&.active {
-		background: linear-gradient(to right, rgb(0, 122, 255), rgb(90, 200, 250));
+	&.tool--active {
+		background: linear-gradient(to right, rgb(0, 122, 255) -20%, rgb(90, 200, 250) 120%);
 		font-weight: 500;
 		color: white;
 	}

@@ -1,4 +1,5 @@
 <div #anchor class="anchor" [ngStyle]="style"></div>
-<svg class="handle-container">
-	<svg:path *ngFor="let handle of handles" [attr.d]="handle.path" class="handle"></svg:path>
+<div #handleAnchor class="handle-anchor" [ngStyle]="handleStyle" *ngFor="let handleStyle of handleStyles"></div>
+<svg class="handle-lines">
+	<svg:path *ngFor="let handle of handles" [attr.d]="handle.path" class="handle-lines__line"></svg:path>
 </svg>
