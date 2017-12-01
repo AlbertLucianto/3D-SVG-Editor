@@ -11,5 +11,4 @@ export class OpacityComponent implements OnInit {
 
 	ngOnInit() {
 	}
-
 }

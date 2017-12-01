@@ -1,10 +1,18 @@
+$width: 800;
+$height: 600;
+$adjustPosition: 100;
+
 .draw-canvas {
-	width: 800px;
-	height: 600px;
+	position: relative;
+	width: #{$width}px;
+	height: #{$height}px;
 	background: white;
-	box-shadow: 0 10px 60px -20px rgba(0,0,0,.3);
-	margin: auto;
+	// box-shadow: 0 20px 125px -40px rgba(0,0,0,.3);
+	box-shadow: 0 0 1px rgba(0,0,0,.1);
+	border-radius: 2px;
+	margin-left: calc(50% - #{($width / 2) + $adjustPosition}px);
+	margin-right: calc(50% - #{($width / 2) - $adjustPosition}px);
 	margin-top: calc(50vh - 300px);
-	border: 1px solid #EEE;
+	// border: 1px solid #EEE;
 	user-select: none;
 }

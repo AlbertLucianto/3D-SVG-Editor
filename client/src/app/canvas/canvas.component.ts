@@ -64,7 +64,8 @@ export class CanvasComponent implements OnInit {
 		this.rd.listen('window', 'resize', (_e) => { this.updateCanvasPosition(); });
 
 		// Update canvas board state scale (and position too after delay)
-		this.rd.listen('window', 'wheel', (e: WheelEvent) => {
+		this.rd.listen('window', 'wheel', (e: WheelEvent) => e.preventDefault());
+		this.rd.listen(this.canvasRef.nativeElement, 'wheel', (e: WheelEvent) => {
 			this.updateCanvasScale(e);
 			window.clearTimeout(this.timeoutId);
 			this.timeoutId = window.setTimeout(() => {

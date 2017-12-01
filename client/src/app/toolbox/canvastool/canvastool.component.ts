@@ -7,7 +7,7 @@ import { ToolboxActions } from '../toolbox.action';
 	selector: 'app-canvastool',
 	templateUrl: './canvastool.component.html',
 	styleUrls: ['./canvastool.component.scss'],
-	encapsulation: ViewEncapsulation.None,
+	encapsulation: ViewEncapsulation.Emulated,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CanvastoolComponent extends ToolBaseComponent implements OnInit {
