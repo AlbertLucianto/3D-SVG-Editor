@@ -18,6 +18,7 @@ import { toolboxReducer } from './toolbox.reducer';
 export class ToolboxComponent {
 	public toolList = [
 		ToolName.Selectiontool,
+		ToolName.DirectSelectiontool,
 		ToolName.Pentool,
 		ToolName.Canvastool,
 	];

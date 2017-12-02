@@ -1,0 +1,23 @@
+.directtool {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	width: 100%;
+	height: 100%;
+	.directtool__icon {
+		width: 25px;
+		height: 25px;
+		background-image: url(../../../assets/img/inactive/direct_inactive.svg);
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: center;
+		&.icon--active {
+			background-image: url(../../../assets/img/active/direct_active.svg);
+		}
+	}
+}
+:host {
+	width: 100%;
+	height: 100%;
+}

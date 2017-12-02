@@ -15,6 +15,6 @@ export class PathComponent extends DrawableBaseComponent implements OnInit {
 	@Input() drawable: Path;
 
 	ngOnInit() {
-		console.log(this.drawable.toPath());
+		// console.log(this.drawable.toPath());
 	}
 }

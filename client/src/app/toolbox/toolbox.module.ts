@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { CanvastoolComponent } from './canvastool/canvastool.component';
 import { CanvastoolEpics } from './canvastool/canvastool.epics';
+import { DirectSelectiontoolComponent } from './directtool/directtool.component';
+import { DirectSelectiontoolEpics } from './directtool/directtool.epics';
 import { PentoolDrawEpics } from './pentool/epics/pentool.draw.epics';
 import { PentoolEpics } from './pentool/epics/pentool.epics';
 import { PentoolActions } from './pentool/pentool.action';
@@ -27,11 +29,13 @@ import { ToolboxEpics } from './toolbox.epics';
 		SelectiontoolComponent,
 		ToolDirective,
 		CanvastoolComponent,
+		DirectSelectiontoolComponent,
 	],
 	entryComponents: [
 		PentoolComponent,
 		SelectiontoolComponent,
 		CanvastoolComponent,
+		DirectSelectiontoolComponent,
 	],
 	providers: [
 		CanvastoolEpics,
@@ -42,6 +46,7 @@ import { ToolboxEpics } from './toolbox.epics';
 		PentoolDrawEpics,
 		SelectiontoolEpics,
 		SelectiontoolActions,
+		DirectSelectiontoolEpics,
 	],
 	exports: [
 		ToolboxComponent,

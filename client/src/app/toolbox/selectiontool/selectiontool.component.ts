@@ -1,11 +1,7 @@
 import { dispatch } from '@angular-redux/store';
 import {
-	AfterContentChecked,
-	ApplicationRef,
 	ChangeDetectionStrategy,
 	Component,
-	ElementRef,
-	Injector,
 	ViewEncapsulation,
 } from '@angular/core';
 
@@ -19,20 +15,12 @@ import { ToolboxActions } from '../toolbox.action';
 	encapsulation: ViewEncapsulation.Emulated,
 	changeDetection: ChangeDetectionStrategy.Default,
 })
-export class SelectiontoolComponent extends ToolBaseComponent implements AfterContentChecked {
-	appElementRef: ElementRef;
+export class SelectiontoolComponent extends ToolBaseComponent {
 	constructor(
-		private toolboxActions: ToolboxActions,
-		applicationRef: ApplicationRef,
-		injector: Injector) {
-		super();
-		this.appElementRef = injector.get(applicationRef.componentTypes[0]).root;
-	}
+		private toolboxActions: ToolboxActions) { super(); }
 
-	ngAfterContentChecked() {
-		if (this.context.isActive) {
-			this.appElementRef.nativeElement.style.cursor = 'url(../assets/img/cursor/selectiontool_cursor.svg) 10 5, default';
-		}
+	setCursorAfterSelected() {
+		this.appElementRef.nativeElement.style.cursor = 'url(assets/img/cursor/selectiontool_cursor.svg) 10 9, default';
 	}
 
 	@dispatch() selectTool = () => this.toolboxActions.selectToolAction(this.context.toolName);
