@@ -1,0 +1,29 @@
+.rim__wrapper {
+	width: 200%;
+	height: 100%; 
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	.rim__outline {
+		width: 120px;
+		height: 120px;
+		border-radius: 50%;
+		border-width: 15px;
+		border-style: solid;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		box-shadow: 0 5px 25px -5px rgba(0,0,0,.75);
+	}
+	.rim__fill {
+		width: 80%;
+		height: 80%;
+		border-radius: 50%;
+		box-shadow: 0 5px 25px -5px rgba(0,0,0,.75);
+	}
+}
+:host {
+	height: 100%;
+	width: 35%;
+	direction: rtl;
+}

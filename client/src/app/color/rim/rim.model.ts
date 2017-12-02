@@ -2,6 +2,8 @@ import { Record } from 'immutable';
 
 import { Color } from './rim.color.model';
 
+export { Color };
+
 export enum ColorAttribute {
 	Fill = 'fill',
 	Outline = 'outline',
@@ -14,13 +16,13 @@ export interface IFill {
 
 export interface IOutline {
 	color: Color;
-	width: number;
 	opacity: number;
+	width: number;
 }
 
 const initFill: IFill = { color: new Color(), opacity: 1 };
 
-export class Fill extends Record({}) {
+export class Fill extends Record(initFill) {
 	color: Color;
 	opacity: number;
 

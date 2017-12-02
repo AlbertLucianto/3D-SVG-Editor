@@ -12,6 +12,11 @@ export const componentToHex = (c: number): string => {
 
 export const rgbToHex = (r: number, g: number, b: number) => `#${componentToHex(r)}${componentToHex(g)}${componentToHex(b)}`;
 
+/**
+ * Create clamp between min and max, inclusive
+ * @param { number } min - Minimum (for color supposedly integer 0)
+ * @param { number } max - Maximum (for color supposedly integer 255)
+ */
 export const createClamp = (min: number, max: number): (value: number) => number =>
 	num => Math.round(num <= min ? min : num >= max ? max : num);
 
@@ -58,11 +63,12 @@ export class Color {
 	}
 
 	set = (channel: 'r'|'g'|'b', value: number): Color => {
-		console.assert(!inColorRange(value), 'Invalid color value, should be between 0 and 255 inclusive');
+		console.assert(inColorRange(value), 'Invalid color value, should be between 0 and 255 inclusive');
 		return new Color({ ...this.toObject(), [channel]: value });
 	}
 
 	toRGBString = () => `rgb(${this._r}, ${this._g}, ${this._b})`;
+	toRGBAString = (alpha: number) => `rgba(${this._r}, ${this._g}, ${this._b}, ${alpha})`;
 	toHexString = () => rgbToHex(this._r, this._g, this._b);
 	toObject = (): IRGBObject => ({ r: this._r, g: this._g, b: this._b });
 }

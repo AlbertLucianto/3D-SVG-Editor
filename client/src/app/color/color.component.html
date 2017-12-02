@@ -1,10 +1,8 @@
-<div class="color-picker">
-  <app-rim-color></app-rim-color>
-  <app-slider-color channel="r"></app-slider-color>
-  <app-slider-color channel="g"></app-slider-color>
-  <app-slider-color channel="b"></app-slider-color>
-  <app-slider-opacity></app-slider-opacity>
-  <div *ngIf="isOutlineSelected">
-    <app-stroke-width-slider></app-stroke-width-slider>
+<div class="colorPicker">
+  <app-rim-color [selected]="selected$ | async"></app-rim-color>
+  <div class="picker__sliderGroup">
+    <app-slider-color *ngFor="let channel of ['r', 'g', 'b']" [channel]="channel" [selected]="selected$ | async"></app-slider-color>
   </div>
 </div>
+<app-slider-opacity></app-slider-opacity>
+<app-stroke-width-slider></app-stroke-width-slider>
