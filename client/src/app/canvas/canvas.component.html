@@ -1,3 +1,4 @@
 <div #canvas class="draw-canvas" [ngStyle]="canvasStyle$ | async">
 	<app-drawable [drawable]="drawable" *ngFor="let drawable of (root$ | async)"></app-drawable>
+	<app-bounding-box></app-bounding-box>
 </div>

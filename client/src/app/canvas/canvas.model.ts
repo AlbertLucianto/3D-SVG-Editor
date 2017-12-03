@@ -97,9 +97,19 @@ export class Board extends Record(initBoardAttributes) {
 export interface ICanvasState {
 	root: List<Drawable>;
 	board: Board;
+	/**
+	 * List of paths from root
+	 */
+	selected: List<List<number>>;
 }
 
-export class CanvasState extends Record({ root: List<Drawable>([]), board: new Board(initBoardAttributes) }) {
+const initCanvasState: ICanvasState = {
+	root: List<Drawable>([]),
+	board: new Board(initBoardAttributes),
+	selected: List<List<number>>([]),
+};
+
+export class CanvasState extends Record(initCanvasState) {
 	constructor(initCanvas: ICanvasState) {
 		super(initCanvas);
 	}

@@ -19,10 +19,10 @@ export const canvasReducer: Reducer<CanvasState> = (
 	state = new CanvasState({
 		root: List([
 			new Path({ absPosition: new Position({ x: 100, y: 100 }), idx: 0 }),
-			new Path({ absPosition: new Position({ x: 100, y: 100 }), idx: 1 }),
 			// new Group({ absPosition: { x: 100, y: 100 }, idx: 0 }),
 		]),
 		board: new Board(),
+		selected: List<List<number>>([List([0])]),
 	}),
 	action: Action) => {
 		switch (true) {

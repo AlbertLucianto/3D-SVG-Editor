@@ -1,0 +1,8 @@
+<svg class="boundingBox" [ngClass]="{ display: show ? 'unset' : 'none' }">
+  <svg:rect
+    class="boundingBox__rect"
+    [attr.width]="width$ | async"
+    [attr.height]="height$ | async"
+    [attr.y]="top$ | async"
+    [attr.x]="left$ | async"></svg:rect>
+</svg>

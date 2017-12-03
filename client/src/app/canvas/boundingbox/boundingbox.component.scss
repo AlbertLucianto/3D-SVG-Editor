@@ -1,0 +1,12 @@
+.boundingBox {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	&__rect {
+		fill: none;
+		stroke: rgba(255,204,0,.5);
+		stroke-width: 1px;
+	}
+}
