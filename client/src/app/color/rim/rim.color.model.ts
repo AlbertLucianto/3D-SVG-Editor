@@ -63,7 +63,7 @@ export class Color {
 	}
 
 	set = (channel: 'r'|'g'|'b', value: number): Color => {
-		console.assert(inColorRange(value), 'Invalid color value, should be between 0 and 255 inclusive');
+		console.assert(inColorRange(value), 'Invalid color value, should be between 0 and 255 inclusive, found:', value);
 		return new Color({ ...this.toObject(), [channel]: value });
 	}
 

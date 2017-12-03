@@ -1,3 +1,5 @@
 <div #bar class="colorSlider" [ngStyle]="barStyle$ | async">
-	<div class="colorSlider__handle" (mousedown)="startDrag($event)" [ngStyle]="handleStyle$ | async"></div>
+	<div class="colorSlider__handle"
+		(mousedown)="startDrag($event)"
+		[ngStyle]="handleStyle$ | async"></div>
 </div>

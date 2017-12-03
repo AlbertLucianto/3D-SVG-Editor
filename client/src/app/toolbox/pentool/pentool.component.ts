@@ -16,12 +16,16 @@ import { ToolboxActions } from '../toolbox.action';
 	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class PentoolComponent extends ToolBaseComponent {
+	hotKey = 'p';
+
 	constructor(
 		private toolboxActions: ToolboxActions) { super(); }
 
 	setCursorAfterSelected() {
 		this.appElementRef.nativeElement.style.cursor = 'url(assets/img/cursor/pentool_cursor.svg) 10 5, pointer';
 	}
+
+	afterHotKeyDown = () => { this.selectTool(); };
 
 	@dispatch() selectTool = () => this.toolboxActions.selectToolAction(this.context.toolName);
 }

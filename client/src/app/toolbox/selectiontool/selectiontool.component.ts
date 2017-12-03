@@ -16,12 +16,16 @@ import { ToolboxActions } from '../toolbox.action';
 	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class SelectiontoolComponent extends ToolBaseComponent {
+	hotKey = 'v';
+
 	constructor(
 		private toolboxActions: ToolboxActions) { super(); }
 
 	setCursorAfterSelected() {
 		this.appElementRef.nativeElement.style.cursor = 'url(assets/img/cursor/selectiontool_cursor.svg) 10 9, default';
 	}
+
+	afterHotKeyDown = () => { this.selectTool(); };
 
 	@dispatch() selectTool = () => this.toolboxActions.selectToolAction(this.context.toolName);
 }

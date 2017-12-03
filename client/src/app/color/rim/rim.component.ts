@@ -1,17 +1,13 @@
-import { select$, WithSubStore } from '@angular-redux/store';
+import { select, WithSubStore } from '@angular-redux/store';
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import { Color } from '../rim/rim.color.model';
-import { ColorAttribute, Fill, Outline } from '../rim/rim.model';
-import { rimReducer } from '../rim/rim.reducer';
-
-const getColor = (attribute: Observable<Fill|Outline>): Observable<string> =>
-	attribute.map(prop => prop.color.toRGBString());
+import { colorPickerReducer } from '../color.reducer';
+import { ColorAttribute, RimState } from '../rim/rim.model';
 
 @WithSubStore({
 	basePathMethodName: 'getBasePath',
-	localReducer: rimReducer,
+	localReducer: colorPickerReducer,
 })
 @Component({
 	selector: 'app-rim-color',
@@ -20,12 +16,25 @@ const getColor = (attribute: Observable<Fill|Outline>): Observable<string> =>
 })
 export class RimComponent implements OnInit {
 	@Input() selected: ColorAttribute;
-	@select$('fill', getColor)	readonly fillColor$: Observable<Color>;
-	@select$('outline', getColor)	readonly outlineColor$: Observable<Color>;
+	@select('rim')	readonly rim$: Observable<RimState>;
 
 	constructor() { }
 
-	getBasePath = () => ['color', 'rim'];
+	get fillColor$() {
+		return this.rim$.map(rim => rim.fill.color.toRGBString());
+	}
+
+	get outlineColor$() {
+		return this.rim$.map(rim => rim.outline.color.toRGBString());
+	}
+
+	/**
+	 * An alternative is ['color', 'rim']
+	 *
+	 * But, since it will create problem with sub reducer (state get by getBasePath is passed to the reducer)
+	 * it create complication in the reducer, and does not adhere to existing implementations
+	 */
+	getBasePath = () => ['color'];
 
 	ngOnInit() {
 	}

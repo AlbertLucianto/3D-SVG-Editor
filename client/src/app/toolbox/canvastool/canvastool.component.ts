@@ -16,6 +16,8 @@ import { ToolboxActions } from '../toolbox.action';
 	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class CanvastoolComponent extends ToolBaseComponent {
+	hotKey = 'h';
+
 	constructor(
 		private toolboxActions: ToolboxActions) { super(); }
 
@@ -23,6 +25,8 @@ export class CanvastoolComponent extends ToolBaseComponent {
 		this.appElementRef.nativeElement.style.cursor = '-webkit-grab';
 		this.appElementRef.nativeElement.style.cursor = 'grab';
 	}
+
+	afterHotKeyDown = () => { this.selectTool(); };
 
 	@dispatch() selectTool = () => this.toolboxActions.selectToolAction(this.context.toolName);
 }

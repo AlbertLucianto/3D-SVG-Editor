@@ -74,12 +74,17 @@ export class SliderComponent implements OnInit {
 			});
 	}
 
+	/**
+	 * An alternative is ['color', 'rim', this.selected]
+	 *
+	 * But, since it will create problem with sub reducer (state get by getBasePath is passed to the reducer)
+	 * it create complication in the reducer, and does not adhere to existing implementations
+	 */
 	getBasePath = () => ['color'];
 
 	ngOnInit() { }
 
 	startDrag = (e: MouseEvent) => {
-		console.log(this.channel);
 		this.startPos = e.clientX;
 		this.dragging = true;
 		this.onDragListener = this.rd.listen('document', 'mousemove', this.onDrag);
@@ -89,12 +94,13 @@ export class SliderComponent implements OnInit {
 	onDrag = (e: MouseEvent) => {
 		if (this.dragging) {
 			const rect = this.barEl.nativeElement.getBoundingClientRect();
-			const newValue = 255 * (clampColor(e.clientX - rect.left) / rect.width);
+			const newValue = clampColor(255 * ((e.clientX - rect.left) / rect.width));
 			this.changeValue(newValue, this.channel); // parameter channel is required to bind with calling component
 		}
 	}
 
 	endDrag = (e: MouseEvent) => {
+		this.dragging = false;
 		this.onDragListener();
 		this.endDragListener();
 	}
