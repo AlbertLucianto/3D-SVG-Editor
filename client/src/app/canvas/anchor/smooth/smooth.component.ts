@@ -36,9 +36,7 @@ export class SmoothAnchorComponent extends AnchorBaseComponent implements OnInit
 	@Input() anchor: BaseAnchor;
 	@select$(['toolbox', 'selected', 'listeners'], filterListener)	readonly listeners$: Observable<List<RegisteredListener>>;
 
-	constructor(private rd: Renderer2) {
-		super();
-	}
+	constructor(private rd: Renderer2) { super(); }
 
 	get style() {
 		return {

@@ -110,7 +110,24 @@ export class CubicBezierAnchor extends BaseAnchor implements AnchorWithHandles {
 	}
 
 	get handleLines() {
-		return [];
+		return [
+			{
+				path: `
+				M${this.absPosition.x}, ${this.absPosition.y}
+				L${this.handlePositions.end.x}, ${this.handlePositions.end.y}
+				`,
+				headTransformStyle: `
+				translate(${this.handlePositions.end.x}px, ${this.handlePositions.end.y}px)`,
+			},
+			{
+				path: `
+				M${this.absPosition.x}, ${this.absPosition.y}
+				L${(this.absPosition.x * 2) - this.handlePositions.end.x}, ${(this.absPosition.y * 2) - this.handlePositions.end.y}
+				`,
+				headTransformStyle: `
+				translate(${(this.absPosition.x * 2) - this.handlePositions.end.x}px, ${(this.absPosition.y * 2) - this.handlePositions.end.y}px)`,
+			},
+		];
 	}
 
 	toPath = (): string =>
