@@ -21,9 +21,10 @@ const initDrawableAttribute = {
 	idx: 0,
 	absPosition: new Position({ x: 0, y: 0 }),
 	type: '',
+	children: List<Drawable>([]),
 };
 
-export abstract class Drawable extends Record({ ...initDrawableAttribute, children: List<Drawable>([]) }) {
+export abstract class Drawable extends Record(initDrawableAttribute) {
 	children: List<Drawable>;
 	routeParentPath: List<number>;
 	idx: number;
@@ -39,4 +40,14 @@ export abstract class Drawable extends Record({ ...initDrawableAttribute, childr
 	}
 
 	abstract setRouteParentPath: (parentPath: List<number>) => Drawable;
+
+	/**
+	 * Converting from Array<number> usually used in `targetIn` to be merged alternately with 'children' string
+	 * Used for accessing immutable data using methods `getIn`, `setIn`, etc.
+	 */
+	static toRoutePath = (targetIn: Array<number>, accessLastChildren: boolean = false): Array<number|'children'> =>
+		targetIn.reduce<Array<number|'children'>>((acc, target, idx) =>
+			accessLastChildren || idx !== targetIn.length - 1 ?
+			[...acc, target, 'children'] : [...acc, target],
+			[])
 }

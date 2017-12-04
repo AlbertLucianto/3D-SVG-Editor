@@ -31,8 +31,7 @@ export class Group extends Drawable {
 	 * @param {{type: DrawableType, absPosition: Position }|Path|Group} drawable - drawable parameters
 	 * @param {number} idx - inserted on index
 	 */
-	addChild = (drawable:
-		{ type: DrawableType, absPosition: Position }|Path|Group, idx: number): Group => {
+	addChild = (drawable: { type: DrawableType, absPosition: Position }|Path|Group, idx: number): Group => {
 		const child = <Path|Group>drawable;
 		if (typeof child !== 'undefined') {
 			return new Group({
