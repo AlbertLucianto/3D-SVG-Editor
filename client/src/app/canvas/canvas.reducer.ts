@@ -23,6 +23,7 @@ export const canvasReducer: Reducer<CanvasState> = (
 		]),
 		board: new Board(),
 		selected: List<List<number>>([List([0])]),
+		isolate: List<number>([]),
 	}),
 	action: Action) => {
 		switch (true) {

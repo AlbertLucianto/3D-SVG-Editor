@@ -13,15 +13,15 @@ export const drawableReducer: Reducer<CanvasState> = (state: CanvasState, action
 	switch (action.type) {
 		case DrawableActionType.DRAWABLE_SELECT:
 			const selectAction = <SelectAction>action;
-			return drawableCore.selectDrawable(state, selectAction.payload);
+			return <CanvasState>drawableCore.selectDrawable(state, selectAction.payload);
 		case DrawableActionType.DRAWABLE_ADD_SELECT:
 			const addSelectAction = <AddSelectAction>action;
-			return drawableCore.addSelectDrawable(state, addSelectAction.payload);
+			return <CanvasState>drawableCore.addSelectDrawable(state, addSelectAction.payload);
 		case DrawableActionType.DRAWABLE_DESELECT:
 			const deselectAction = <DeselectAction>action;
-			return drawableCore.deselectDrawable(state, deselectAction.payload);
+			return <CanvasState>drawableCore.deselectDrawable(state, deselectAction.payload);
 		case DrawableActionType.DRAWABLE_DESELECT_ALL:
-			return drawableCore.deselectAllDrawable(state);
+			return <CanvasState>drawableCore.deselectAllDrawable(state);
 	}
 	return state;
 };

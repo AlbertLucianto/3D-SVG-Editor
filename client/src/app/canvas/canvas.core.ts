@@ -4,11 +4,11 @@ const MIN_CANVAS_SCALE = 0.2;
 const MAX_CANVAS_SCALE = 2;
 
 export const updateTopLeft = (state: CanvasState, position: IPosition): CanvasState => {
-	return state.setIn(['board', 'topLeft'], new Position(position));
+	return <CanvasState>state.setIn(['board', 'topLeft'], new Position(position));
 };
 
 export const updateScale = (state: CanvasState, change: number): CanvasState => {
-	return state.updateIn(
+	return <CanvasState>state.updateIn(
 		['board', 'scale'],
 		(scale: number) => (
 			Math.min(Math.max(
@@ -18,5 +18,5 @@ export const updateScale = (state: CanvasState, change: number): CanvasState => 
 };
 
 export const updateMoved = (state: CanvasState, position: IPosition): CanvasState => {
-	return state.setIn(['board', 'moved'], new Position(position));
+	return <CanvasState>state.setIn(['board', 'moved'], new Position(position));
 };

@@ -19,14 +19,13 @@ export enum PentoolActionType {
 export type IMouseDownOnCanvasPayload = IPosition;
 export type IMouseUpOnCanvasPayload = IMouseDownOnCanvasPayload;
 export type IMoveCursorPayload = IMouseDownOnCanvasPayload;
-export type IChangeActivePathPayload = Array<number>;
 export interface IMouseDownOnAnchorPayload { targetIn: Array<number>; idx: number; }
 
 export type IMouseDownOnCanvasAction = FluxStandardAction<IMouseDownOnCanvasPayload, undefined>;
 export type IMouseUpOnCanvasAction = FluxStandardAction<IMouseUpOnCanvasPayload, undefined>;
 export type IMoveCursorOnCanvasAction = FluxStandardAction<IMoveCursorPayload, undefined>;
 export type IMouseDownOnAnchorAction = FluxStandardAction<IMouseDownOnAnchorPayload, undefined>;
-export type IChangeActivePathAction = FluxStandardAction<IChangeActivePathPayload, undefined>;
+export type IChangeActivePathAction = FluxStandardAction<Array<number>, undefined>;
 
 @Injectable()
 export class PentoolActions {

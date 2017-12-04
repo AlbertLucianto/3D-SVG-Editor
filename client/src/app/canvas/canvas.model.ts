@@ -108,15 +108,22 @@ export interface ICanvasState {
 	 * List of paths from root
 	 */
 	selected: List<List<number>>;
+	isolate: List<number>;
 }
 
 const initCanvasState: ICanvasState = {
 	root: List<Drawable>([]),
 	board: new Board(initBoardAttributes),
 	selected: List<List<number>>([]),
+	isolate: List<number>([]),
 };
 
-export class CanvasState extends Record(initCanvasState) {
+export class CanvasState extends Record(initCanvasState) implements ICanvasState {
+	root: List<Drawable>;
+	board: Board;
+	selected: List<List<number>>;
+	isolate: List<number>;
+
 	constructor(initCanvas: ICanvasState) {
 		super(initCanvas);
 	}
