@@ -19,7 +19,7 @@ import { IBoard, IPosition } from '../../../canvas/canvas.model';
 import { PathActions, PathActionType } from '../../../canvas/path/path.action';
 import { Path } from '../../../canvas/path/path.model';
 import { IAppState } from '../../../store/model';
-import { PentoolActionType } from '../pentool.action';
+import { PentoolActions, PentoolActionType } from '../pentool.action';
 
 const doneAction = { type: 'DONE', payload: undefined, meta: undefined };
 
@@ -34,6 +34,7 @@ const calcPositionOnCanvas = (input: IPosition, boardState: IBoard): IPosition =
 @Injectable()
 export class PentoolDrawEpics {
 	constructor(
+		private pentoolActions: PentoolActions,
 		private anchorActions: AnchorActions,
 		private pathActions: PathActions) { }
 
@@ -50,7 +51,7 @@ export class PentoolDrawEpics {
 			let position = <IPosition>action.payload[positionKey];
 			const targetIn = <Array<number>>store.getState().toolbox.selected.others.get('activePathIn').toJS();
 			if (shouldAdjust) {
-				const boardState = <IBoard>store.getState().canvas.get('board').toJS();
+				const boardState = <IBoard>store.getState().canvas.board.toJS();
 				position = calcPositionOnCanvas(<IPosition>action.payload, boardState); }
 			return this.pathActions.addAnchorAction(targetIn, position, anchorType);
 		};
@@ -61,7 +62,7 @@ export class PentoolDrawEpics {
 			const targetIn = <Array<number>>store.getState().toolbox.selected.others.get('activePathIn').toJS();
 			const idx = (<Path>store.getState().canvas.getIn(['root', ...targetIn])).children.size - 1;
 			if (shouldAdjust) {
-				const boardState = <IBoard>store.getState().canvas.get('board').toJS();
+				const boardState = <IBoard>store.getState().canvas.board.toJS();
 				position = calcPositionOnCanvas(<IPosition>action.payload, boardState); }
 			return this.anchorActions.updatePosition(targetIn, idx, position);
 		};
@@ -72,10 +73,13 @@ export class PentoolDrawEpics {
 			.ofType(PentoolActionType.PENTOOL_MOUSE_DOWN_ON_CANVAS)
 			.throttle(() => action$
 				.ofType(PathActionType.PATH_ZIP_PATH)
-				.switchMap(() => action$.ofType(PentoolActionType.PENTOOL_MOUSE_DOWN_ON_CANVAS)),
+				.switchMap(() => action$.ofType(PentoolActionType.PENTOOL_MOUSE_DOWN_ON_CANVAS)), // Skip one right after zip
 			)
-			// .map(action => this.pathActions.createNewIn())
-			.map(addAnchorWithStore(store, 'absPoint', true))
+			.map(action => this.pathActions.createNewIn(
+				store.getState().canvas.isolate.toArray(),
+				calcPositionOnCanvas(action.payload, <IBoard>store.getState().canvas.board.toJS())),
+			)
+			.map(action => this.pentoolActions.changeActivePathAction([...action.payload.parentIn, -1]))
 			.switchMap(() => // First create anchor, wait either drag or release, creating curve or line
 				raceStatic<FluxStandardAction<any, undefined>>(
 					action$.ofType(PentoolActionType.PENTOOL_MOUSE_UP_ON_CANVAS).take(1)
@@ -113,7 +117,7 @@ export class PentoolDrawEpics {
 									.map(updateAnchorPosWithStore(store, 'absPoint', true))
 									.map(action => this.anchorActions.updateBezierHandle(action.payload.targetIn, action.payload.idx, action.payload.position))
 									.map(action => {
-										const boardState = <IBoard>store.getState().canvas.get('board').toJS();
+										const boardState = <IBoard>store.getState().canvas.board.toJS();
 										const downOnCanvas = calcPositionOnCanvas(downAction.payload, boardState);
 										const position: IPosition = { // Reverse handle for the previous anchor
 											x: (downOnCanvas.x * 2) - action.payload.position.x,

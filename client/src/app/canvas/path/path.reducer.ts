@@ -3,6 +3,7 @@ import { Action, Reducer } from 'redux';
 import { CanvasState } from '../canvas.model';
 import {
 	IAddAnchorAction,
+	ICreateNewInAction,
 	IRemoveAnchorAction,
 	IRemoveLastAnchorAction,
 	IZipPathAction,
@@ -12,6 +13,9 @@ import * as pathCore from './path.core';
 
 export const pathReducer: Reducer<CanvasState> = (state: CanvasState, action: Action) => {
 	switch (action.type) {
+		case PathActionType.PATH_CREATE_NEW_IN:
+			const createAction = <ICreateNewInAction>action;
+			return <CanvasState>pathCore.createNewIn(state, createAction.payload.parentIn, createAction.payload.anchorPosition);
 		case PathActionType.PATH_ADD_ANCHOR:
 			const addAction = <IAddAnchorAction>action;
 			return <CanvasState>pathCore.addAnchor(

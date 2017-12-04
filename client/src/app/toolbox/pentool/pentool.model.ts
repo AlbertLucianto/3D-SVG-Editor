@@ -31,6 +31,6 @@ export const createPentool = (): ToolBase => {
 			{ name: 'mousemove', handler: mouseMoveOnCanvas, target: 'canvas' },
 			{ name: 'mousedown', handler: mouseDownOnHeadAnchor, target: 'anchor' },
 		]),
-		others: Map({ activePathIn: List([0]) }),
+		others: Map({ activePathIn: List([]) }),
 	});
 };

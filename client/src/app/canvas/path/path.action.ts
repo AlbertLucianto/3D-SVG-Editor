@@ -50,7 +50,7 @@ export class PathActions {
 	 * Otherwise, it will be just passing to the next operator, and only the last action is dispatched
 	 */
 	@dispatch()
-	createNewIn = (parentIn: Array<number>, anchorPosition): ICreateNewInAction => {
+	createNewIn = (parentIn: Array<number>, anchorPosition: IPosition): ICreateNewInAction => {
 		return {
 			type: PathActionType.PATH_CREATE_NEW_IN,
 			payload: { parentIn, anchorPosition },

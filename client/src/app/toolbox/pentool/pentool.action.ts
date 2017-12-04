@@ -1,3 +1,4 @@
+import { dispatch } from '@angular-redux/store';
 import { Injectable } from '@angular/core';
 import { FluxStandardAction } from 'flux-standard-action';
 
@@ -12,17 +13,20 @@ export enum PentoolActionType {
 	PENTOOL_MOUSE_UP_ON_CANVAS = 'PENTOOL_MOUSE_UP_ON_CANVAS',
 	PENTOOL_MOUSE_MOVE_ON_CANVAS = 'PENTOOL_MOUSE_MOVE_ON_CANVAS',
 	PENTOOL_MOUSE_DOWN_ON_ANCHOR = 'PENTOOL_MOUSE_DOWN_ON_ANCHOR',
+	PENTOOL_CHANGE_ACTIVE_PATH = 'PENTOOL_CHANGE_ACTIVE_PATH',
 }
 
 export type IMouseDownOnCanvasPayload = IPosition;
 export type IMouseUpOnCanvasPayload = IMouseDownOnCanvasPayload;
 export type IMoveCursorPayload = IMouseDownOnCanvasPayload;
+export type IChangeActivePathPayload = Array<number>;
 export interface IMouseDownOnAnchorPayload { targetIn: Array<number>; idx: number; }
 
 export type IMouseDownOnCanvasAction = FluxStandardAction<IMouseDownOnCanvasPayload, undefined>;
 export type IMouseUpOnCanvasAction = FluxStandardAction<IMouseUpOnCanvasPayload, undefined>;
 export type IMoveCursorOnCanvasAction = FluxStandardAction<IMoveCursorPayload, undefined>;
 export type IMouseDownOnAnchorAction = FluxStandardAction<IMouseDownOnAnchorPayload, undefined>;
+export type IChangeActivePathAction = FluxStandardAction<IChangeActivePathPayload, undefined>;
 
 @Injectable()
 export class PentoolActions {
@@ -54,6 +58,13 @@ export class PentoolActions {
 	mouseDownOnAnchorAction = (targetIn: Array<number>, idx: number): IMouseDownOnAnchorAction => ({
 		type: PentoolActionType.PENTOOL_MOUSE_DOWN_ON_ANCHOR,
 		payload: { targetIn, idx },
+		meta: undefined,
+	})
+
+	@dispatch()
+	changeActivePathAction = (targetIn: Array<number>): IChangeActivePathAction => ({
+		type: PentoolActionType.PENTOOL_CHANGE_ACTIVE_PATH,
+		payload: targetIn,
 		meta: undefined,
 	})
 }
