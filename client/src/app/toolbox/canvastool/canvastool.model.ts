@@ -1,7 +1,6 @@
 import { List } from 'immutable';
 
 import { ActionFromEvent, RegisteredListener } from '../../canvas/canvas.model';
-import { Drawable } from '../../canvas/drawable/drawable.model';
 import { ToolBase } from '../tool/tool.model';
 import { ToolName } from '../toolbox.model';
 import { CanvastoolActions } from './canvastool.action';
@@ -9,15 +8,15 @@ import { CanvastoolActions } from './canvastool.action';
 export const createCanvastool = (): ToolBase => {
 	const actions = new CanvastoolActions();
 
-	const mouseDownOnCanvas: ActionFromEvent = (e: MouseEvent, triggeringDrawable: Drawable) => {
+	const mouseDownOnCanvas: ActionFromEvent = (e: MouseEvent) => {
 		return actions.mouseDownOnCanvasAction({ x: e.clientX, y: e.clientY });
 	};
 
-	const mouseMoveOnCanvas: ActionFromEvent = (e: MouseEvent, triggeringDrawable: Drawable) => {
+	const mouseMoveOnCanvas: ActionFromEvent = (e: MouseEvent) => {
 		return actions.moveCursorOnCanvasAction({ x: e.clientX, y: e.clientY });
 	};
 
-	const mouseUpOnCanvas: ActionFromEvent = (e: MouseEvent, triggeringDrawable: Drawable) => {
+	const mouseUpOnCanvas: ActionFromEvent = (e: MouseEvent) => {
 		return actions.mouseUpOnCanvasAction({ x: e.clientX, y: e.clientY });
 	};
 

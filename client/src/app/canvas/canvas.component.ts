@@ -14,9 +14,8 @@ import 'rxjs/add/operator/filter';
 import { Observable } from 'rxjs/Observable';
 
 import { CanvasActions } from './canvas.action';
-import { IPosition, Position, RegisteredListener } from './canvas.model';
+import { ActionFromEvent, IPosition, RegisteredListener } from './canvas.model';
 import { Drawable } from './drawable/drawable.model';
-import { Path } from './path/path.model';
 
 const DAMP_SCROLL = 200;
 const DEBOUNCE_TIME = 20;
@@ -79,18 +78,14 @@ export class CanvasComponent implements OnInit {
 			this.listeners.forEach((listenerToDestroy: Function) => listenerToDestroy());
 			listeners.forEach(listener => {
 				this.listeners.push(this.rd.listen(this.canvasRef.nativeElement, listener.name,
-					(e: MouseEvent) => this.dispatchRegisteredAction(listener.handler, e),
+					(e: MouseEvent) => { this.dispatchRegisteredAction(listener.handler, e); },
 				));
 			});
 		});
 	}
 
-	@dispatch() dispatchRegisteredAction = (handler: Function, e: MouseEvent) => {
-		return handler(e, new Path({
-			routeParentPath: List([]),
-			idx: 0,
-			absPosition: new Position({ x: 0, y: 0 }),
-		})); // Still hardcoded, update later when there is 'selectedDrawable' state
+	@dispatch() dispatchRegisteredAction = (handler: ActionFromEvent, e: MouseEvent) => {
+		return handler(e);
 	}
 
 	@dispatch() updateCanvasPosition = () => {

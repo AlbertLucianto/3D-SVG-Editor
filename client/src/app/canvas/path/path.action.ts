@@ -10,6 +10,7 @@ import { IPosition } from '../canvas.model';
  * to be able to check if an enum value is in enum keys
  */
 export enum PathActionType {
+	PATH_CREATE_NEW_IN = 'PATH_CREATE_NEW_IN',
 	PATH_ADD_ANCHOR = 'PATH_ADD_ANCHOR',
 	PATH_UPDATE_ANCHOR = 'PATH_UPDATE_ANCHOR',
 	PATH_CHANGE_ANCHOR_TYPE = 'PATH_CHANGE_ANCHOR_TYPE',
@@ -17,6 +18,11 @@ export enum PathActionType {
 	PATH_REMOVE_ANCHOR = 'PATH_REMOVE_ANCHOR',
 	PATH_REMOVE_LAST_ANCHOR = 'PATH_REMOVE_LAST_ANCHOR',
 	PATH_ZIP_PATH = 'PATH_ZIP_PATH',
+}
+
+export interface ICreateNewInPayload {
+	parentIn: Array<number>;
+	anchorPosition: IPosition;
 }
 
 export interface IAddAnchorPayload {
@@ -29,6 +35,7 @@ export interface IRemoveAnchorPayload {
 	idx: number;
 }
 
+export type ICreateNewInAction = FluxStandardAction<ICreateNewInPayload, undefined>;
 export type IAddAnchorAction = FluxStandardAction<IAddAnchorPayload, undefined>;
 export type IRemoveAnchorAction = FluxStandardAction<IRemoveAnchorPayload, undefined>;
 export type IRemoveLastAnchorAction = FluxStandardAction<Array<number>, undefined>;
@@ -42,6 +49,15 @@ export class PathActions {
 	 * Don't forget to add `@dispatch()` if you want to achieve continuous dispatch.
 	 * Otherwise, it will be just passing to the next operator, and only the last action is dispatched
 	 */
+	@dispatch()
+	createNewIn = (parentIn: Array<number>, anchorPosition): ICreateNewInAction => {
+		return {
+			type: PathActionType.PATH_CREATE_NEW_IN,
+			payload: { parentIn, anchorPosition },
+			meta: undefined,
+		};
+	}
+
 	@dispatch()
 	addAnchorAction = (targetIn: Array<number>, anchorPosition: IPosition, anchorType?: AnchorType): IAddAnchorAction => {
 		return {

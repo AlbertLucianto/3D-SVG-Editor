@@ -17,6 +17,7 @@ import { AnchorActions } from '../../../canvas/anchor/anchor.action';
 import { AnchorType } from '../../../canvas/anchor/anchor.model';
 import { IBoard, IPosition } from '../../../canvas/canvas.model';
 import { PathActions, PathActionType } from '../../../canvas/path/path.action';
+import { Path } from '../../../canvas/path/path.model';
 import { IAppState } from '../../../store/model';
 import { PentoolActionType } from '../pentool.action';
 
@@ -47,19 +48,22 @@ export class PentoolDrawEpics {
 		const addAnchorWithStore = (store: MiddlewareAPI<IAppState>, positionKey: string, shouldAdjust: boolean, anchorType?: AnchorType) =>
 		(action: FluxStandardAction<any, undefined>) => {
 			let position = <IPosition>action.payload[positionKey];
+			const targetIn = <Array<number>>store.getState().toolbox.selected.others.get('activePathIn').toJS();
 			if (shouldAdjust) {
 				const boardState = <IBoard>store.getState().canvas.get('board').toJS();
-				position = calcPositionOnCanvas(<IPosition>action.payload[positionKey], boardState); }
-			return this.pathActions.addAnchorAction(action.payload.targetIn, position, anchorType);
+				position = calcPositionOnCanvas(<IPosition>action.payload, boardState); }
+			return this.pathActions.addAnchorAction(targetIn, position, anchorType);
 		};
 
 		const updateAnchorPosWithStore = (store: MiddlewareAPI<IAppState>, positionKey: string, shouldAdjust: boolean) =>
 		(action: FluxStandardAction<any, undefined>) => {
 			let position = <IPosition>action.payload[positionKey];
+			const targetIn = <Array<number>>store.getState().toolbox.selected.others.get('activePathIn').toJS();
+			const idx = (<Path>store.getState().canvas.getIn(['root', ...targetIn])).children.size - 1;
 			if (shouldAdjust) {
 				const boardState = <IBoard>store.getState().canvas.get('board').toJS();
-				position = calcPositionOnCanvas(<IPosition>action.payload[positionKey], boardState); }
-			return this.anchorActions.updatePosition(action.payload.targetIn, action.payload.idx, position);
+				position = calcPositionOnCanvas(<IPosition>action.payload, boardState); }
+			return this.anchorActions.updatePosition(targetIn, idx, position);
 		};
 
 		let lastAnchorType: AnchorType;
@@ -70,6 +74,7 @@ export class PentoolDrawEpics {
 				.ofType(PathActionType.PATH_ZIP_PATH)
 				.switchMap(() => action$.ofType(PentoolActionType.PENTOOL_MOUSE_DOWN_ON_CANVAS)),
 			)
+			// .map(action => this.pathActions.createNewIn())
 			.map(addAnchorWithStore(store, 'absPoint', true))
 			.switchMap(() => // First create anchor, wait either drag or release, creating curve or line
 				raceStatic<FluxStandardAction<any, undefined>>(
@@ -109,7 +114,7 @@ export class PentoolDrawEpics {
 									.map(action => this.anchorActions.updateBezierHandle(action.payload.targetIn, action.payload.idx, action.payload.position))
 									.map(action => {
 										const boardState = <IBoard>store.getState().canvas.get('board').toJS();
-										const downOnCanvas = calcPositionOnCanvas(downAction.payload.absPoint, boardState);
+										const downOnCanvas = calcPositionOnCanvas(downAction.payload, boardState);
 										const position: IPosition = { // Reverse handle for the previous anchor
 											x: (downOnCanvas.x * 2) - action.payload.position.x,
 											y: (downOnCanvas.y * 2) - action.payload.position.y,

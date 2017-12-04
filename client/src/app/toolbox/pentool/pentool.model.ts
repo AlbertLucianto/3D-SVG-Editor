@@ -1,7 +1,6 @@
-import { List } from 'immutable';
+import { List, Map } from 'immutable';
 
 import { ActionFromEvent, RegisteredListener } from '../../canvas/canvas.model';
-import { Drawable } from '../../canvas/drawable/drawable.model';
 import { ToolBase } from '../tool/tool.model';
 import { ToolName } from '../toolbox.model';
 import { PentoolActions } from './pentool.action';
@@ -9,22 +8,16 @@ import { PentoolActions } from './pentool.action';
 export const createPentool = (): ToolBase => {
 	const actions = new PentoolActions();
 
-	const mouseDownOnCanvas: ActionFromEvent = (e: MouseEvent, triggeringDrawable: Drawable) => {
-		const pathFromRoot = [ ...triggeringDrawable.routeParentPath.toJS(), triggeringDrawable.idx ];
-		return actions.mouseDownOnCanvasAction(pathFromRoot, { x: e.clientX, y: e.clientY });
-	};
+	const mouseDownOnCanvas: ActionFromEvent = (e: MouseEvent) =>
+		actions.mouseDownOnCanvasAction({ x: e.clientX, y: e.clientY });
 
-	const mouseUpOnCanvas: ActionFromEvent = (e: MouseEvent, triggeringDrawable: Drawable) => {
-		const pathFromRoot = [ ...triggeringDrawable.routeParentPath.toJS(), triggeringDrawable.idx ];
-		return actions.mouseUpOnCanvasAction(pathFromRoot, { x: e.clientX, y: e.clientY });
-	};
+	const mouseUpOnCanvas: ActionFromEvent = (e: MouseEvent) =>
+		actions.mouseUpOnCanvasAction({ x: e.clientX, y: e.clientY });
 
-	const mouseMoveOnCanvas: ActionFromEvent = (e: MouseEvent, triggeringDrawable: Drawable) => {
-		const pathFromRoot = [ ...triggeringDrawable.routeParentPath.toJS(), triggeringDrawable.idx ];
-		return actions.moveCursorOnCanvasAction(pathFromRoot, triggeringDrawable.get('children').size - 1, { x: e.clientX, y: e.clientY });
-	};
+	const mouseMoveOnCanvas: ActionFromEvent = (e: MouseEvent) =>
+		actions.moveCursorOnCanvasAction({ x: e.clientX, y: e.clientY });
 
-	const mouseDownOnHeadAnchor: ActionFromEvent = (e: MouseEvent, triggeringDrawable: Drawable) => {
+	const mouseDownOnHeadAnchor: ActionFromEvent = (e: MouseEvent, { triggeringDrawable }) => {
 		// e.stopPropagation();
 		const pathFromRoot = triggeringDrawable.routeParentPath.toArray();
 		return actions.mouseDownOnAnchorAction(pathFromRoot, triggeringDrawable.idx);
@@ -38,5 +31,6 @@ export const createPentool = (): ToolBase => {
 			{ name: 'mousemove', handler: mouseMoveOnCanvas, target: 'canvas' },
 			{ name: 'mousedown', handler: mouseDownOnHeadAnchor, target: 'anchor' },
 		]),
+		others: Map({ activePathIn: List([0]) }),
 	});
 };

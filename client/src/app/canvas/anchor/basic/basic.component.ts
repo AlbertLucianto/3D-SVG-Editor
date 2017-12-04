@@ -13,7 +13,7 @@ import 'rxjs/add/operator/filter';
 import { Observable } from 'rxjs/Observable';
 
 import { BaseAnchor } from '../../anchor/anchor.model';
-import { RegisteredListener } from '../../canvas.model';
+import { RegisteredListener, ActionFromEvent } from '../../canvas.model';
 import { Drawable } from '../../drawable/drawable.model';
 import { AnchorBaseComponent } from '../anchor.base.component';
 
@@ -52,7 +52,7 @@ export class BasicAnchorComponent extends AnchorBaseComponent implements OnInit 
 			this.listeners.forEach((listenerToDestroy: Function) => listenerToDestroy());
 			listeners.forEach(listener => {
 				this.listeners.push(this.rd.listen(this.anchorRef.nativeElement, listener.name,
-					(e: MouseEvent) => this.dispatchRegisteredAction(listener.handler, e, this.anchor),
+					(e: MouseEvent) => { this.dispatchRegisteredAction(listener.handler, e, this.anchor); },
 				));
 			});
 		});
@@ -62,7 +62,7 @@ export class BasicAnchorComponent extends AnchorBaseComponent implements OnInit 
 	 * Need to pass `drawableRef` because calling `this` in the function
 	 * will refer the drawable from the currentTarget (last anchor)
 	 */
-	@dispatch() dispatchRegisteredAction = (handler: Function, e: MouseEvent, drawableRef: Drawable) => {
-		return handler(e, drawableRef);
+	@dispatch() dispatchRegisteredAction = (handler: ActionFromEvent, e: MouseEvent, drawableRef: Drawable) => {
+		return handler(e, { triggeringDrawable: drawableRef, currentTriggeringDrawable: this.anchor });
 	}
 }
