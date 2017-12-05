@@ -4,6 +4,7 @@ import {
 	ComponentFactoryResolver,
 	ComponentRef,
 	Input,
+	OnChanges,
 	OnDestroy,
 	OnInit,
 	ViewChild,
@@ -36,7 +37,7 @@ const getComponentType = (typeName: DrawableType) => {
 	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DrawableComponent implements OnInit, OnDestroy {
+export class DrawableComponent implements OnInit, OnDestroy, OnChanges {
 	componentRef: ComponentRef<DrawableBaseComponent>;
 	instance: DrawableBaseComponent;
 	@ViewChild(DrawableDirective, { read: ViewContainerRef }) drawableHost: ViewContainerRef;
@@ -52,6 +53,10 @@ export class DrawableComponent implements OnInit, OnDestroy {
 			this.instance = this.componentRef.instance;
 			this.instance.drawable = this.drawable;
 		}
+	}
+
+	ngOnChanges() {
+		if (!!this.instance) { this.instance.drawable = this.drawable; }
 	}
 
 	ngOnDestroy() {

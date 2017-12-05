@@ -99,4 +99,8 @@ export class CanvasComponent implements OnInit {
 		e.preventDefault();
 		return this.canvasActions.updateScale(e.deltaY / DAMP_SCROLL);
 	}
+
+	trackById(idx: number, drawable: Drawable): number {
+		return drawable.id;
+	}
 }

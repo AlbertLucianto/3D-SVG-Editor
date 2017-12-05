@@ -26,7 +26,7 @@ const filterListener = (listeners$: Observable<List<RegisteredListener>>) =>
 	templateUrl: './basic.component.html',
 	styleUrls: ['./basic.component.scss'],
 	encapsulation: ViewEncapsulation.None,
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class BasicAnchorComponent extends AnchorBaseComponent implements OnInit {
 	listeners: Array<Function> = [];

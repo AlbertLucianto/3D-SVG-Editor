@@ -6,6 +6,7 @@ import { Drawable, DrawableType, IinitDrawable } from '../drawable/drawable.mode
 
 export interface IinitPath extends IinitDrawable {
 	isZipped?: boolean;
+	children?: List<BaseAnchor>;
 }
 
 export class Path extends Drawable {
@@ -55,7 +56,6 @@ export class Path extends Drawable {
 					idx: this.children.size,
 				},
 			)),
-			isZipped: this.isZipped,
 		});
 	}
 
@@ -66,16 +66,14 @@ export class Path extends Drawable {
 		return new Path({
 			...(<IinitPath>this.toObject()),
 			children,
-			isZipped: this.isZipped,
 		});
 	}
 
 	public updateAnchor = (idx: number, newPosition: IPosition): Path => {
-		const children = this.children.updateIn([idx], child => child.setPosition(newPosition));
+		const children = this.children.updateIn([idx], (child: BaseAnchor) => child.setPosition(newPosition));
 		return new Path({
 			...(<IinitPath>this.toObject()),
 			children,
-			isZipped: this.isZipped,
 		});
 	}
 
@@ -84,7 +82,6 @@ export class Path extends Drawable {
 		return new Path({
 			...(<IinitPath>this.toObject()),
 			children,
-			isZipped: this.isZipped,
 		});
 	}
 
@@ -96,6 +93,13 @@ export class Path extends Drawable {
 		return new Path({
 			...(<IinitPath>this.toObject()),
 			isZipped: true,
+		});
+	}
+
+	public toObject() {
+		return <IinitPath>({
+			...Drawable.prototype.toObject.call(this),
+			...(<IinitPath>this),
 		});
 	}
 }

@@ -16,21 +16,19 @@ export class BasicAnchor extends BaseAnchor {
 
 	setRouteParentPath = (path: List<number>): BasicAnchor => {
 		return new BasicAnchor({
-			idx: this.idx,
+			...this.toObject(),
 			routeParentPath: path,
-			absPosition: this.absPosition,
-			anchorType: this.anchorType,
 		});
 	}
 
 	setPosition = (absPosition: IPosition): BasicAnchor => {
 		return new BasicAnchor({
-			idx: this.idx,
-			routeParentPath: this.routeParentPath,
+			...this.toObject(),
 			absPosition: new Position(absPosition),
-			anchorType: this.anchorType,
 		});
 	}
+
+	clone = () => new BasicAnchor(this.toObject());
 
 	get transformStyle(): string {
 		return `translate(${this.absPosition.get('x')}px, ${this.absPosition.get('y')}px)`;

@@ -8,6 +8,7 @@ export enum DrawableType {
 }
 
 export interface IinitDrawable {
+	id?: number;
 	idx: number;
 	absPosition: Position;
 	routeParentPath?: List<number>;
@@ -17,14 +18,17 @@ export interface IinitDrawable {
 }
 
 const initDrawableAttribute = {
-	routeParentPath: List<number>([]),
+	id: 0,
 	idx: 0,
 	absPosition: new Position({ x: 0, y: 0 }),
+	routeParentPath: List<number>([]),
 	type: '',
 	children: List<Drawable>([]),
 };
 
 export abstract class Drawable extends Record(initDrawableAttribute) {
+	private static lastId = 1;
+	id: number;
 	children: List<Drawable>;
 	routeParentPath: List<number>;
 	idx: number;
@@ -34,8 +38,9 @@ export abstract class Drawable extends Record(initDrawableAttribute) {
 	constructor(init: IinitDrawable) {
 		super({
 			...init,
-			routeParentPath: init.routeParentPath ? init.routeParentPath : List<number>([]),
-			children: init.children ? init.children : List<Drawable>([]),
+			id: init.id || Drawable.genId(),
+			routeParentPath: init.routeParentPath || List<number>([]),
+			children: init.children || List<Drawable>([]),
 		});
 	}
 
@@ -50,4 +55,8 @@ export abstract class Drawable extends Record(initDrawableAttribute) {
 			accessLastChildren || idx !== targetIn.length - 1 ?
 			[...acc, target, 'children'] : [...acc, target],
 			[])
+
+	static genId = (): number => {
+		return Drawable.lastId++;
+	}
 }

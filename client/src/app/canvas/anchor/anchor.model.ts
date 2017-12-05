@@ -1,5 +1,5 @@
 import { List } from 'immutable';
-import { IPosition } from '../canvas.model';
+import { IPosition, Position } from '../canvas.model';
 import { Drawable, DrawableType, IinitDrawable } from '../drawable/drawable.model';
 
 export enum AnchorType {
@@ -16,9 +16,7 @@ export enum AnchorType {
 }
 
 export abstract class BaseAnchor extends Drawable {
-	idx: number;
 	anchorType: AnchorType;
-	transformStyle: string;
 
 	constructor(params: IinitDrawable) {
 		super({
@@ -27,16 +25,24 @@ export abstract class BaseAnchor extends Drawable {
 		});
 	}
 
+	abstract transformStyle: string;
 	abstract setRouteParentPath: (path: List<number>) => BaseAnchor;
-
 	abstract setPosition: (absPosition: IPosition) => BaseAnchor;
-
 	abstract toPath: () => string;
+	abstract clone: () => BaseAnchor;
+
+	public toObject() {
+		return <IinitDrawable>({
+			...Drawable.prototype.toObject.call(this),
+			...(<IinitDrawable>this),
+		});
+	}
 }
 
 export interface IHandle { path: string; headTransformStyle: string; }
 
-export interface AnchorWithHandles {
+export interface AnchorWithHandles extends BaseAnchor {
+	handlePositions: List<Position>;
 	handleLines: Array<IHandle>;
-	updateHandle: (absPosition: IPosition, which?: string) => AnchorWithHandles&BaseAnchor;
+	updateHandle: (absPosition: IPosition, which?: string) => AnchorWithHandles;
 }

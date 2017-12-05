@@ -25,7 +25,7 @@ listeners$.map(listeners => <List<RegisteredListener>>listeners
 	selector: 'app-path',
 	templateUrl: './path.component.html',
 	styleUrls: ['./path.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	changeDetection: ChangeDetectionStrategy.Default,
 	encapsulation: ViewEncapsulation.None, // default
 	// about encapsulation: angular-2-training-book.rangle.io/handout/advanced-components/view_encapsulation.html
 })
@@ -44,7 +44,6 @@ export class PathComponent extends DrawableBaseComponent implements OnInit {
 			// clear listener from pevious tool
 			this.listeners.forEach((listenerToDestroy: Function) => listenerToDestroy());
 			listeners.forEach(listener => {
-				// console.log(this.pathRef, listener);
 				this.listeners.push(this.rd.listen(this.pathRef.nativeElement, listener.name,
 					(e: MouseEvent) => { this.dispatchRegisteredAction(listener.handler, e, this.drawable); },
 				));
@@ -58,5 +57,9 @@ export class PathComponent extends DrawableBaseComponent implements OnInit {
 	 */
 	@dispatch() dispatchRegisteredAction = (handler: ActionFromEvent, e: MouseEvent, drawableRef: Drawable) => {
 		return handler(e, { triggeringDrawable: drawableRef, currentTriggeringDrawable: this.drawable });
+	}
+
+	trackById(idx: number, drawable: Drawable): number {
+		return drawable.id;
 	}
 }

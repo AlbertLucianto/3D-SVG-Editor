@@ -4,6 +4,7 @@ import {
 	ComponentFactoryResolver,
 	ComponentRef,
 	Input,
+	OnChanges,
 	OnDestroy,
 	OnInit,
 	ViewChild,
@@ -40,7 +41,7 @@ const getComponentType = (typeName: AnchorType) => {
 	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AnchorComponent extends DrawableBaseComponent implements OnInit, OnDestroy {
+export class AnchorComponent extends DrawableBaseComponent implements OnInit, OnDestroy, OnChanges {
 	componentRef: ComponentRef<AnchorBaseComponent>;
 	instance: AnchorBaseComponent;
 	@ViewChild(AnchorDirective, { read: ViewContainerRef }) anchorHost: ViewContainerRef;
@@ -56,6 +57,10 @@ export class AnchorComponent extends DrawableBaseComponent implements OnInit, On
 			this.instance = this.componentRef.instance;
 			this.instance.anchor = this.drawable;
 		}
+	}
+
+	ngOnChanges() {
+		if (this.instance) { this.instance.anchor = this.drawable; }
 	}
 
 	ngOnDestroy() {

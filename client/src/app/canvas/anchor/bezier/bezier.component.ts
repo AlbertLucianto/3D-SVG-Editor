@@ -28,7 +28,7 @@ listeners$.map(listeners => <List<RegisteredListener>>listeners
 	templateUrl: './bezier.component.html',
 	styleUrls: ['./bezier.component.scss'],
 	encapsulation: ViewEncapsulation.None,
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class BezierAnchorComponent extends AnchorBaseComponent implements OnInit {
 	listeners: Array<Function> = [];
@@ -41,7 +41,6 @@ export class BezierAnchorComponent extends AnchorBaseComponent implements OnInit
 	get style() {
 		return {
 			transform: this.anchor.transformStyle,
-			'pointer-events': this.anchor.idx === 0 ? 'auto' : 'none', // Test only for stopping cursor following
 		};
 	}
 

@@ -10,36 +10,41 @@ import { AnchorType, AnchorWithHandles, BaseAnchor } from '../anchor.model';
  */
 export class QuadraticBezierAnchor extends BaseAnchor implements AnchorWithHandles {
 	anchorType: AnchorType;
-	handlePosition: Position;
+	handlePositions: List<Position>;
 
 	constructor(params: IinitDrawable) {
 		super(params);
 		this.anchorType = AnchorType.QuadraticBezierCurve;
-		this.handlePosition = params.handlePosition || this.absPosition;
+		this.handlePositions = params.handlePositions || List([this.absPosition]);
 	}
 
 	setRouteParentPath = (path: List<number>): QuadraticBezierAnchor => {
 		return new QuadraticBezierAnchor({
-			idx: this.idx,
+			...(this.toObject()),
 			routeParentPath: path,
-			absPosition: this.absPosition,
-			handlePosition: this.handlePosition,
 		});
 	}
 
 	setPosition = (absPosition: IPosition): QuadraticBezierAnchor => {
 		return new QuadraticBezierAnchor({
-			idx: this.idx,
-			routeParentPath: this.routeParentPath,
+			...(this.toObject()),
 			absPosition: new Position(absPosition),
-			handlePosition: this.handlePosition,
 		});
 	}
 
 	updateHandle = (absPosition: IPosition) => {
 		return new QuadraticBezierAnchor({
-			...<IinitDrawable>this.toObject(),
-			handlePosition: new Position(absPosition),
+			...(this.toObject()),
+			handlePositions: List([new Position(absPosition)]),
+		});
+	}
+
+	clone = () => new QuadraticBezierAnchor(this.toObject());
+
+	toObject() {
+		return ({
+			...BaseAnchor.prototype.toObject.call(this),
+			handlePositions: this.handlePositions,
 		});
 	}
 
@@ -54,7 +59,7 @@ export class QuadraticBezierAnchor extends BaseAnchor implements AnchorWithHandl
 	toPath = (): string =>
 		`
 		${this.anchorType}
-		${this.handlePosition.x}, ${this.handlePosition.y}
+		${this.handlePositions.get(0).x}, ${this.handlePositions.get(0).y}
 		${this.absPosition.x}, ${this.absPosition.y}
 		`
 }
@@ -65,45 +70,40 @@ export class QuadraticBezierAnchor extends BaseAnchor implements AnchorWithHandl
  */
 export class CubicBezierAnchor extends BaseAnchor implements AnchorWithHandles {
 	anchorType: AnchorType;
-	handlePositions: { start: Position, end: Position };
+	handlePositions: List<Position>;
 
 	constructor(params: IinitDrawable) {
 		super(params);
 		this.anchorType = AnchorType.CubicBezierCurve;
-		this.handlePositions = params.handlePositions || { start: this.absPosition, end: this.absPosition };
+		this.handlePositions = params.handlePositions || List([this.absPosition, this.absPosition]);
 	}
 
 	setRouteParentPath = (path: List<number>): CubicBezierAnchor => {
 		return new CubicBezierAnchor({
-			idx: this.idx,
-			absPosition: this.absPosition,
+			...this.toObject(),
 			routeParentPath: path,
-			handlePositions: this.handlePositions,
 		});
 	}
 
 	setPosition = (absPosition: IPosition): CubicBezierAnchor => {
 		return new CubicBezierAnchor({
-			idx: this.idx,
+			...this.toObject(),
 			absPosition: new Position(absPosition),
-			routeParentPath: this.routeParentPath,
-			handlePositions: this.handlePositions,
 		});
 	}
 
 	updateHandle = (absPosition: IPosition, which: 'start'|'end'|'both' = 'start') => {
 		const position = new Position(absPosition);
+		const whichIdx = ({ start: 0, end: 1, both: 2 })[which];
 		return new CubicBezierAnchor({
-			idx: this.idx,
-			absPosition: this.absPosition,
-			routeParentPath: this.routeParentPath,
-			handlePositions: {
-				...this.handlePositions,
-				[which === 'both' ? 'start' : which]: position,
-				[which === 'both' ? 'end' : which]: position,
-			},
+			...this.toObject(),
+			handlePositions: this.handlePositions
+				.set(whichIdx === 2 ? 0 : whichIdx, position)
+				.set(whichIdx === 2 ? 1 : whichIdx, position),
 		});
 	}
+
+	clone = () => new CubicBezierAnchor(this.toObject());
 
 	get transformStyle() {
 		return `translate(${this.absPosition.x}px, ${this.absPosition.y}px)`;
@@ -114,18 +114,20 @@ export class CubicBezierAnchor extends BaseAnchor implements AnchorWithHandles {
 			{
 				path: `
 				M${this.absPosition.x}, ${this.absPosition.y}
-				L${this.handlePositions.end.x}, ${this.handlePositions.end.y}
+				L${this.handlePositions.get(1).x}, ${this.handlePositions.get(1).y}
 				`,
 				headTransformStyle: `
-				translate(${this.handlePositions.end.x}px, ${this.handlePositions.end.y}px)`,
+				translate(${this.handlePositions.get(1).x}px, ${this.handlePositions.get(1).y}px)`,
 			},
 			{
 				path: `
 				M${this.absPosition.x}, ${this.absPosition.y}
-				L${(this.absPosition.x * 2) - this.handlePositions.end.x}, ${(this.absPosition.y * 2) - this.handlePositions.end.y}
+				L${(this.absPosition.x * 2) - this.handlePositions.get(1).x}, ${(this.absPosition.y * 2) - this.handlePositions.get(1).y}
 				`,
 				headTransformStyle: `
-				translate(${(this.absPosition.x * 2) - this.handlePositions.end.x}px, ${(this.absPosition.y * 2) - this.handlePositions.end.y}px)`,
+				translate(
+				${(this.absPosition.x * 2) - this.handlePositions.get(1).x}px,
+				${(this.absPosition.y * 2) - this.handlePositions.get(1).y}px)`,
 			},
 		];
 	}
@@ -133,8 +135,8 @@ export class CubicBezierAnchor extends BaseAnchor implements AnchorWithHandles {
 	toPath = (): string =>
 		`
 		${this.anchorType}
-		${this.handlePositions.start.x}, ${this.handlePositions.start.y}
-		${this.handlePositions.end.x}, ${this.handlePositions.end.y}
+		${this.handlePositions.get(0).x}, ${this.handlePositions.get(0).y}
+		${this.handlePositions.get(1).x}, ${this.handlePositions.get(1).y}
 		${this.absPosition.x}, ${this.absPosition.y}
 		`
 }

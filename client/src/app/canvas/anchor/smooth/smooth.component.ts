@@ -28,7 +28,7 @@ listeners$.map(listeners => <List<RegisteredListener>>listeners
 	templateUrl: './smooth.component.html',
 	styleUrls: ['./smooth.component.scss'],
 	encapsulation: ViewEncapsulation.None,
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class SmoothAnchorComponent extends AnchorBaseComponent implements OnInit {
 	listeners: Array<Function> = [];

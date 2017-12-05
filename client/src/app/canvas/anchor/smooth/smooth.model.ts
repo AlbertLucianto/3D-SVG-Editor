@@ -11,38 +11,36 @@ import { BasicAnchor } from '../basic/basic.model';
  */
 export class SmoothAnchor extends BaseAnchor implements AnchorWithHandles {
 	anchorType: AnchorType;
-	handlePosition: Position;
+	handlePositions: List<Position>;
 
 	constructor(params: IinitDrawable) {
 		super(params);
 		this.anchorType = AnchorType.SmoothCurveTo;
-		this.handlePosition = params.handlePosition || this.absPosition;
+		this.handlePositions = params.handlePositions || List([this.absPosition]);
 	}
 
 	setRouteParentPath = (path: List<number>): SmoothAnchor => {
 		return new SmoothAnchor({
-			idx: this.idx,
-			absPosition: this.absPosition,
+			...this.toObject(),
 			routeParentPath: path,
-			handlePosition: this.handlePosition,
 		});
 	}
 
 	setPosition = (absPosition: IPosition): SmoothAnchor => {
 		return new SmoothAnchor({
-			idx: this.idx,
-			routeParentPath: this.routeParentPath,
+			...this.toObject(),
 			absPosition: new Position(absPosition),
-			handlePosition: this.handlePosition,
 		});
 	}
 
 	updateHandle = (absPosition: IPosition) => {
 		return new SmoothAnchor({
-			...<IinitDrawable>this.toObject(),
-			handlePosition: new Position(absPosition),
+			...this.toObject(),
+			handlePositions: List([new Position(absPosition)]),
 		});
 	}
+
+	clone = () => new SmoothAnchor(this.toObject());
 
 	get transformStyle() {
 		return `translate(${this.absPosition.x}px, ${this.absPosition.y}px)`;
@@ -51,15 +49,15 @@ export class SmoothAnchor extends BaseAnchor implements AnchorWithHandles {
 	get handleLines() {
 		return [
 			{
-				path: `M${this.absPosition.x}, ${this.absPosition.y} L${this.handlePosition.x}, ${this.handlePosition.y}`,
-				headTransformStyle: `translate(${this.handlePosition.x}px, ${this.handlePosition.y}px)`,
+				path: `M${this.absPosition.x}, ${this.absPosition.y} L${this.handlePositions.get(0).x}, ${this.handlePositions.get(0).y}`,
+				headTransformStyle: `translate(${this.handlePositions.get(0).x}px, ${this.handlePositions.get(0).y}px)`,
 			},
 			{
 				path: `
 				M${this.absPosition.x}, ${this.absPosition.y}
-				L${(this.absPosition.x * 2) - this.handlePosition.x}, ${(this.absPosition.y * 2) - this.handlePosition.y}`,
+				L${(this.absPosition.x * 2) - this.handlePositions.get(0).x}, ${(this.absPosition.y * 2) - this.handlePositions.get(0).y}`,
 				headTransformStyle: `
-				translate(${(this.absPosition.x * 2) - this.handlePosition.x}px, ${(this.absPosition.y * 2) - this.handlePosition.y}px)
+				translate(${(this.absPosition.x * 2) - this.handlePositions.get(0).x}px, ${(this.absPosition.y * 2) - this.handlePositions.get(0).y}px)
 				`,
 			},
 		];
@@ -68,7 +66,7 @@ export class SmoothAnchor extends BaseAnchor implements AnchorWithHandles {
 	toPath = (): string =>
 		`
 		${this.anchorType}
-		${this.handlePosition.x}, ${this.handlePosition.y}
+		${this.handlePositions.get(0).x}, ${this.handlePositions.get(0).y}
 		${this.absPosition.x}, ${this.absPosition.y}
 		`
 }
