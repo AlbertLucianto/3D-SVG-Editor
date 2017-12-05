@@ -4,12 +4,16 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
-	.path__line {
-		fill: #888;
-		stroke: #80F;
-		stroke-width: 1px;
+	pointer-events: none;
+	.path__container {
 		width: 100%;
 		height: 100%;
+		.path__line {
+			fill: #888;
+			stroke: #80F;
+			stroke-width: 1px;
+			pointer-events: all;
+		}
 	}
 	.path__anchorGroup {
 		position: absolute;
@@ -17,5 +21,6 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
+		pointer-events: none;
 	}
 }

@@ -13,7 +13,7 @@ import 'rxjs/add/operator/filter';
 import { Observable } from 'rxjs/Observable';
 
 import { BaseAnchor } from '../../anchor/anchor.model';
-import { RegisteredListener, ActionFromEvent } from '../../canvas.model';
+import { ActionFromEvent, RegisteredListener } from '../../canvas.model';
 import { Drawable } from '../../drawable/drawable.model';
 import { AnchorBaseComponent } from '../anchor.base.component';
 
@@ -34,9 +34,7 @@ export class BasicAnchorComponent extends AnchorBaseComponent implements OnInit 
 	@Input() anchor: BaseAnchor;
 	@select$(['toolbox', 'selected', 'listeners'], filterListener)	readonly listeners$: Observable<List<RegisteredListener>>;
 
-	constructor(private rd: Renderer2) {
-		super();
-	}
+	constructor(private rd: Renderer2) { super(); }
 
 	get style() {
 		return {

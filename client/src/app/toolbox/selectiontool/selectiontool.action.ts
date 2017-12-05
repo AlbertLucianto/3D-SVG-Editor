@@ -6,12 +6,10 @@ import { FluxStandardAction } from 'flux-standard-action';
  * to be able to check if an enum value is in enum keys
  */
 export enum SelectiontoolActionType {
-	SELECTIONTOOL_SELECT_DRAWABLE = 'SELECTIONTOOL_SELECT_DRAWABLE',
+	SELECTIONTOOL_MOUSE_DOWN_ON_DRAWABLE = 'SELECTIONTOOL_MOUSE_DOWN_ON_DRAWABLE',
 }
 
-export type ISelectDrawableAction = FluxStandardAction<{
-	drawable: Object,
-}, undefined>;
+export type ISelectDrawableAction = FluxStandardAction<Array<number>, undefined>;
 
 @Injectable()
 export class SelectiontoolActions {
@@ -21,9 +19,9 @@ export class SelectiontoolActions {
 	 * Here it does not need any `@dispatch()` decorator as it will only be
 	 * dispatched by view components, not epics
 	 */
-	selectDrawableAction = (drawable: Object): ISelectDrawableAction => ({
-		type: SelectiontoolActionType.SELECTIONTOOL_SELECT_DRAWABLE,
-		payload: { drawable },
+	mouseDownOnDrawableAction = (targetIn: Array<number>): ISelectDrawableAction => ({
+		type: SelectiontoolActionType.SELECTIONTOOL_MOUSE_DOWN_ON_DRAWABLE,
+		payload: targetIn,
 		meta: undefined,
 	})
 }

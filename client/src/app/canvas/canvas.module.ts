@@ -6,6 +6,7 @@ import { BoundingBoxComponent } from './boundingbox/boundingbox.component';
 import { CanvasActions } from './canvas.action';
 import { CanvasComponent } from './canvas.component';
 import { CanvasEpics } from './canvas.epics';
+import { DrawableActions } from './drawable/drawable.action';
 import { DrawableComponent } from './drawable/drawable.component';
 import { DrawableDirective } from './drawable/drawable.directive';
 import { GroupComponent } from './group/group.component';
@@ -33,6 +34,7 @@ import { PathComponent } from './path/path.component';
 		PathActions,
 		CanvasActions,
 		CanvasEpics,
+		DrawableActions,
 	],
 	exports: [
 		CanvasComponent,

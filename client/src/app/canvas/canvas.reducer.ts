@@ -10,23 +10,23 @@ import {
 	IUpdateTopLeftAction,
 } from './canvas.action';
 import * as canvasCore from './canvas.core';
-import { Board, CanvasState, Position } from './canvas.model';
+import { Board, CanvasState } from './canvas.model';
+import { DrawableActionType } from './drawable/drawable.action';
+import { drawableReducer } from './drawable/drawable.reducer';
 import { PathActionType } from './path/path.action';
-import { Path } from './path/path.model';
 import { pathReducer } from './path/path.reducer';
 
 export const canvasReducer: Reducer<CanvasState> = (
 	state = new CanvasState({
-		root: List([
-			new Path({ absPosition: new Position({ x: 100, y: 100 }), idx: 0 }),
-			// new Group({ absPosition: { x: 100, y: 100 }, idx: 0 }),
-		]),
+		root: List([]),
 		board: new Board(),
-		selected: List<List<number>>([List([0])]),
+		selected: List<List<number>>([]),
 		isolate: List<number>([]),
 	}),
 	action: Action) => {
 		switch (true) {
+			case action.type in DrawableActionType:
+				return drawableReducer(state, action);
 			case action.type in PathActionType:
 				return pathReducer(state, action);
 			case action.type in AnchorActionType:

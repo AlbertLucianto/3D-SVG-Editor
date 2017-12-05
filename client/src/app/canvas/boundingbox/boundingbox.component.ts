@@ -50,24 +50,26 @@ export class BoundingBoxComponent implements OnInit {
 					return selected.reduce<IBoundingBox>((accBound, pathFromRoot) => {
 						const drawable = <Drawable>root.getIn(pathFromRoot.toJS());
 						this.show = true;
-						switch (drawable.type) {
-							case DrawableType.Anchor:
-								return {
-									top: Math.min(drawable.absPosition.y, accBound.top),
-									bottom: Math.max(drawable.absPosition.y, accBound.bottom),
-									right: Math.max(drawable.absPosition.x, accBound.right),
-									left: Math.min(drawable.absPosition.x, accBound.left),
-								};
-							case DrawableType.Path:
-								const pathBound = calculatePathBound(<Path>drawable);
-								return {
-									top: Math.min(pathBound.top, accBound.top),
-									bottom: Math.max(pathBound.bottom, accBound.bottom),
-									right: Math.max(pathBound.right, accBound.right),
-									left: Math.min(pathBound.left, accBound.left),
-								};
-							default: return accBound;
+						if (typeof drawable !== 'undefined') {
+							switch (drawable.type) {
+								case DrawableType.Anchor:
+									return {
+										top: Math.min(drawable.absPosition.y, accBound.top),
+										bottom: Math.max(drawable.absPosition.y, accBound.bottom),
+										right: Math.max(drawable.absPosition.x, accBound.right),
+										left: Math.min(drawable.absPosition.x, accBound.left),
+									};
+								case DrawableType.Path:
+									const pathBound = calculatePathBound(<Path>drawable);
+									return {
+										top: Math.min(pathBound.top, accBound.top),
+										bottom: Math.max(pathBound.bottom, accBound.bottom),
+										right: Math.max(pathBound.right, accBound.right),
+										left: Math.min(pathBound.left, accBound.left),
+									};
+							}
 						}
+						return accBound;
 					}, this.initWithCanvas);
 				}),
 			);

@@ -4,6 +4,7 @@
 	height: 100%;
 	top: 0;
 	left: 0;
+	pointer-events: none;
 	&__rect {
 		fill: none;
 		stroke: rgba(255,204,0,.5);
