@@ -1,5 +1,5 @@
 TODO
-* Add select attribute capability color picker
+* ~~Add select attribute capability color picker~~ (Done. Maybe need to emphasize style selected)
 * Able to change color of selected drawable
 * Resizing bounding box
 * Move drawables using selection tool
