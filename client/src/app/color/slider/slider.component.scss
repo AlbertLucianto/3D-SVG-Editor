@@ -5,7 +5,7 @@
 	border-radius: 5px;
 	margin: 10px;
 	box-shadow: 0 2.5px 20px -2.5px rgba(0,0,0,.1) inset;
-	transition: transform .2s ease, box-shadow .2s ease;
+	transition: box-shadow .2s ease;
 	.colorSlider__handle {
 		width: 20px;
 		height: 20px;
@@ -15,6 +15,7 @@
 		background: white;
 		box-shadow: 2.5px 2.5px 20px -2.5px rgba(0,0,0,.4);
 		border-radius: 50%;
+		transition: transform .1s ease;
 		&:hover {
 			cursor: -webkit-grab;
 			cursor: grab;

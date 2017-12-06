@@ -1,9 +1,10 @@
-import { select, WithSubStore } from '@angular-redux/store';
+import { dispatch, select, WithSubStore } from '@angular-redux/store';
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { colorPickerReducer } from '../color.reducer';
 import { ColorAttribute, RimState } from '../rim/rim.model';
+import { RimActions } from './rim.action';
 
 @WithSubStore({
 	basePathMethodName: 'getBasePath',
@@ -18,7 +19,7 @@ export class RimComponent implements OnInit {
 	@Input() selected: ColorAttribute;
 	@select('rim')	readonly rim$: Observable<RimState>;
 
-	constructor() { }
+	constructor(private rimActions: RimActions) { }
 
 	get fillColor$() {
 		return this.rim$.map(rim => rim.fill.color.toRGBString());
@@ -36,6 +37,11 @@ export class RimComponent implements OnInit {
 	 */
 	getBasePath = () => ['color'];
 
-	ngOnInit() {
+	ngOnInit() { }
+
+	@dispatch() selectAttribute = (e: MouseEvent, attribute: ColorAttribute) => {
+		console.log(attribute);
+		e.stopPropagation();
+		return this.rimActions.ColorAttributeSelect(attribute);
 	}
 }

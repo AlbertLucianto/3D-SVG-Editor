@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { ColorPickerComponent } from './color.component';
 import { ColorPickerEpics } from './color.epics';
 import { OpacityComponent } from './opacity/opacity.component';
+import { RimActions } from './rim/rim.action';
 import { RimComponent } from './rim/rim.component';
 import { SliderActions } from './slider/slider.action';
 import { SliderComponent } from './slider/slider.component';
@@ -23,6 +24,7 @@ import { StrokeComponent } from './stroke/stroke.component';
 	providers: [
 		ColorPickerEpics,
 		SliderActions,
+		RimActions,
 	],
 	exports: [
 		ColorPickerComponent,
