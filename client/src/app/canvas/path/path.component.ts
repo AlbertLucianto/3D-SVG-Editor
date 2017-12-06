@@ -1,7 +1,9 @@
 import { dispatch, select$ } from '@angular-redux/store';
 import {
 	ChangeDetectionStrategy,
+	ChangeDetectorRef,
 	Component,
+	DoCheck,
 	ElementRef,
 	Input,
 	OnInit,
@@ -25,17 +27,20 @@ listeners$.map(listeners => <List<RegisteredListener>>listeners
 	selector: 'app-path',
 	templateUrl: './path.component.html',
 	styleUrls: ['./path.component.scss'],
-	changeDetection: ChangeDetectionStrategy.Default,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None, // default
 	// about encapsulation: angular-2-training-book.rangle.io/handout/advanced-components/view_encapsulation.html
 })
-export class PathComponent extends DrawableBaseComponent implements OnInit {
+export class PathComponent extends DrawableBaseComponent implements OnInit, DoCheck {
 	listeners: Array<Function> = [];
 	@ViewChild('path') pathRef: ElementRef;
 	@Input() drawable: Path;
 	@select$(['toolbox', 'selected', 'listeners'], filterListener)	readonly listeners$: Observable<List<RegisteredListener>>;
+	private old: Path;
 
-	constructor(private rd: Renderer2) { super(); }
+	constructor(
+		private rd: Renderer2,
+		private cdRef: ChangeDetectorRef) { super(); }
 
 	ngOnInit() {
 		// console.log(this.drawable.toPath());
@@ -49,6 +54,12 @@ export class PathComponent extends DrawableBaseComponent implements OnInit {
 				));
 			});
 		});
+		this.old = this.drawable;
+	}
+
+	ngDoCheck() {
+		if (this.drawable !== this.old) { this.cdRef.markForCheck(); }
+		this.old = this.drawable;
 	}
 
 	/**

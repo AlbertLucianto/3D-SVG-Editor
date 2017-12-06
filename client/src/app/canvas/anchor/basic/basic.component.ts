@@ -1,6 +1,9 @@
 import { dispatch, select$ } from '@angular-redux/store';
-import { ChangeDetectionStrategy,
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
 	Component,
+	DoCheck,
 	ElementRef,
 	Input,
 	OnInit,
@@ -26,15 +29,18 @@ const filterListener = (listeners$: Observable<List<RegisteredListener>>) =>
 	templateUrl: './basic.component.html',
 	styleUrls: ['./basic.component.scss'],
 	encapsulation: ViewEncapsulation.None,
-	changeDetection: ChangeDetectionStrategy.Default,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BasicAnchorComponent extends AnchorBaseComponent implements OnInit {
+export class BasicAnchorComponent extends AnchorBaseComponent implements OnInit, DoCheck {
 	listeners: Array<Function> = [];
 	@ViewChild('anchor') anchorRef: ElementRef;
 	@Input() anchor: BaseAnchor;
 	@select$(['toolbox', 'selected', 'listeners'], filterListener)	readonly listeners$: Observable<List<RegisteredListener>>;
+	private old: BaseAnchor;
 
-	constructor(private rd: Renderer2) { super(); }
+	constructor(
+		private rd: Renderer2,
+		private cdRef: ChangeDetectorRef) { super(); }
 
 	get style() {
 		return {
@@ -54,6 +60,12 @@ export class BasicAnchorComponent extends AnchorBaseComponent implements OnInit 
 				));
 			});
 		});
+		this.old = this.anchor;
+	}
+
+	ngDoCheck() {
+		if (this.old !== this.anchor) { this.cdRef.markForCheck(); }
+		this.old = this.anchor;
 	}
 
 	/**

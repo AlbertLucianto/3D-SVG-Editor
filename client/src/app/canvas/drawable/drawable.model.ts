@@ -20,6 +20,7 @@ export interface IinitDrawable {
 const initDrawableAttribute = {
 	id: 0,
 	idx: 0,
+	version: 0,
 	absPosition: new Position({ x: 0, y: 0 }),
 	routeParentPath: List<number>([]),
 	type: '',
@@ -28,10 +29,12 @@ const initDrawableAttribute = {
 
 export abstract class Drawable extends Record(initDrawableAttribute) {
 	private static lastId = 1;
+	private static lastVersion = 1;
 	id: number;
+	idx: number;
+	version: number;
 	children: List<Drawable>;
 	routeParentPath: List<number>;
-	idx: number;
 	absPosition: Position;
 	type: DrawableType;
 
@@ -39,6 +42,7 @@ export abstract class Drawable extends Record(initDrawableAttribute) {
 		super({
 			...init,
 			id: init.id || Drawable.genId(),
+			version: Drawable.genVersion(),
 			routeParentPath: init.routeParentPath || List<number>([]),
 			children: init.children || List<Drawable>([]),
 		});
@@ -58,5 +62,9 @@ export abstract class Drawable extends Record(initDrawableAttribute) {
 
 	static genId = (): number => {
 		return Drawable.lastId++;
+	}
+
+	static genVersion = (): number => {
+		return Drawable.lastVersion++;
 	}
 }
