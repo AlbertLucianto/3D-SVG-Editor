@@ -40,7 +40,6 @@ export class RimComponent implements OnInit {
 	ngOnInit() { }
 
 	@dispatch() selectAttribute = (e: MouseEvent, attribute: ColorAttribute) => {
-		console.log(attribute);
 		e.stopPropagation();
 		return this.rimActions.ColorAttributeSelect(attribute);
 	}

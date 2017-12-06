@@ -1,13 +1,16 @@
 <div class="rim__wrapper">
 	<div
 		class="rim__outline"
-		[style.border-color]="outlineColor$ | async"
+		[style.background]="outlineColor$ | async"
 		(mousedown)="selectAttribute($event, 'outline')"
 		[class.selected]="selected === 'outline'">
-		<div class="rim__fill"
-			[style.background]="fillColor$ | async"
-			(mousedown)="selectAttribute($event, 'fill')"
-			[class.selected]="selected === 'fill'">
+		<div
+			[ngClass]="['rim__separator', 'selected__' + selected]">
+			<div class="rim__fill"
+				[style.background]="fillColor$ | async"
+				(mousedown)="selectAttribute($event, 'fill')"
+				[class.selected]="selected === 'fill'">
+			</div>
 		</div>
 	</div>
 </div>
