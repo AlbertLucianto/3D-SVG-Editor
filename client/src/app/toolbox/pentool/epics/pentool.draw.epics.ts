@@ -1,3 +1,6 @@
+/**
+ * NEED SOME MORE REFINEMENTS!
+ */
 import { Injectable } from '@angular/core';
 import { FluxStandardAction } from 'flux-standard-action';
 import { MiddlewareAPI } from 'redux';
@@ -18,6 +21,7 @@ import { AnchorType } from '../../../canvas/anchor/anchor.model';
 import { IBoard, IPosition } from '../../../canvas/canvas.model';
 import { PathActions, PathActionType } from '../../../canvas/path/path.action';
 import { Path } from '../../../canvas/path/path.model';
+import { ColorAttribute } from '../../../color/rim/rim.model';
 import { IAppState } from '../../../store/model';
 import { PentoolActions, PentoolActionType } from '../pentool.action';
 
@@ -80,6 +84,8 @@ export class PentoolDrawEpics {
 				calcPositionOnCanvas(action.payload, <IBoard>store.getState().canvas.board.toJS())),
 			)
 			.map(action => this.pentoolActions.changeActivePathAction([...action.payload.parentIn, -1]))
+			.map(action => this.pathActions.changeColor(action.payload, ColorAttribute.Fill, store.getState().color.rim.fill.color))
+			.map(action => this.pathActions.changeColor(action.payload.targetIn, ColorAttribute.Outline, store.getState().color.rim.outline.color))
 			.switchMap(() => // First create anchor, wait either drag or release, creating curve or line
 				raceStatic<FluxStandardAction<any, undefined>>(
 					action$.ofType(PentoolActionType.PENTOOL_MOUSE_UP_ON_CANVAS).take(1)

@@ -1,4 +1,6 @@
 import { List } from 'immutable';
+
+import { Color, ColorAttribute } from '../../color/rim/rim.model';
 import { AnchorFactory } from '../anchor/anchor.factory';
 import { AnchorType, BaseAnchor } from '../anchor/anchor.model';
 import { IPosition, Position } from '../canvas.model';
@@ -7,12 +9,16 @@ import { Drawable, DrawableType, IinitDrawable } from '../drawable/drawable.mode
 export interface IinitPath extends IinitDrawable {
 	isZipped?: boolean;
 	children?: List<BaseAnchor>;
+	fill?: Color;
+	outline?: Color;
 }
 
 export class Path extends Drawable {
 	children: List<BaseAnchor>;
 	idx: number;
 	isZipped: boolean;
+	fill: Color;
+	outline: Color;
 
 	constructor(params: IinitPath) {
 		super({
@@ -20,9 +26,11 @@ export class Path extends Drawable {
 			type: DrawableType.Path,
 		});
 		this.isZipped = !!params.isZipped;
+		this.fill = params.fill || new Color('#000');
+		this.outline = params.outline || new Color('#000');
 	}
 
-	setRouteParentPath = (path: List<number>): Path => {
+	public setRouteParentPath = (path: List<number>): Path => {
 		return new Path({
 			...(<IinitPath>this.toObject()),
 			children: <List<BaseAnchor>>this.children.map(child => child.setRouteParentPath(path.push(this.idx))),
@@ -32,6 +40,11 @@ export class Path extends Drawable {
 
 	public toPath = (): string =>
 		this.children.reduce((acc, anchor) => `${acc} ${anchor.toPath()}`, '').concat(this.isZipped ? ' z' : '')
+
+	public toColorStyle = (): { [key: string]: string } => ({
+		fill: this.fill.toRGBString(), // Later change to toRGBAString when Opacity finished
+		stroke: this.outline.toRGBString(),
+	})
 
 	/**
 	 * Problem with immutable by adding methods which returns its own type
@@ -95,6 +108,12 @@ export class Path extends Drawable {
 			isZipped: true,
 		});
 	}
+
+	public setColor = (attribute: ColorAttribute, color: Color): Path =>
+		new Path({
+			...(<IinitPath>this.toObject()),
+			[attribute]: color,
+		})
 
 	public toObject() {
 		return <IinitPath>({

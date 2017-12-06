@@ -3,6 +3,7 @@ import { Action, Reducer } from 'redux';
 import { CanvasState } from '../canvas.model';
 import {
 	IAddAnchorAction,
+	IChangeColorAction,
 	ICreateNewInAction,
 	IRemoveAnchorAction,
 	IRemoveLastAnchorAction,
@@ -29,6 +30,13 @@ export const pathReducer: Reducer<CanvasState> = (state: CanvasState, action: Ac
 		case PathActionType.PATH_ZIP_PATH:
 			const zipAction = <IZipPathAction>action;
 			return <CanvasState>pathCore.zipPath(state, zipAction.payload);
+		case PathActionType.PATH_CHANGE_COLOR:
+			const changeColorAction = <IChangeColorAction>action;
+			return <CanvasState>pathCore.changeColor(
+				state,
+				changeColorAction.payload.targetIn,
+				changeColorAction.payload.attribute,
+				changeColorAction.payload.color);
 	}
 	return state;
 };

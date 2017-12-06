@@ -3,7 +3,6 @@ import { FluxStandardAction } from 'flux-standard-action';
 import { createEpicMiddleware, Epic } from 'redux-observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mapTo';
-import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/takeUntil';
 
@@ -47,7 +46,7 @@ export class CanvastoolEpics {
 	private moveCanvasOnMouseCycle = (): Epic<FluxStandardAction<any, undefined>, IAppState> => {
 		return (action$, store) => action$
 			.ofType(CanvastoolActionType.CANVASTOOL_MOUSE_DOWN_ON_CANVAS)
-			.mergeMap(startAction => {
+			.switchMap(startAction => {
 				const { moved } = <IBoard>store.getState().canvas.get('board').toJS();
 				return action$
 					.ofType(CanvastoolActionType.CANVASTOOL_MOUSE_MOVE_ON_CANVAS)

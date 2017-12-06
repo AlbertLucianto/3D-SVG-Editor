@@ -1,6 +1,6 @@
 <div class="path">
   <svg class="path__container">
-    <svg:path #path [attr.d]="drawable.toPath()" class="path__line"></svg:path>
+    <svg:path #path [attr.d]="drawable.toPath()" class="path__line" [ngStyle]="drawable.toColorStyle()"></svg:path>
   </svg>
   <div class="path__anchorGroup">
     <app-anchor *ngFor="let anchor of drawable.children; trackBy: trackById" [drawable]="anchor"></app-anchor>

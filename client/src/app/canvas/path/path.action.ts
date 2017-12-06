@@ -2,6 +2,8 @@ import { dispatch } from '@angular-redux/store';
 import { Injectable } from '@angular/core';
 import { FluxStandardAction } from 'flux-standard-action';
 
+import { IRGBObject } from '../../color/rim/rim.color.model';
+import { Color, ColorAttribute } from '../../color/rim/rim.model';
 import { AnchorType } from '../anchor/anchor.model';
 import { IPosition } from '../canvas.model';
 
@@ -18,6 +20,7 @@ export enum PathActionType {
 	PATH_REMOVE_ANCHOR = 'PATH_REMOVE_ANCHOR',
 	PATH_REMOVE_LAST_ANCHOR = 'PATH_REMOVE_LAST_ANCHOR',
 	PATH_ZIP_PATH = 'PATH_ZIP_PATH',
+	PATH_CHANGE_COLOR = 'PATH_CHANGE_COLOR',
 }
 
 export interface ICreateNewInPayload {
@@ -34,12 +37,18 @@ export interface IRemoveAnchorPayload {
 	targetIn: Array<number>;
 	idx: number;
 }
+export interface IChangeColorPayload {
+	targetIn: Array<number>;
+	attribute: ColorAttribute;
+	color: Color;
+}
 
 export type ICreateNewInAction = FluxStandardAction<ICreateNewInPayload, undefined>;
 export type IAddAnchorAction = FluxStandardAction<IAddAnchorPayload, undefined>;
 export type IRemoveAnchorAction = FluxStandardAction<IRemoveAnchorPayload, undefined>;
 export type IRemoveLastAnchorAction = FluxStandardAction<Array<number>, undefined>;
 export type IZipPathAction = FluxStandardAction<Array<number>, undefined>;
+export type IChangeColorAction = FluxStandardAction<IChangeColorPayload, undefined>;
 
 @Injectable()
 export class PathActions {
@@ -90,6 +99,17 @@ export class PathActions {
 		return {
 			type: PathActionType.PATH_ZIP_PATH,
 			payload: targetIn,
+			meta: undefined,
+		};
+	}
+
+	@dispatch()
+	changeColor = (targetIn: Array<number>, attribute: ColorAttribute, value: string|Color|IRGBObject): IChangeColorAction => {
+		let color = <Color>value;
+		if (typeof color === 'undefined') { color = new Color(value); }
+		return {
+			type: PathActionType.PATH_CHANGE_COLOR,
+			payload: { targetIn, attribute, color },
 			meta: undefined,
 		};
 	}
