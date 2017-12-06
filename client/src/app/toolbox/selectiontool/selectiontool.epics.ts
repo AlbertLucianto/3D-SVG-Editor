@@ -21,6 +21,7 @@ export class SelectiontoolEpics {
 		return [
 			createEpicMiddleware(this.setSelectiontoolTraitOnSelected()),
 			createEpicMiddleware(this.selectDrawableOnClick()),
+			createEpicMiddleware(this.deselectOnClickAway()),
 		];
 	}
 
@@ -35,6 +36,13 @@ export class SelectiontoolEpics {
 		return (action$, store) => action$
 			.ofType(SelectiontoolActionType.SELECTIONTOOL_MOUSE_DOWN_ON_DRAWABLE)
 			.map(action => this.drawableActions.selectAction(action.payload))
+			.mapTo(doneAction); // Preventing double dispatch
+	}
+
+	private deselectOnClickAway = (): Epic<FluxStandardAction<any, undefined>, IAppState> => {
+		return (action$, store) => action$
+			.ofType(SelectiontoolActionType.SELECTIONTOOL_MOUSE_DOWN_ON_CANVAS)
+			.map(action => this.drawableActions.deselectAllAction())
 			.mapTo(doneAction); // Preventing double dispatch
 	}
 }
