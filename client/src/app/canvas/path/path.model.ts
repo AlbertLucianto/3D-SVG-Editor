@@ -1,6 +1,6 @@
 import { List } from 'immutable';
 
-import { Color, ColorAttribute } from '../../color/rim/rim.model';
+import { ColorAttribute } from '../../color/rim/rim.model';
 import { AnchorFactory } from '../anchor/anchor.factory';
 import { AnchorType, BaseAnchor } from '../anchor/anchor.model';
 import { IPosition, Position } from '../canvas.model';
@@ -9,16 +9,16 @@ import { Drawable, DrawableType, IinitDrawable } from '../drawable/drawable.mode
 export interface IinitPath extends IinitDrawable {
 	isZipped?: boolean;
 	children?: List<BaseAnchor>;
-	fill?: Color;
-	outline?: Color;
+	fill?: string;
+	outline?: string;
 }
 
 export class Path extends Drawable {
 	children: List<BaseAnchor>;
 	idx: number;
 	isZipped: boolean;
-	fill: Color;
-	outline: Color;
+	fill: string;
+	outline: string;
 
 	constructor(params: IinitPath) {
 		super({
@@ -26,8 +26,8 @@ export class Path extends Drawable {
 			type: DrawableType.Path,
 		});
 		this.isZipped = !!params.isZipped;
-		this.fill = params.fill || new Color('#000');
-		this.outline = params.outline || new Color('#000');
+		this.fill = params.fill || '#000';
+		this.outline = params.outline || '#000';
 	}
 
 	public setRouteParentPath = (path: List<number>): Path => {
@@ -42,8 +42,8 @@ export class Path extends Drawable {
 		this.children.reduce((acc, anchor) => `${acc} ${anchor.toPath()}`, '').concat(this.isZipped ? ' z' : '')
 
 	public toColorStyle = (): { [key: string]: string } => ({
-		fill: this.fill.toRGBString(), // Later change to toRGBAString when Opacity finished
-		stroke: this.outline.toRGBString(),
+		fill: this.fill, // Later change to toRGBAString when Opacity finished
+		stroke: this.outline,
 	})
 
 	/**
@@ -109,7 +109,7 @@ export class Path extends Drawable {
 		});
 	}
 
-	public setColor = (attribute: ColorAttribute, color: Color): Path =>
+	public setColor = (attribute: ColorAttribute, color: string): Path =>
 		new Path({
 			...(<IinitPath>this.toObject()),
 			[attribute]: color,

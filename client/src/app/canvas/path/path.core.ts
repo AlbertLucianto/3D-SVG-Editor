@@ -1,6 +1,6 @@
 import { List } from 'immutable';
 
-import { Color, ColorAttribute } from '../../color/rim/rim.model';
+import { ColorAttribute } from '../../color/rim/rim.model';
 import { AnchorType } from '../anchor/anchor.model';
 import { CanvasState, IPosition, Position } from '../canvas.model';
 import { Drawable } from '../drawable/drawable.model';
@@ -40,7 +40,7 @@ export const zipPath = (state: CanvasState, targetIn: Array<number>) => {
 	});
 };
 
-export const changeColor = (state: CanvasState, targetIn: Array<number>, attribute: ColorAttribute, color: Color) => {
+export const changeColor = (state: CanvasState, targetIn: Array<number>, attribute: ColorAttribute, color: string) => {
 	return state.updateIn(['root', ...Drawable.toRoutePath(targetIn)], (accessedPath: Path): Path => {
 		return accessedPath.setColor(attribute, color);
 	});

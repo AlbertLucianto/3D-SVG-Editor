@@ -2,8 +2,7 @@ import { dispatch } from '@angular-redux/store';
 import { Injectable } from '@angular/core';
 import { FluxStandardAction } from 'flux-standard-action';
 
-import { IRGBObject } from '../../color/rim/rim.color.model';
-import { Color, ColorAttribute } from '../../color/rim/rim.model';
+import { ColorAttribute } from '../../color/rim/rim.model';
 import { AnchorType } from '../anchor/anchor.model';
 import { IPosition } from '../canvas.model';
 
@@ -40,7 +39,7 @@ export interface IRemoveAnchorPayload {
 export interface IChangeColorPayload {
 	targetIn: Array<number>;
 	attribute: ColorAttribute;
-	color: Color;
+	color: string;
 }
 
 export type ICreateNewInAction = FluxStandardAction<ICreateNewInPayload, undefined>;
@@ -104,9 +103,9 @@ export class PathActions {
 	}
 
 	@dispatch()
-	changeColor = (targetIn: Array<number>, attribute: ColorAttribute, value: string|Color|IRGBObject): IChangeColorAction => {
-		let color = <Color>value;
-		if (typeof color === 'undefined') { color = new Color(value); }
+	changeColor = (targetIn: Array<number>, attribute: ColorAttribute, color: string): IChangeColorAction => {
+		// let color = <Color>value;
+		// if (typeof color === 'undefined') { color = new Color(value); }
 		return {
 			type: PathActionType.PATH_CHANGE_COLOR,
 			payload: { targetIn, attribute, color },

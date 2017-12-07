@@ -84,8 +84,9 @@ export class PentoolDrawEpics {
 				calcPositionOnCanvas(action.payload, <IBoard>store.getState().canvas.board.toJS())),
 			)
 			.map(action => this.pentoolActions.changeActivePathAction([...action.payload.parentIn, -1]))
-			.map(action => this.pathActions.changeColor(action.payload, ColorAttribute.Fill, store.getState().color.rim.fill.color))
-			.map(action => this.pathActions.changeColor(action.payload.targetIn, ColorAttribute.Outline, store.getState().color.rim.outline.color))
+			.map(action => this.pathActions.changeColor(action.payload, ColorAttribute.Fill, store.getState().color.rim.fill.color.toRGBString()))
+			.map(action => this.pathActions.changeColor(
+				action.payload.targetIn, ColorAttribute.Outline, store.getState().color.rim.outline.color.toRGBString()))
 			.switchMap(() => // First create anchor, wait either drag or release, creating curve or line
 				raceStatic<FluxStandardAction<any, undefined>>(
 					action$.ofType(PentoolActionType.PENTOOL_MOUSE_UP_ON_CANVAS).take(1)
