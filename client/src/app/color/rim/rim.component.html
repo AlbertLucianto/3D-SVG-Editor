@@ -3,13 +3,14 @@
 		class="rim__outline"
 		[style.background]="outlineColor$ | async"
 		(mousedown)="selectAttribute($event, 'outline')"
-		[class.selected]="selected === 'outline'">
+		[ngStyle]="getShadowStyle$('outline') | async">
 		<div
-			[ngClass]="['rim__separator', 'selected__' + selected]">
+			class="rim__separator"
+			[ngStyle]="separatorStyle$ | async">
 			<div class="rim__fill"
 				[style.background]="fillColor$ | async"
 				(mousedown)="selectAttribute($event, 'fill')"
-				[class.selected]="selected === 'fill'">
+				[ngStyle]="getShadowStyle$('fill') | async">
 			</div>
 		</div>
 	</div>

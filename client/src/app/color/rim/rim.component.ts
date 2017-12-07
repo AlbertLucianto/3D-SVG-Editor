@@ -29,6 +29,33 @@ export class RimComponent implements OnInit {
 		return this.rim$.map(rim => rim.outline.color.toRGBString());
 	}
 
+	get separatorStyle$() {
+		const outlineActive = this.selected === ColorAttribute.Outline;
+		const cb = (val: number) => Math.max(val - 50, 0);
+
+		return this.rim$.map(rim => ({
+			'box-shadow': `
+			${outlineActive ? '5px 5px 25px -5px' : '0 5px 10px -5px'}
+			${rim.outline.color
+				.update('r', cb).update('g', cb).update('b', cb)
+				.toRGBAString(outlineActive ? 0.75 : 0.25)}
+			inset`,
+		}));
+	}
+
+	getShadowStyle$(attribute: ColorAttribute) {
+		const isSelected = this.selected === attribute;
+		const cb = (val: number) => Math.max(val - 50, 0);
+
+		return this.rim$.map(rim => ({
+			'box-shadow': `
+			${isSelected ? '5px 5px 25px -5px' : '0 5px 15px -5px'}
+			${rim[attribute].color
+				.update('r', cb).update('g', cb).update('b', cb)
+				.toRGBAString(isSelected ? 0.75 : 0.25)}`,
+		}));
+	}
+
 	/**
 	 * An alternative is ['color', 'rim']
 	 *
