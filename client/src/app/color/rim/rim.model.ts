@@ -11,32 +11,28 @@ export enum ColorAttribute {
 
 export interface IFill {
 	color: Color;
-	opacity: number;
 }
 
 export interface IOutline {
 	color: Color;
-	opacity: number;
 	width: number;
 }
 
-const initFill: IFill = { color: new Color(), opacity: 1 };
+const initFill: IFill = { color: new Color() };
 
 export class Fill extends Record(initFill) {
 	color: Color;
-	opacity: number;
 
 	constructor(state: IFill = initFill) {
 		super(state);
 	}
 }
 
-const initOutline: IOutline = { color: new Color(), width: 1, opacity: 1 };
+const initOutline: IOutline = { color: new Color(), width: 1 };
 
 export class Outline extends Record(initOutline) {
 	color: Color;
 	width: number;
-	opacity: number;
 
 	constructor(state: IOutline = initOutline) {
 		super(state);
