@@ -3,7 +3,7 @@
 > An open source project for building 3D svg graphic assets
 
 Result and example (as December 2017):
-![result](https://albertlucianto.github.io/3d-svg-editor-ss.png =640x400)
+![result](https://albertlucianto.github.io/3d-svg-editor-ss.png)
 
 See UI mockup [here](https://albertlucianto.github.io/3d-svg-editor-ui.pdf)
 
