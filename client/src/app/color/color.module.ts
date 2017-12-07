@@ -8,6 +8,7 @@ import { RimActions } from './rim/rim.action';
 import { RimComponent } from './rim/rim.component';
 import { SliderActions } from './slider/slider.action';
 import { SliderComponent } from './slider/slider.component';
+import { SliderEpics } from './slider/slider.epics';
 import { StrokeComponent } from './stroke/stroke.component';
 
 @NgModule({
@@ -24,6 +25,7 @@ import { StrokeComponent } from './stroke/stroke.component';
 	providers: [
 		ColorPickerEpics,
 		SliderActions,
+		SliderEpics,
 		RimActions,
 	],
 	exports: [

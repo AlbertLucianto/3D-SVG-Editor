@@ -67,6 +67,12 @@ export class Color {
 		return new Color({ ...this.toObject(), [channel]: value });
 	}
 
+	update = (channel: 'r'|'g'|'b', mutation: (val: number) => number): Color => {
+		const newValue = mutation(this[channel]);
+		console.assert(inColorRange(newValue), 'Invalid color newValuevalue, should be between 0 and 255 inclusive, found:', newValue);
+		return new Color({ ...this.toObject(), [channel]: newValue });
+	}
+
 	toRGBString = () => `rgb(${this._r}, ${this._g}, ${this._b})`;
 	toRGBAString = (alpha: number) => `rgba(${this._r}, ${this._g}, ${this._b}, ${alpha})`;
 	toHexString = () => rgbToHex(this._r, this._g, this._b);

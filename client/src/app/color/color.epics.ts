@@ -1,10 +1,15 @@
 import { Injectable } from '@angular/core';
 
+import { SliderEpics } from './slider/slider.epics';
+
 @Injectable()
 export class ColorPickerEpics {
-	constructor() { }
+	constructor(
+		private sliderEpics: SliderEpics) { }
 
 	public createEpics() {
-		return [];
+		return [
+			...this.sliderEpics.createEpics(),
+		];
 	}
 }
