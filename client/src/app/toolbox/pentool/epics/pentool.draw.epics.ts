@@ -105,20 +105,22 @@ export class PentoolDrawEpics {
 				.last()
 				.switchMap(() => action$ // For next movements
 					.ofType(PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS)
-					.throttle(() => { // Do this after the `switchMap()` below and skip that while this executing (dragging)
-						let lastIdx: number;
-						return action$
+					.throttle(() => action$ // Do this after the `switchMap()` below and skip that while this executing (dragging)
 						.ofType(PentoolActionType.PENTOOL_MOUSE_DOWN_ON_CANVAS)
 						.mergeMap(downAction => raceStatic<FluxStandardAction<any, undefined>>(
 							action$.ofType(PentoolActionType.PENTOOL_MOUSE_UP_ON_CANVAS).take(1)
 								.map(addAnchorWithStore(store, 'absPoint', true))
 								.do(() => lastAnchorType = AnchorType.LineTo),
 							action$.ofType(PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS).take(1)
-								.do(action => lastIdx = action.payload.idx)
 								.map(addAnchorWithStore(store, 'absPoint', true, AnchorType.SmoothCurveTo))
-								.map(action =>
-									lastAnchorType === AnchorType.LineTo ?
-									this.anchorActions.changeType(action.payload.targetIn, lastIdx - 1, AnchorType.SmoothCurveTo) : action)
+								.map(action => {
+									if (lastAnchorType === AnchorType.LineTo) {
+										const targetIn = <Array<number>>store.getState().toolbox.selected.others.get('activePathIn').toJS();
+										const idx = (<Path>store.getState().canvas.getIn(['root', ...targetIn])).children.size - 1;
+										return this.anchorActions.changeType(action.payload.targetIn, idx - 1, AnchorType.SmoothCurveTo);
+									}
+									return action;
+								})
 								.switchMap(() => action$
 									.ofType(PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS)
 									.map(updateAnchorPosWithStore(store, 'absPoint', true))
@@ -135,8 +137,8 @@ export class PentoolDrawEpics {
 								)
 								.do(() => lastAnchorType = AnchorType.SmoothCurveTo)
 								.takeUntil(action$.ofType(PentoolActionType.PENTOOL_MOUSE_UP_ON_CANVAS)),
-						).last());
-					})
+						).last()),
+					)
 					.switchMap(() => { // Track movement when mouse is not down
 						let anchorIdx: number;
 						return action$
