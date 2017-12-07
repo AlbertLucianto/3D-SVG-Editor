@@ -47,21 +47,15 @@ export class SliderComponent implements OnInit {
 		return this.rim$.map(rim => rim[this.selected].color);
 	}
 
-	get opacity$(): Observable<number> {
-		return this.rim$.map(rim => rim[this.selected].opacity);
-	}
-
 	get barStyle$(): Observable<Object> {
 		return this.color$
-			.mergeMap(color =>
-				this.opacity$.map(opacity => ({
-					background: `
-					linear-gradient(to right,
-					${color.set(this.channel, 0).toRGBAString(opacity)},
-					${color.set(this.channel, 255).toRGBAString(opacity)})
-					`,
-				})),
-			);
+			.map(color => ({
+				background: `
+				linear-gradient(to right,
+				${color.set(this.channel, 0).toRGBAString()},
+				${color.set(this.channel, 255).toRGBAString()})
+				`,
+			}));
 	}
 
 	get handleStyle$() {

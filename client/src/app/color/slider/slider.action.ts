@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
 import { FluxStandardAction } from 'flux-standard-action';
 
-import { ColorAttribute } from '../rim/rim.model';
+import { IRGBObject } from '../rim/rim.color.model';
+import { Color, ColorAttribute } from '../rim/rim.model';
 
 export enum SliderActionType {
 	SLIDER_CHANGE_VALUE_BY_CHANNEL = 'SLIDER_CHANGE_VALUE_BY_CHANNEL',
+	SLIDER_CHANGE_COLOR = 'SLIDER_CHANGE_COLOR',
 }
 
-export interface IChangeValueByChannelPayload {
-	attribute: ColorAttribute; channel: 'r'|'g'|'b'; value: number;
-}
+export interface IChangeValueByChannelPayload { attribute: ColorAttribute; channel: 'r'|'g'|'b'; value: number; }
+export interface IChangeColorPayload { attribute: ColorAttribute; color: Color; }
 
 export type IChangeValueByChannelAction = FluxStandardAction<IChangeValueByChannelPayload, undefined>;
+export type IChangeColorAction = FluxStandardAction<IChangeColorPayload, undefined>;
 
 @Injectable()
 export class SliderActions {
@@ -27,4 +29,14 @@ export class SliderActions {
 		payload: { attribute, channel, value },
 		meta: undefined,
 	})
+
+	changeColor = (attribute: ColorAttribute, value: Color|string|IRGBObject): IChangeColorAction => {
+		let color = <Color>value;
+		if (!(color instanceof Color)) { color = new Color(value); }
+		return {
+			type: SliderActionType.SLIDER_CHANGE_COLOR,
+			payload: { attribute, color },
+			meta: undefined,
+		};
+	}
 }

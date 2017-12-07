@@ -3,6 +3,7 @@ import { Action, Reducer } from 'redux';
 import { ColorPickerState } from '../color.model';
 import { Color } from '../rim/rim.model';
 import {
+	IChangeColorAction,
 	IChangeValueByChannelAction,
 	SliderActionType,
 } from './slider.action';
@@ -10,10 +11,15 @@ import {
 export const sliderReducer: Reducer<ColorPickerState> = (state: ColorPickerState, action: Action) => {
 	switch (action.type) {
 		case SliderActionType.SLIDER_CHANGE_VALUE_BY_CHANNEL:
-			const { payload } = <IChangeValueByChannelAction>action;
+			const changeByChannel = <IChangeValueByChannelAction>action;
 			return <ColorPickerState>state.updateIn(
-				['rim', payload.attribute, 'color'],
-				(color: Color) => color.set(payload.channel, payload.value));
+				['rim', changeByChannel.payload.attribute, 'color'],
+				(color: Color) => color.set(changeByChannel.payload.channel, changeByChannel.payload.value));
+		case SliderActionType.SLIDER_CHANGE_COLOR:
+			const changeColor = <IChangeColorAction>action;
+			console.log(changeColor.payload.color);
+			return <ColorPickerState>state.setIn(
+				['rim', changeColor.payload.attribute, 'color'], changeColor.payload.color);
 	}
 	return state;
 };
