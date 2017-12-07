@@ -49,6 +49,7 @@
     "enhanced-resolve": "3.3.0",
     "flux-standard-action": "^2.0.0",
     "immutable": "^3.8.2",
+    "parse-color": "^1.0.0",
     "redux": "^3.7.2",
     "rxjs": "^5.5.2",
     "zone.js": "0.8.17"
