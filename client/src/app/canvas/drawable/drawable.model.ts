@@ -54,11 +54,11 @@ export abstract class Drawable extends Record(initDrawableAttribute) {
 	 * Converting from Array<number> usually used in `targetIn` to be merged alternately with 'children' string
 	 * Used for accessing immutable data using methods `getIn`, `setIn`, etc.
 	 */
-	static toRoutePath = (targetIn: Array<number>, accessLastChildren: boolean = false): Array<number|'children'> =>
-		targetIn.reduce<Array<number|'children'>>((acc, target, idx) =>
+	static toRoutePath = (targetIn: Array<number>, accessLastChildren: boolean = false): Array<number|'children'|'root'> =>
+		targetIn.reduce<Array<number|'children'|'root'>>((acc, target, idx) =>
 			accessLastChildren || idx !== targetIn.length - 1 ?
 			[...acc, target, 'children'] : [...acc, target],
-			[])
+			['root'])
 
 	static genId = (): number => {
 		return Drawable.lastId++;

@@ -1,4 +1,5 @@
-TODO
+# TODO
+
 * ~~Add select attribute capability color picker~~
   * ~~(Done. Maybe need to emphasize style selected)~~
 * ~~Able to change color of selected drawable~~
@@ -16,5 +17,6 @@ TODO
 * _Many more coming..._
 
 OPTIONAL
+
 * Improve rendering using OnPush change detection strategy
 * Improve calculation performance using GPU.js

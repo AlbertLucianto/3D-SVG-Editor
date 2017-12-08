@@ -1,5 +1,5 @@
 import { dispatch, select, WithSubStore } from '@angular-redux/store';
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { colorPickerReducer } from '../color.reducer';
@@ -14,6 +14,7 @@ import { RimActions } from './rim.action';
 	selector: 'app-rim-color',
 	templateUrl: './rim.component.html',
 	styleUrls: ['./rim.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RimComponent implements OnInit {
 	@Input() selected: ColorAttribute;

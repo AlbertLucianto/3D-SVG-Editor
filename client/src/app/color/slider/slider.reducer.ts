@@ -17,7 +17,6 @@ export const sliderReducer: Reducer<ColorPickerState> = (state: ColorPickerState
 				(color: Color) => color.set(changeByChannel.payload.channel, changeByChannel.payload.value));
 		case SliderActionType.SLIDER_CHANGE_COLOR:
 			const changeColor = <IChangeColorAction>action;
-			console.log(changeColor.payload.color);
 			return <ColorPickerState>state.setIn(
 				['rim', changeColor.payload.attribute, 'color'], changeColor.payload.color);
 	}

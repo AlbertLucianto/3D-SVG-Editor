@@ -19,6 +19,7 @@ import { raceStatic } from 'rxjs/operator/race';
 import { AnchorActions } from '../../../canvas/anchor/anchor.action';
 import { AnchorType } from '../../../canvas/anchor/anchor.model';
 import { IBoard, IPosition } from '../../../canvas/canvas.model';
+import { Drawable } from '../../../canvas/drawable/drawable.model';
 import { PathActions, PathActionType } from '../../../canvas/path/path.action';
 import { Path } from '../../../canvas/path/path.model';
 import { ColorAttribute } from '../../../color/rim/rim.model';
@@ -64,7 +65,7 @@ export class PentoolDrawEpics {
 		(action: FluxStandardAction<any, undefined>) => {
 			let position = <IPosition>action.payload[positionKey];
 			const targetIn = <Array<number>>store.getState().toolbox.selected.others.get('activePathIn').toJS();
-			const idx = (<Path>store.getState().canvas.getIn(['root', ...targetIn])).children.size - 1;
+			const idx = (<Path>store.getState().canvas.getIn(Drawable.toRoutePath(targetIn))).children.size - 1;
 			if (shouldAdjust) {
 				const boardState = <IBoard>store.getState().canvas.board.toJS();
 				position = calcPositionOnCanvas(<IPosition>action.payload, boardState); }
@@ -116,7 +117,7 @@ export class PentoolDrawEpics {
 								.map(action => {
 									if (lastAnchorType === AnchorType.LineTo) {
 										const targetIn = <Array<number>>store.getState().toolbox.selected.others.get('activePathIn').toJS();
-										const idx = (<Path>store.getState().canvas.getIn(['root', ...targetIn])).children.size - 1;
+										const idx = (<Path>store.getState().canvas.getIn(Drawable.toRoutePath(targetIn))).children.size - 1;
 										return this.anchorActions.changeType(action.payload.targetIn, idx - 1, AnchorType.SmoothCurveTo);
 									}
 									return action;
