@@ -3,6 +3,10 @@ import { Position } from '../canvas.model';
 import { Drawable, DrawableType, IinitDrawable } from '../drawable/drawable.model';
 import { Path } from '../path/path.model';
 
+export interface IinitGroup extends IinitDrawable {
+	children?: List<Group|Path>;
+}
+
 export class Group extends Drawable {
 	children: List<Group|Path>;
 
@@ -15,12 +19,13 @@ export class Group extends Drawable {
 
 	setRouteParentPath = (path: List<number>): Group => {
 		return new Group({
-			children: <List<Group|Path>>this.children.map(child => child.setRouteParentPath(path.push(this.idx))),
-			idx: this.idx,
+			...(<IinitGroup>this.toObject()),
 			routeParentPath: path,
-			absPosition: this.absPosition,
+			children: <List<Group|Path>>this.children.map(child => child.setRouteParentPath(path.push(this.idx))),
 		});
 	}
+
+	public setIndex = (idx: number): Group => new Group({ ...this.toObject(), idx });
 
 	/**
 	 * * Problem with immutable by adding methods which returns its own type
@@ -35,12 +40,11 @@ export class Group extends Drawable {
 		const child = <Path|Group>drawable;
 		if (typeof child !== 'undefined') {
 			return new Group({
+				...(<IinitGroup>this),
 				children: this.children.insert(idx, child.setRouteParentPath(this.routeParentPath.push(idx))),
-				idx: idx,
-				absPosition: this.absPosition,
 			});
 		}
-		return <Group>this.update(
+		return <Group>this.update( // Pretty sure will be error, fix later!
 			'children',
 			(children: List<Group|Path>): List<Group|Path> => {
 				const init = {
