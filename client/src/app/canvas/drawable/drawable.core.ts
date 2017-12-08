@@ -1,6 +1,7 @@
 import { List } from 'immutable';
 
 import { CanvasState } from '../canvas.model';
+import { Drawable } from './drawable.model';
 
 export const selectDrawable = (state: CanvasState, targetIn: Array<number>) => {
 	return state.set('selected', List([ List(targetIn) ]));
@@ -16,4 +17,8 @@ export const deselectDrawable = (state: CanvasState, targetIn: Array<number>) =>
 
 export const deselectAllDrawable = (state: CanvasState) => {
 	return state.set('selected', List<List<number>>([]));
+};
+
+export const deleteDrawable = (state: CanvasState, targetIn: Array<number>) => {
+	return state.removeIn(Drawable.toRoutePath(targetIn));
 };

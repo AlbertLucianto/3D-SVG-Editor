@@ -7,16 +7,19 @@ export enum DrawableActionType {
 	DRAWABLE_ADD_SELECT = 'DRAWABLE_ADD_SELECT',
 	DRAWABLE_DESELECT = 'DRAWABLE_DESELECT',
 	DRAWABLE_DESELECT_ALL = 'DRAWABLE_DESELECT_ALL',
+	DRAWABLE_DELETE = 'DRAWABLE_DELETE',
 }
 
 export type ISelectPayload = Array<number>;
 export type IAddSelectPayload = ISelectPayload;
 export type IDeselectPayload = ISelectPayload;
+export type IDeleteDrawablePayload = ISelectPayload;
 
 export type SelectAction = FluxStandardAction<ISelectPayload, undefined>;
 export type AddSelectAction = FluxStandardAction<IAddSelectPayload, undefined>;
 export type DeselectAction = FluxStandardAction<IDeselectPayload, undefined>;
 export type DeselectAllAction = FluxStandardAction<undefined, undefined>;
+export type DeleteDrawableAction = FluxStandardAction<IDeleteDrawablePayload, undefined>;
 
 @Injectable()
 export class DrawableActions {
@@ -45,6 +48,13 @@ export class DrawableActions {
 	deselectAllAction = (): DeselectAllAction => ({
 		type: DrawableActionType.DRAWABLE_DESELECT_ALL,
 		payload: undefined,
+		meta: undefined,
+	})
+
+	@dispatch()
+	deleteDrawableAction = (targetIn: Array<number>): DeleteDrawableAction => ({
+		type: DrawableActionType.DRAWABLE_DELETE,
+		payload: targetIn,
 		meta: undefined,
 	})
 }

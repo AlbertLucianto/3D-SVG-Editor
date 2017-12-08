@@ -3,6 +3,7 @@ import { Action, Reducer } from 'redux';
 import { CanvasState } from '../canvas.model';
 import {
 	AddSelectAction,
+	DeleteDrawableAction,
 	DeselectAction,
 	DrawableActionType,
 	SelectAction,
@@ -22,6 +23,9 @@ export const drawableReducer: Reducer<CanvasState> = (state: CanvasState, action
 			return <CanvasState>drawableCore.deselectDrawable(state, deselectAction.payload);
 		case DrawableActionType.DRAWABLE_DESELECT_ALL:
 			return <CanvasState>drawableCore.deselectAllDrawable(state);
+		case DrawableActionType.DRAWABLE_DELETE:
+			const deleteAction = <DeleteDrawableAction>action;
+			return <CanvasState>drawableCore.deleteDrawable(state, deleteAction.payload);
 	}
 	return state;
 };

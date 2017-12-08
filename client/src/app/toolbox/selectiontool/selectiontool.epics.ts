@@ -29,6 +29,7 @@ export class SelectiontoolEpics {
 			createEpicMiddleware(this.deselectOnClickAway()),
 			createEpicMiddleware(this.changeColorPickerOnSelect(ColorAttribute.Fill)),
 			createEpicMiddleware(this.changeColorPickerOnSelect(ColorAttribute.Outline)),
+			createEpicMiddleware(this.deleteObjectWhenPressed()),
 		];
 	}
 
@@ -58,10 +59,21 @@ export class SelectiontoolEpics {
 			.ofType(SelectiontoolActionType.SELECTIONTOOL_MOUSE_DOWN_ON_DRAWABLE)
 			.map(action => {
 				const path = <Path>store.getState().canvas.root.getIn(Drawable.toRoutePath(action.payload));
-				if (typeof path !== 'undefined') {
-					return this.sliderActions.changeColor(attribute, path[attribute]);
-				}
+				if (typeof path !== 'undefined') { return this.sliderActions.changeColor(attribute, path[attribute]); }
 				return doneAction;
 			});
+	}
+
+	private deleteObjectWhenPressed = (): Epic<FluxStandardAction<any, undefined>, IAppState> => {
+		return (action$, store) => action$
+			.ofType(SelectiontoolActionType.SELECTIONTOOL_KEY_DOWN_ON_WINDOW)
+			.filter(action => {
+				const e: KeyboardEvent = action.payload;
+				const key = e.which || e.keyCode;
+				return key === 8;
+			})
+			.do(() => store.getState().canvas.selected.forEach(targetIn =>
+				this.drawableActions.deleteDrawableAction(targetIn.toArray())))
+			.mapTo(doneAction);
 	}
 }

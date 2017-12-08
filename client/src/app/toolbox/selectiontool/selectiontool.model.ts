@@ -18,12 +18,17 @@ export const createSelectiontool = (): ToolBase => {
 		return actions.mouseDownOnCanvas();
 	};
 
+	const keyDownOnWindow: ActionFromEvent = (e: KeyboardEvent) => {
+		return actions.keyDownOnWindow(e);
+	};
+
 	return new ToolBase({
 		name: ToolName.Selectiontool,
 		listeners: List<RegisteredListener>([
 			{ name: 'mousedown', handler: mouseDownOnDrawable, target: 'path' },
 			{ name: 'mousedown', handler: mouseDownOnDrawable, target: 'group' },
 			{ name: 'mousedown', handler: mouseDownOnCanvas, target: 'canvas' },
+			{ name: 'keydown', handler: keyDownOnWindow, target: 'window' },
 		]),
 	});
 };
