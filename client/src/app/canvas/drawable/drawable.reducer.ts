@@ -6,6 +6,7 @@ import {
 	DeleteDrawableAction,
 	DeselectAction,
 	DrawableActionType,
+	RefreshAllRoutePathInAction,
 	SelectAction,
 } from './drawable.action';
 import * as drawableCore from './drawable.core';
@@ -26,6 +27,9 @@ export const drawableReducer: Reducer<CanvasState> = (state: CanvasState, action
 		case DrawableActionType.DRAWABLE_DELETE:
 			const deleteAction = <DeleteDrawableAction>action;
 			return <CanvasState>drawableCore.deleteDrawable(state, deleteAction.payload);
+		case DrawableActionType.DRAWABLE_REFRESH_ALL_ROUTE_PATH_IN:
+			const refreshAction = <RefreshAllRoutePathInAction>action;
+			return <CanvasState>drawableCore.refreshAllRoutePathIn(state, refreshAction.payload);
 	}
 	return state;
 };

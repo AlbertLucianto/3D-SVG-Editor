@@ -38,6 +38,8 @@ export class Path extends Drawable {
 		});
 	}
 
+	public setIndex = (idx: number): Path => new Path({ ...this.toObject(), idx });
+
 	public toPath = (): string =>
 		this.children.reduce((acc, anchor) => `${acc} ${anchor.toPath()}`, '').concat(this.isZipped ? ' z' : '')
 

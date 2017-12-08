@@ -8,18 +8,21 @@ export enum DrawableActionType {
 	DRAWABLE_DESELECT = 'DRAWABLE_DESELECT',
 	DRAWABLE_DESELECT_ALL = 'DRAWABLE_DESELECT_ALL',
 	DRAWABLE_DELETE = 'DRAWABLE_DELETE',
+	DRAWABLE_REFRESH_ALL_ROUTE_PATH_IN = 'DRAWABLE_REFRESH_ALL_ROUTE_PATH_IN',
 }
 
 export type ISelectPayload = Array<number>;
 export type IAddSelectPayload = ISelectPayload;
 export type IDeselectPayload = ISelectPayload;
 export type IDeleteDrawablePayload = ISelectPayload;
+export type IRefreshAllRoutePathInPayload = ISelectPayload;
 
 export type SelectAction = FluxStandardAction<ISelectPayload, undefined>;
 export type AddSelectAction = FluxStandardAction<IAddSelectPayload, undefined>;
 export type DeselectAction = FluxStandardAction<IDeselectPayload, undefined>;
 export type DeselectAllAction = FluxStandardAction<undefined, undefined>;
 export type DeleteDrawableAction = FluxStandardAction<IDeleteDrawablePayload, undefined>;
+export type RefreshAllRoutePathInAction = FluxStandardAction<IRefreshAllRoutePathInPayload, undefined>;
 
 @Injectable()
 export class DrawableActions {
@@ -55,6 +58,13 @@ export class DrawableActions {
 	deleteDrawableAction = (targetIn: Array<number>): DeleteDrawableAction => ({
 		type: DrawableActionType.DRAWABLE_DELETE,
 		payload: targetIn,
+		meta: undefined,
+	})
+
+	@dispatch()
+	refreshAllRoutePathIn = (parentIn: Array<number>): RefreshAllRoutePathInAction => ({
+		type: DrawableActionType.DRAWABLE_REFRESH_ALL_ROUTE_PATH_IN,
+		payload: parentIn,
 		meta: undefined,
 	})
 }

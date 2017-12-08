@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FluxStandardAction } from 'flux-standard-action';
+import { List } from 'immutable';
 import { createEpicMiddleware, Epic } from 'redux-observable';
 
 import { DrawableActions } from '../../canvas/drawable/drawable.action';
@@ -14,6 +15,11 @@ import { SelectiontoolActionType } from './selectiontool.action';
 import { createSelectiontool } from './selectiontool.model';
 
 const doneAction = { type: 'DONE', payload: undefined, meta: undefined };
+
+const findMostCommonAncestor = (routePaths: List<List<number>>) =>
+routePaths.reduce<List<number>>((common, path) =>
+	common.reduce((acc, val, idx) => val === path.get(idx) ? acc.push(val) : acc, List<number>([])),
+	routePaths.get(0));
 
 @Injectable()
 export class SelectiontoolEpics {
@@ -58,7 +64,7 @@ export class SelectiontoolEpics {
 		return (action$, store) => action$
 			.ofType(SelectiontoolActionType.SELECTIONTOOL_MOUSE_DOWN_ON_DRAWABLE)
 			.map(action => {
-				const path = <Path>store.getState().canvas.root.getIn(Drawable.toRoutePath(action.payload));
+				const path = <Path>store.getState().canvas.getIn(Drawable.toRoutePath(action.payload));
 				if (typeof path !== 'undefined') { return this.sliderActions.changeColor(attribute, path[attribute]); }
 				return doneAction;
 			});
@@ -70,10 +76,15 @@ export class SelectiontoolEpics {
 			.filter(action => {
 				const e: KeyboardEvent = action.payload;
 				const key = e.which || e.keyCode;
-				return key === 8;
+				return key === 8; // Delete key
 			})
 			.do(() => store.getState().canvas.selected.forEach(targetIn =>
 				this.drawableActions.deleteDrawableAction(targetIn.toArray())))
+			.do(() => {
+				const parentIn = findMostCommonAncestor(store.getState().canvas.selected);
+				this.drawableActions.refreshAllRoutePathIn(parentIn.slice(0, -1).toArray());
+			})
+			.map(() => this.drawableActions.deselectAllAction())
 			.mapTo(doneAction);
 	}
 }

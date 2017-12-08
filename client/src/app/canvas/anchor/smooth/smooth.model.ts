@@ -26,6 +26,8 @@ export class SmoothAnchor extends BaseAnchor implements AnchorWithHandles {
 		});
 	}
 
+	public setIndex = (idx: number): SmoothAnchor => new SmoothAnchor({ ...this.toObject(), idx });
+
 	setPosition = (absPosition: IPosition): SmoothAnchor => {
 		return new SmoothAnchor({
 			...this.toObject(),

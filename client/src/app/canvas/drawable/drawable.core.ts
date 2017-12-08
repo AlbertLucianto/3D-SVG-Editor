@@ -22,3 +22,9 @@ export const deselectAllDrawable = (state: CanvasState) => {
 export const deleteDrawable = (state: CanvasState, targetIn: Array<number>) => {
 	return state.removeIn(Drawable.toRoutePath(targetIn));
 };
+
+export const refreshAllRoutePathIn = (state: CanvasState, parentIn: Array<number>) => {
+	return state.updateIn(Drawable.toRoutePath(parentIn), (children: List<Drawable>) =>
+		children.map((drawable, idx) => drawable.setRouteParentPath(List(parentIn)).setIndex(idx)),
+	);
+};

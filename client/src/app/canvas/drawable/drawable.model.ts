@@ -27,7 +27,9 @@ const initDrawableAttribute = {
 	children: List<Drawable>([]),
 };
 
-export abstract class Drawable extends Record(initDrawableAttribute) {
+const RecordDrawable = Record(initDrawableAttribute);
+
+export abstract class Drawable extends RecordDrawable {
 	private static lastId = 1;
 	private static lastVersion = 1;
 	id: number;
@@ -49,22 +51,30 @@ export abstract class Drawable extends Record(initDrawableAttribute) {
 	}
 
 	abstract setRouteParentPath: (parentPath: List<number>) => Drawable;
+	abstract setIndex: (idx: number) => Drawable;
 
 	/**
 	 * Converting from Array<number> usually used in `targetIn` to be merged alternately with 'children' string
 	 * Used for accessing immutable data using methods `getIn`, `setIn`, etc.
 	 */
 	static toRoutePath = (targetIn: Array<number>, accessLastChildren: boolean = false): Array<number|'children'|'root'> =>
-		targetIn.reduce<Array<number|'children'|'root'>>((acc, target, idx) =>
+	targetIn.reduce<Array<number|'children'|'root'>>((acc, target, idx) =>
 			accessLastChildren || idx !== targetIn.length - 1 ?
 			[...acc, target, 'children'] : [...acc, target],
 			['root'])
 
-	static genId = (): number => {
-		return Drawable.lastId++;
+			static genId = (): number => {
+				return Drawable.lastId++;
 	}
 
 	static genVersion = (): number => {
 		return Drawable.lastVersion++;
+	}
+
+	public toObject() {
+		return <IinitDrawable>({
+			...RecordDrawable.prototype.toObject.call(this),
+			...(<IinitDrawable>this),
+		});
 	}
 }

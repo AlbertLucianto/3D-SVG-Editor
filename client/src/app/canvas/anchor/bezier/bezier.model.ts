@@ -25,6 +25,8 @@ export class QuadraticBezierAnchor extends BaseAnchor implements AnchorWithHandl
 		});
 	}
 
+	public setIndex = (idx: number): QuadraticBezierAnchor => new QuadraticBezierAnchor({ ...this.toObject(), idx });
+
 	setPosition = (absPosition: IPosition): QuadraticBezierAnchor => {
 		return new QuadraticBezierAnchor({
 			...(this.toObject()),
@@ -84,6 +86,8 @@ export class CubicBezierAnchor extends BaseAnchor implements AnchorWithHandles {
 			routeParentPath: path,
 		});
 	}
+
+	public setIndex = (idx: number): CubicBezierAnchor => new CubicBezierAnchor({ ...this.toObject(), idx });
 
 	setPosition = (absPosition: IPosition): CubicBezierAnchor => {
 		return new CubicBezierAnchor({

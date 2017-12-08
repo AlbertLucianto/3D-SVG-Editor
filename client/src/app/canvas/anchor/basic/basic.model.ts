@@ -21,6 +21,8 @@ export class BasicAnchor extends BaseAnchor {
 		});
 	}
 
+	public setIndex = (idx: number): BasicAnchor => new BasicAnchor({ ...this.toObject(), idx });
+
 	setPosition = (absPosition: IPosition): BasicAnchor => {
 		return new BasicAnchor({
 			...this.toObject(),
