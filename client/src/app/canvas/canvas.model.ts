@@ -14,19 +14,10 @@ export interface IRotation {
 	z?: number;
 }
 
-export class Position extends Record({ x: 0, y: 0 }) {
+export class Position extends Record({ x: 0, y: 0, z: 0 }) {
 	x: number;
 	y: number;
-
-	constructor(params: IPosition) {
-		super(params);
-	}
-}
-
-export class Position3D extends Record({ x: 0, y: 0, z: 0 }) {
-	x: number;
-	y: number;
-	z: number;
+	z?: number;
 
 	constructor(params: IPosition) {
 		super(params);
@@ -95,7 +86,12 @@ const initBoardAttributes: IBoard = {
 	dimension: new Size({ width: 800, height: 600 }),
 };
 
-export class Board extends Record(initBoardAttributes) {
+export class Board extends Record(initBoardAttributes) implements IBoard {
+	topLeft: Position;
+	scale: number;
+	moved: Position;
+	dimension: Size;
+
 	constructor(initBoard: IBoard = initBoardAttributes) {
 		super(initBoard);
 	}
