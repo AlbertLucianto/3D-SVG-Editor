@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { FluxStandardAction } from 'flux-standard-action';
 import { List } from 'immutable';
 import { createEpicMiddleware, Epic } from 'redux-observable';
+import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/switchMap';
+import { Observable } from 'rxjs/Observable';
 
 import { CanvasActions } from '../../canvas/canvas.action';
 import { IPosition } from '../../canvas/canvas.model';
@@ -84,17 +86,19 @@ export class SelectiontoolEpics {
 
 	private deleteObjectWhenPressed = (): Epic<FluxStandardAction<any, undefined>, IAppState> => {
 		return (action$, store) => action$
-			.ofType(SelectiontoolActionType.SELECTIONTOOL_KEY_DOWN_ON_WINDOW)
+			.ofType(SelectiontoolActionType.SELECTIONTOOL_KEY_DOWN_ON_WINDOW) // Later should just remove this action
+			.throttle(() => Observable.fromEvent(document, 'keyup'))
 			.filter(action => {
 				const e: KeyboardEvent = action.payload;
 				const key = e.which || e.keyCode;
 				return key === 8; // Delete key
 			})
+			.do(() => this.canvasActions.pushHistory())
 			.do(() => store.getState().canvas.selected.forEach(targetIn =>
 				this.drawableActions.deleteDrawableAction(targetIn.toArray())))
 			.do(() => {
 				const parentIn = findMostCommonAncestor(store.getState().canvas.selected);
-				this.drawableActions.refreshAllRoutePathIn(parentIn.slice(0, -1).toArray());
+				if (parentIn) { this.drawableActions.refreshAllRoutePathIn(parentIn.slice(0, -1).toArray()); }
 			})
 			.map(() => this.drawableActions.deselectAllAction())
 			.mapTo(doneAction);
