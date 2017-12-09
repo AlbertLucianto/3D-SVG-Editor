@@ -41,7 +41,7 @@ export class AnchorActions {
 	 * Otherwise, it will be just passing to the next operator, and only the last action is dispatched
 	 */
 	@dispatch()
-	updatePosition = (targetIn: Array<number>, idx: number, position: IPosition): IUpdatePositionAction => {
+	setPosition = (targetIn: Array<number>, idx: number, position: IPosition): IUpdatePositionAction => {
 		return {
 			type: AnchorActionType.ANCHOR_UPDATE_POSITION,
 			payload: { targetIn, idx, position },
@@ -59,7 +59,7 @@ export class AnchorActions {
 	}
 
 	@dispatch()
-	updateBezierHandle = (targetIn: Array<number>, idx: number, position: IPosition,
+	setBezierHandle = (targetIn: Array<number>, idx: number, position: IPosition,
 		which: 'start'|'end'|'both' = 'start'): IUpdateBezierHandleAction => {
 			return {
 				type: AnchorActionType.ANCHOR_UPDATE_BEZIER_HANDLE,
