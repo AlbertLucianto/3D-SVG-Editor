@@ -1,4 +1,4 @@
-import { List, Record } from 'immutable';
+import { List, Record, Stack } from 'immutable';
 import { Action } from 'redux';
 import { Drawable } from './drawable/drawable.model';
 
@@ -105,6 +105,7 @@ export interface ICanvasState {
 	 */
 	selected: List<List<number>>;
 	isolate: List<number>;
+	history?: Stack<List<Drawable>>;
 }
 
 const initCanvasState: ICanvasState = {
@@ -112,6 +113,7 @@ const initCanvasState: ICanvasState = {
 	board: new Board(initBoardAttributes),
 	selected: List<List<number>>([]),
 	isolate: List<number>([]),
+	history: Stack.of<List<Drawable>>(List<Drawable>([])),
 };
 
 export class CanvasState extends Record(initCanvasState) implements ICanvasState {
@@ -119,6 +121,7 @@ export class CanvasState extends Record(initCanvasState) implements ICanvasState
 	board: Board;
 	selected: List<List<number>>;
 	isolate: List<number>;
+	history: Stack<List<Drawable>>;
 
 	constructor(initCanvas: ICanvasState) {
 		super(initCanvas);

@@ -12,11 +12,15 @@ export enum CanvasActionType {
 	CANVAS_UPDATE_TOP_LEFT = 'CANVAS_UPDATE_TOP_LEFT',
 	CANVAS_UPDATE_SCALE = 'CANVAS_UPDATE_SCALE',
 	CANVAS_UPDATE_MOVED = 'CANVAS_UPDATE_MOVED',
+	CANVAS_PUSH_HISTORY = 'CANVAS_PUSH_HISTORY',
+	CANVAS_POP_HISTORY = 'CANVAS_POP_HISTORY',
 }
 
 export type IUpdateTopLeftAction = FluxStandardAction<IPosition, undefined>;
 export type IUpdateScaleAction = FluxStandardAction<number, undefined>;
 export type IUpdateMovedAction = IUpdateTopLeftAction;
+export type IPushHistoryAction = FluxStandardAction<undefined, undefined>;
+export type IPopHistoryAction = IPushHistoryAction;
 
 @Injectable()
 export class CanvasActions {
@@ -38,6 +42,20 @@ export class CanvasActions {
 	updateMoved = (position: IPosition): IUpdateMovedAction => ({
 		type: CanvasActionType.CANVAS_UPDATE_MOVED,
 		payload: position,
+		meta: undefined,
+	})
+
+	@dispatch()
+	pushHistory = (): IPushHistoryAction => ({
+		type: CanvasActionType.CANVAS_PUSH_HISTORY,
+		payload: undefined,
+		meta: undefined,
+	})
+
+	@dispatch()
+	popHistory = (): IPopHistoryAction => ({
+		type: CanvasActionType.CANVAS_POP_HISTORY,
+		payload: undefined,
 		meta: undefined,
 	})
 }

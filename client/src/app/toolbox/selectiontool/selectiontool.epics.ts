@@ -4,6 +4,7 @@ import { List } from 'immutable';
 import { createEpicMiddleware, Epic } from 'redux-observable';
 import 'rxjs/add/operator/switchMap';
 
+import { CanvasActions } from '../../canvas/canvas.action';
 import { IPosition } from '../../canvas/canvas.model';
 import { DrawableActions } from '../../canvas/drawable/drawable.action';
 import { Drawable } from '../../canvas/drawable/drawable.model';
@@ -35,7 +36,8 @@ export class SelectiontoolEpics {
 	constructor(
 		private toolboxActions: ToolboxActions,
 		private drawableActions: DrawableActions,
-		private sliderActions: SliderActions) { }
+		private sliderActions: SliderActions,
+		private canvasActions: CanvasActions) { }
 
 	public createEpics = () => {
 		return [
@@ -99,14 +101,18 @@ export class SelectiontoolEpics {
 	}
 
 	private moveDrawableOnDrag = (): Epic<FluxStandardAction<any, undefined>, IAppState> => {
+		const MOVE_STEP_PUSH_HISTORY = 2; // Tolerance for mousedown, usually leads to move cursor a bit
+		let moveSteps = 0;
 		return (action$, store) => action$
 			.ofType(SelectiontoolActionType.SELECTIONTOOL_MOUSE_DOWN_ON_DRAWABLE)
+			.do(() => moveSteps = 0)
 			.switchMap((downAction: IMouseDownOnDrawableAction) => {
 				const { scale } = store.getState().canvas.board;
 				let lastCursorPos = downAction.payload.cursorPosition;
 				return action$
 				.ofType(SelectiontoolActionType.SELECTIONTOOL_MOUSE_MOVE_ON_CANVAS)
 				.do((moveAction: IMouseMoveOnCanvasAction) => {
+					if (moveSteps++ === MOVE_STEP_PUSH_HISTORY) { this.canvasActions.pushHistory(); } // Undoable
 					const drawableMoved = calcDrawableMove(moveAction.payload, lastCursorPos, scale);
 					store.getState().canvas.selected.forEach(targetIn => { // Can be optimised later using GPU.js
 						this.drawableActions.updatePosition(

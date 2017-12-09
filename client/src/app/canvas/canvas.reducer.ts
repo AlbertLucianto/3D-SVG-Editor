@@ -39,6 +39,10 @@ export const canvasReducer: Reducer<CanvasState> = (
 				return canvasCore.updateScale(state, (<IUpdateScaleAction>action).payload);
 			case CanvasActionType.CANVAS_UPDATE_MOVED:
 				return canvasCore.updateMoved(state, (<IUpdateMovedAction>action).payload);
+			case CanvasActionType.CANVAS_PUSH_HISTORY:
+				return canvasCore.pushHistory(state);
+			case CanvasActionType.CANVAS_POP_HISTORY:
+				return canvasCore.popHistory(state);
 		}
 		return state;
 };
