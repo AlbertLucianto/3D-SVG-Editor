@@ -36,21 +36,21 @@ export class PentoolActions {
 	 * dispatched by view components, not epics. If decorated, it will redundantly
 	 * dispatch twice.
 	 */
-	mouseDownOnCanvasAction = (absPoint: IPosition): IMouseDownOnCanvasAction => ({
+	mouseDownOnCanvasAction = (cursorPosition: IPosition): IMouseDownOnCanvasAction => ({
 		type: PentoolActionType.PENTOOL_MOUSE_DOWN_ON_CANVAS,
-		payload: absPoint,
+		payload: cursorPosition,
 		meta: undefined,
 	})
 
-	mouseUpOnCanvasAction = (absPoint: IPosition): IMouseUpOnCanvasAction => ({
+	mouseUpOnCanvasAction = (cursorPosition: IPosition): IMouseUpOnCanvasAction => ({
 		type: PentoolActionType.PENTOOL_MOUSE_UP_ON_CANVAS,
-		payload: absPoint,
+		payload: cursorPosition,
 		meta: undefined,
 	})
 
-	moveCursorOnCanvasAction = (absPoint: IPosition): IMoveCursorOnCanvasAction => ({
+	moveCursorOnCanvasAction = (cursorPosition: IPosition): IMoveCursorOnCanvasAction => ({
 		type: PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS,
-		payload: absPoint,
+		payload: cursorPosition,
 		meta: undefined,
 	})
 

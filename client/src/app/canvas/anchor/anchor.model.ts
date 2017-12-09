@@ -30,13 +30,6 @@ export abstract class BaseAnchor extends Drawable {
 	abstract setPosition: (absPosition: IPosition) => BaseAnchor;
 	abstract toPath: () => string;
 	abstract clone: () => BaseAnchor;
-
-	public toObject() {
-		return <IinitDrawable>({
-			...Drawable.prototype.toObject.call(this),
-			...(<IinitDrawable>this),
-		});
-	}
 }
 
 export interface IHandle { path: string; headTransformStyle: string; }

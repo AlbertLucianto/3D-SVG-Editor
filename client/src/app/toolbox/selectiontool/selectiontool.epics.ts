@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { FluxStandardAction } from 'flux-standard-action';
 import { List } from 'immutable';
 import { createEpicMiddleware, Epic } from 'redux-observable';
+import 'rxjs/add/operator/switchMap';
 
+import { IPosition } from '../../canvas/canvas.model';
 import { DrawableActions } from '../../canvas/drawable/drawable.action';
 import { Drawable } from '../../canvas/drawable/drawable.model';
 import { Path } from '../../canvas/path/path.model';
@@ -11,7 +13,7 @@ import { SliderActions } from '../../color/slider/slider.action';
 import { IAppState } from '../../store/model';
 import { IToolboxGeneralAction, ToolboxActions, ToolboxActionType } from '../toolbox.action';
 import { ToolName } from '../toolbox.model';
-import { SelectiontoolActionType } from './selectiontool.action';
+import { IMouseDownOnDrawableAction, IMouseMoveOnCanvasAction, SelectiontoolActionType } from './selectiontool.action';
 import { createSelectiontool } from './selectiontool.model';
 
 const doneAction = { type: 'DONE', payload: undefined, meta: undefined };
@@ -20,6 +22,13 @@ const findMostCommonAncestor = (routePaths: List<List<number>>) =>
 routePaths.reduce<List<number>>((common, path) =>
 	common.reduce((acc, val, idx) => val === path.get(idx) ? acc.push(val) : acc, List<number>([])),
 	routePaths.get(0));
+
+const calcDrawableMove = (current: IPosition, start: IPosition, scale: number) => {
+	return {
+		x: (current.x - start.x) / scale,
+		y: (current.y - start.y) / scale,
+	};
+};
 
 @Injectable()
 export class SelectiontoolEpics {
@@ -36,6 +45,7 @@ export class SelectiontoolEpics {
 			createEpicMiddleware(this.changeColorPickerOnSelect(ColorAttribute.Fill)),
 			createEpicMiddleware(this.changeColorPickerOnSelect(ColorAttribute.Outline)),
 			createEpicMiddleware(this.deleteObjectWhenPressed()),
+			createEpicMiddleware(this.moveDrawableOnDrag()),
 		];
 	}
 
@@ -49,7 +59,7 @@ export class SelectiontoolEpics {
 	private selectDrawableOnClick = (): Epic<FluxStandardAction<any, undefined>, IAppState> => {
 		return (action$, store) => action$
 			.ofType(SelectiontoolActionType.SELECTIONTOOL_MOUSE_DOWN_ON_DRAWABLE)
-			.map(action => this.drawableActions.selectAction(action.payload))
+			.map(action => this.drawableActions.selectAction(action.payload.targetIn))
 			.mapTo(doneAction); // Preventing double dispatch
 	}
 
@@ -63,8 +73,8 @@ export class SelectiontoolEpics {
 	private changeColorPickerOnSelect = (attribute: ColorAttribute): Epic<FluxStandardAction<any, undefined>, IAppState> => {
 		return (action$, store) => action$
 			.ofType(SelectiontoolActionType.SELECTIONTOOL_MOUSE_DOWN_ON_DRAWABLE)
-			.map(action => {
-				const path = <Path>store.getState().canvas.getIn(Drawable.toRoutePath(action.payload));
+			.map((action: IMouseDownOnDrawableAction) => {
+				const path = <Path>store.getState().canvas.getIn(Drawable.toRoutePath(action.payload.targetIn));
 				if (typeof path !== 'undefined') { return this.sliderActions.changeColor(attribute, path[attribute]); }
 				return doneAction;
 			});
@@ -85,6 +95,32 @@ export class SelectiontoolEpics {
 				this.drawableActions.refreshAllRoutePathIn(parentIn.slice(0, -1).toArray());
 			})
 			.map(() => this.drawableActions.deselectAllAction())
+			.mapTo(doneAction);
+	}
+
+	private moveDrawableOnDrag = (): Epic<FluxStandardAction<any, undefined>, IAppState> => {
+		return (action$, store) => action$
+			.ofType(SelectiontoolActionType.SELECTIONTOOL_MOUSE_DOWN_ON_DRAWABLE)
+			.switchMap((downAction: IMouseDownOnDrawableAction) => {
+				const { scale } = store.getState().canvas.board;
+				let lastCursorPos = downAction.payload.cursorPosition;
+				return action$
+				.ofType(SelectiontoolActionType.SELECTIONTOOL_MOUSE_MOVE_ON_CANVAS)
+				.do((moveAction: IMouseMoveOnCanvasAction) => {
+					const drawableMoved = calcDrawableMove(moveAction.payload, lastCursorPos, scale);
+					store.getState().canvas.selected.forEach(targetIn => { // Can be optimised later using GPU.js
+						this.drawableActions.updatePosition(
+							targetIn.toArray(),
+							(pos: IPosition) => ({
+								x: pos.x + drawableMoved.x,
+								y: pos.y + drawableMoved.y,
+							}));
+					});
+					lastCursorPos = moveAction.payload;
+				})
+				.takeUntil(action$
+					.ofType(SelectiontoolActionType.SELECTIONTOOL_MOUSE_UP_ON_WINDOW));
+			})
 			.mapTo(doneAction);
 	}
 }

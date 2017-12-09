@@ -69,7 +69,7 @@ export class PentoolDrawEpics {
 			if (shouldAdjust) {
 				const boardState = <IBoard>store.getState().canvas.board.toJS();
 				position = calcPositionOnCanvas(<IPosition>action.payload, boardState); }
-			return this.anchorActions.updatePosition(targetIn, idx, position);
+			return this.anchorActions.setPosition(targetIn, idx, position);
 		};
 
 		let lastAnchorType: AnchorType;
@@ -91,15 +91,15 @@ export class PentoolDrawEpics {
 			.switchMap(() => // First create anchor, wait either drag or release, creating curve or line
 				raceStatic<FluxStandardAction<any, undefined>>(
 					action$.ofType(PentoolActionType.PENTOOL_MOUSE_UP_ON_CANVAS).take(1)
-						.map(addAnchorWithStore(store, 'absPoint', true))
+						.map(addAnchorWithStore(store, 'cursorPosition', true))
 						.do(() => lastAnchorType = AnchorType.LineTo),
 					action$.ofType(PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS).take(1) // Take only the first and place an anchor
-						.map(addAnchorWithStore(store, 'absPoint', true, AnchorType.CubicBezierCurve))
+						.map(addAnchorWithStore(store, 'cursorPosition', true, AnchorType.CubicBezierCurve))
 						.do(() => lastAnchorType = AnchorType.CubicBezierCurve)
 						.switchMap(() => action$ // Update anchor position each move
 							.ofType(PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS)
-							.map(updateAnchorPosWithStore(store, 'absPoint', true))
-							.map(action => this.anchorActions.updateBezierHandle(action.payload.targetIn, action.payload.idx, action.payload.position, 'both')),
+							.map(updateAnchorPosWithStore(store, 'cursorPosition', true))
+							.map(action => this.anchorActions.setBezierHandle(action.payload.targetIn, action.payload.idx, action.payload.position, 'both')),
 						)
 						.takeUntil(action$.ofType(PentoolActionType.PENTOOL_MOUSE_UP_ON_CANVAS)),
 				)
@@ -110,10 +110,10 @@ export class PentoolDrawEpics {
 						.ofType(PentoolActionType.PENTOOL_MOUSE_DOWN_ON_CANVAS)
 						.mergeMap(downAction => raceStatic<FluxStandardAction<any, undefined>>(
 							action$.ofType(PentoolActionType.PENTOOL_MOUSE_UP_ON_CANVAS).take(1)
-								.map(addAnchorWithStore(store, 'absPoint', true))
+								.map(addAnchorWithStore(store, 'cursorPosition', true))
 								.do(() => lastAnchorType = AnchorType.LineTo),
 							action$.ofType(PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS).take(1)
-								.map(addAnchorWithStore(store, 'absPoint', true, AnchorType.SmoothCurveTo))
+								.map(addAnchorWithStore(store, 'cursorPosition', true, AnchorType.SmoothCurveTo))
 								.map(action => {
 									if (lastAnchorType === AnchorType.LineTo) {
 										const targetIn = <Array<number>>store.getState().toolbox.selected.others.get('activePathIn').toJS();
@@ -124,8 +124,8 @@ export class PentoolDrawEpics {
 								})
 								.switchMap(() => action$
 									.ofType(PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS)
-									.map(updateAnchorPosWithStore(store, 'absPoint', true))
-									.map(action => this.anchorActions.updateBezierHandle(action.payload.targetIn, action.payload.idx, action.payload.position))
+									.map(updateAnchorPosWithStore(store, 'cursorPosition', true))
+									.map(action => this.anchorActions.setBezierHandle(action.payload.targetIn, action.payload.idx, action.payload.position))
 									.map(action => {
 										const boardState = <IBoard>store.getState().canvas.board.toJS();
 										const downOnCanvas = calcPositionOnCanvas(downAction.payload, boardState);
@@ -133,7 +133,7 @@ export class PentoolDrawEpics {
 											x: (downOnCanvas.x * 2) - action.payload.position.x,
 											y: (downOnCanvas.y * 2) - action.payload.position.y,
 										};
-										return this.anchorActions.updateBezierHandle(action.payload.targetIn, action.payload.idx - 1, position, 'end');
+										return this.anchorActions.setBezierHandle(action.payload.targetIn, action.payload.idx - 1, position, 'end');
 									}),
 								)
 								.do(() => lastAnchorType = AnchorType.SmoothCurveTo)
@@ -144,12 +144,12 @@ export class PentoolDrawEpics {
 						let anchorIdx: number;
 						return action$
 						.ofType(PentoolActionType.PENTOOL_MOUSE_MOVE_ON_CANVAS)
-						.map(updateAnchorPosWithStore(store, 'absPoint', true))
+						.map(updateAnchorPosWithStore(store, 'cursorPosition', true))
 						.do(action => anchorIdx = action.payload.idx)
 						.filter(() =>
 							lastAnchorType === AnchorType.CubicBezierCurve
 							|| lastAnchorType === AnchorType.SmoothCurveTo)
-						.map(action => this.anchorActions.updateBezierHandle(action.payload.targetIn, anchorIdx, action.payload.position, 'end'))
+						.map(action => this.anchorActions.setBezierHandle(action.payload.targetIn, anchorIdx, action.payload.position, 'end'))
 						.takeUntil(action$.ofType(PentoolActionType.PENTOOL_MOUSE_DOWN_ON_CANVAS));
 					}),
 				)
