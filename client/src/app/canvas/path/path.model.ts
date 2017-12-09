@@ -40,6 +40,13 @@ export class Path extends Drawable {
 
 	public setIndex = (idx: number): Path => new Path({ ...this.toObject(), idx });
 
+	public updatePosition = (projection: (curPos: IPosition) => IPosition) => {
+		return new Path({
+			...(<IinitPath>this.toObject()),
+			children: <List<BaseAnchor>>this.children.map(child => child.updatePosition(projection)),
+		});
+	}
+
 	public toPath = (): string =>
 		this.children.reduce((acc, anchor) => `${acc} ${anchor.toPath()}`, '').concat(this.isZipped ? ' z' : '')
 
@@ -85,7 +92,7 @@ export class Path extends Drawable {
 	}
 
 	public updateAnchor = (idx: number, newPosition: IPosition): Path => {
-		const children = this.children.updateIn([idx], (child: BaseAnchor) => child.setPosition(newPosition));
+		const children = this.children.update(idx, (child: BaseAnchor) => child.setPosition(newPosition));
 		return new Path({
 			...(<IinitPath>this.toObject()),
 			children,

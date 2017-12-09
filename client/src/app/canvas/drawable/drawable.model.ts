@@ -1,5 +1,5 @@
 import { List, Record } from 'immutable';
-import { Position } from '../canvas.model';
+import { IPosition, Position } from '../canvas.model';
 
 export enum DrawableType {
 	Anchor = 'DRAWABLE_ANCHOR',
@@ -52,6 +52,7 @@ export abstract class Drawable extends RecordDrawable {
 
 	abstract setRouteParentPath: (parentPath: List<number>) => Drawable;
 	abstract setIndex: (idx: number) => Drawable;
+	abstract updatePosition: (projection: (curPos: IPosition) => IPosition) => Drawable;
 
 	/**
 	 * Converting from Array<number> usually used in `targetIn` to be merged alternately with 'children' string

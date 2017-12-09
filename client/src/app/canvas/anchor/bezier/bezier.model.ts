@@ -27,6 +27,13 @@ export class QuadraticBezierAnchor extends BaseAnchor implements AnchorWithHandl
 
 	public setIndex = (idx: number): QuadraticBezierAnchor => new QuadraticBezierAnchor({ ...this.toObject(), idx });
 
+	public updatePosition = (projection: (curPos: IPosition) => IPosition) => {
+		return new QuadraticBezierAnchor({
+			...this.updateHandle(projection(this.handlePositions.get(0))).toObject(),
+			absPosition: new Position(projection(this.absPosition)),
+		});
+	}
+
 	setPosition = (absPosition: IPosition): QuadraticBezierAnchor => {
 		return new QuadraticBezierAnchor({
 			...(this.toObject()),
@@ -88,6 +95,16 @@ export class CubicBezierAnchor extends BaseAnchor implements AnchorWithHandles {
 	}
 
 	public setIndex = (idx: number): CubicBezierAnchor => new CubicBezierAnchor({ ...this.toObject(), idx });
+
+	public updatePosition = (projection: (curPos: IPosition) => IPosition) => {
+		return new CubicBezierAnchor({
+			...this
+				.updateHandle(projection(this.handlePositions.get(0)), 'start')
+				.updateHandle(projection(this.handlePositions.get(1)), 'end')
+				.toObject(),
+			absPosition: new Position(projection(this.absPosition)),
+		});
+	}
 
 	setPosition = (absPosition: IPosition): CubicBezierAnchor => {
 		return new CubicBezierAnchor({

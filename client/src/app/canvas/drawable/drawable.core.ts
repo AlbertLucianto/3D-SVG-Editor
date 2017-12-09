@@ -1,6 +1,6 @@
 import { List } from 'immutable';
 
-import { CanvasState } from '../canvas.model';
+import { CanvasState, IPosition } from '../canvas.model';
 import { Drawable } from './drawable.model';
 
 export const selectDrawable = (state: CanvasState, targetIn: Array<number>) => {
@@ -24,7 +24,13 @@ export const deleteDrawable = (state: CanvasState, targetIn: Array<number>) => {
 };
 
 export const refreshAllRoutePathIn = (state: CanvasState, parentIn: Array<number>) => {
-	return state.updateIn(Drawable.toRoutePath(parentIn), (children: List<Drawable>) =>
+	return state.updateIn(Drawable.toRoutePath(parentIn, true), (children: List<Drawable>) =>
 		children.map((drawable, idx) => drawable.setRouteParentPath(List(parentIn)).setIndex(idx)),
 	);
+};
+
+export const updatePosition = (state: CanvasState, targetIn: Array<number>, projection: (pos: IPosition) => IPosition) => {
+	return state.updateIn(
+		Drawable.toRoutePath(targetIn),
+		(drawable: Drawable) => drawable.updatePosition(projection));
 };

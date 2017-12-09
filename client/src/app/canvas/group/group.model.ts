@@ -1,5 +1,5 @@
 import { List } from 'immutable';
-import { Position } from '../canvas.model';
+import { IPosition, Position } from '../canvas.model';
 import { Drawable, DrawableType, IinitDrawable } from '../drawable/drawable.model';
 import { Path } from '../path/path.model';
 
@@ -26,6 +26,13 @@ export class Group extends Drawable {
 	}
 
 	public setIndex = (idx: number): Group => new Group({ ...this.toObject(), idx });
+
+	public updatePosition = (projection: (curPos: IPosition) => IPosition) => {
+		return new Group({
+			...(<IinitGroup>this.toObject()),
+			children: <List<Drawable>>this.children.map(child => child.updatePosition(projection)),
+		});
+	}
 
 	/**
 	 * * Problem with immutable by adding methods which returns its own type
