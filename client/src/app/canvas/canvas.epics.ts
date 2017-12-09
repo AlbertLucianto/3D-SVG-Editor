@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FluxStandardAction } from 'flux-standard-action';
 import { createEpicMiddleware, Epic } from 'redux-observable';
-import 'rxjs/add/Observable/fromEvent';
+import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mapTo';
 import { Observable } from 'rxjs/Observable';
