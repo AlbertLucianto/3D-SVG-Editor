@@ -15,13 +15,9 @@ import { List } from 'immutable';
 import { Observable } from 'rxjs/Observable';
 
 import { ActionFromEvent, RegisteredListener } from '../canvas.model';
-import { DrawableBaseComponent } from '../drawable/drawable.base.component';
+import { DrawableBaseComponent, filterListener } from '../drawable/drawable.base.component';
 import { Drawable } from '../drawable/drawable.model';
 import { Path } from './path.model';
-
-const filterListener = (listeners$: Observable<List<RegisteredListener>>) =>
-listeners$.map(listeners => <List<RegisteredListener>>listeners
-	.filter(listener => listener.target === 'path'));
 
 @Component({
 	selector: 'app-path',
@@ -35,7 +31,7 @@ export class PathComponent extends DrawableBaseComponent implements OnInit, DoCh
 	listeners: Array<Function> = [];
 	@ViewChild('path') pathRef: ElementRef;
 	@Input() drawable: Path;
-	@select$(['toolbox', 'selected', 'listeners'], filterListener)	readonly listeners$: Observable<List<RegisteredListener>>;
+	@select$(['toolbox', 'selected', 'listeners'], filterListener('path'))	readonly listeners$: Observable<List<RegisteredListener>>;
 	private old: Path;
 
 	constructor(

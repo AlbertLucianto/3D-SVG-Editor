@@ -17,13 +17,10 @@ import { Observable } from 'rxjs/Observable';
 
 import { BaseAnchor, IHandle } from '../../anchor/anchor.model';
 import { ActionFromEvent, RegisteredListener } from '../../canvas.model';
+import { filterListener } from '../../drawable/drawable.base.component';
 import { Drawable } from '../../drawable/drawable.model';
 import { AnchorBaseComponent } from '../anchor.base.component';
 import { SmoothAnchor } from './smooth.model';
-
-const filterListener = (listeners$: Observable<List<RegisteredListener>>) =>
-listeners$.map(listeners => <List<RegisteredListener>>listeners
-	.filter(listener => listener.target === 'anchor'));
 
 @Component({
 	selector: 'app-anchor-smooth',
@@ -36,7 +33,7 @@ export class SmoothAnchorComponent extends AnchorBaseComponent implements OnInit
 	listeners: Array<Function> = [];
 	@ViewChild('anchor') anchorRef: ElementRef;
 	@Input() anchor: BaseAnchor;
-	@select$(['toolbox', 'selected', 'listeners'], filterListener)	readonly listeners$: Observable<List<RegisteredListener>>;
+	@select$(['toolbox', 'selected', 'listeners'], filterListener('anchor'))	readonly listeners$: Observable<List<RegisteredListener>>;
 	private old: BaseAnchor;
 
 	constructor(
