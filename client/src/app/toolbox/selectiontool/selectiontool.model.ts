@@ -22,14 +22,6 @@ export const createSelectiontool = (): ToolBase => {
 		return actions.mouseMoveOnCanvas({ x: e.clientX, y: e.clientY });
 	};
 
-	const mouseUpOnWindow: ActionFromEvent = (e: MouseEvent) => {
-		return actions.mouseUpOnWindow();
-	};
-
-	const keyDownOnWindow: ActionFromEvent = (e: KeyboardEvent) => {
-		return actions.keyDownOnWindow(e);
-	};
-
 	return new ToolBase({
 		name: ToolName.Selectiontool,
 		listeners: List<RegisteredListener>([
@@ -37,8 +29,6 @@ export const createSelectiontool = (): ToolBase => {
 			{ name: 'mousedown', handler: mouseDownOnDrawable, target: 'group' },
 			{ name: 'mousedown', handler: mouseDownOnCanvas, target: 'canvas' },
 			{ name: 'mousemove', handler: mouseMoveOnCanvas, target: 'canvas' },
-			{ name: 'mouseup', handler: mouseUpOnWindow, target: 'window' },
-			{ name: 'keydown', handler: keyDownOnWindow, target: 'window' },
 		]),
 	});
 };

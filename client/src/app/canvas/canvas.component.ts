@@ -33,13 +33,11 @@ const filterListener = (target: string) => (listeners$: Observable<List<Register
 })
 export class CanvasComponent implements OnInit {
 	listeners: Array<Function> = [];
-	windowListeners: Array<Function> = [];
 	@ViewChild('canvas') canvasRef: ElementRef;
 	@select(['canvas', 'root'])							readonly root$: Observable<List<Drawable>>;
 	@select(['canvas', 'board', 'scale'])		readonly scale$: Observable<number>;
 	@select(['canvas', 'board', 'moved'])		readonly moved$: Observable<IPosition>;
 	@select$(['toolbox', 'selected', 'listeners'], filterListener('canvas'))	readonly listeners$: Observable<List<RegisteredListener>>;
-	@select$(['toolbox', 'selected', 'listeners'], filterListener('window'))	readonly windowListeners$: Observable<List<RegisteredListener>>;
 	private timeoutId: number;
 
 	constructor(
@@ -80,17 +78,6 @@ export class CanvasComponent implements OnInit {
 			this.listeners.forEach((listenerToDestroy: Function) => listenerToDestroy());
 			listeners.forEach(listener => {
 				this.listeners.push(this.rd.listen(this.canvasRef.nativeElement, listener.name,
-					(e: Event) => { this.dispatchRegisteredAction(listener.handler, e); },
-				));
-			});
-		});
-
-		// Window listeners as dictated by toolbox
-		this.windowListeners$.subscribe(listeners => {
-			// clear listener from pevious tool
-			this.windowListeners.forEach((listenerToDestroy: Function) => listenerToDestroy());
-			listeners.forEach(listener => {
-				this.windowListeners.push(this.rd.listen('window', listener.name,
 					(e: Event) => { this.dispatchRegisteredAction(listener.handler, e); },
 				));
 			});

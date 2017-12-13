@@ -84,12 +84,10 @@ export class SelectiontoolEpics {
 			});
 	}
 
-	private deleteObjectWhenPressed = (): Epic<FluxStandardAction<any, undefined>, IAppState> => {
-		return (action$, store) => action$
-			.ofType(SelectiontoolActionType.SELECTIONTOOL_KEY_DOWN_ON_WINDOW) // Later should just remove this action
-			.throttle(() => Observable.fromEvent(document, 'keyup'))
-			.filter(action => {
-				const e: KeyboardEvent = action.payload;
+	private deleteObjectWhenPressed = (): Epic<KeyboardEvent|FluxStandardAction<any, undefined>, IAppState> => {
+		return (action$, store) => Observable.fromEvent<KeyboardEvent>(document, 'keydown')
+			.throttle(() => Observable.fromEvent<KeyboardEvent>(document, 'keyup'))
+			.filter(e => {
 				const key = e.which || e.keyCode;
 				return key === 8; // Delete key
 			})
@@ -128,8 +126,7 @@ export class SelectiontoolEpics {
 					});
 					lastCursorPos = moveAction.payload;
 				})
-				.takeUntil(action$
-					.ofType(SelectiontoolActionType.SELECTIONTOOL_MOUSE_UP_ON_WINDOW));
+				.takeUntil(Observable.fromEvent(document, 'mouseup'));
 			})
 			.mapTo(doneAction);
 	}

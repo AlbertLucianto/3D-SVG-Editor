@@ -45,16 +45,4 @@ export class SelectiontoolActions {
 		payload: cursorPosition,
 		meta: undefined,
 	})
-
-	mouseUpOnWindow = () => ({
-		type: SelectiontoolActionType.SELECTIONTOOL_MOUSE_UP_ON_WINDOW,
-		payload: undefined,
-		meta: undefined,
-	})
-
-	keyDownOnWindow = (e: KeyboardEvent): IKeyDownOnWindowAction => ({
-		type: SelectiontoolActionType.SELECTIONTOOL_KEY_DOWN_ON_WINDOW,
-		payload: e,
-		meta: undefined,
-	})
 }
