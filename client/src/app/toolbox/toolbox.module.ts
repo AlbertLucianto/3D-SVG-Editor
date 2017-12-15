@@ -9,6 +9,9 @@ import { PentoolDrawEpics } from './pentool/epics/pentool.draw.epics';
 import { PentoolEpics } from './pentool/epics/pentool.epics';
 import { PentoolActions } from './pentool/pentool.action';
 import { PentoolComponent } from './pentool/pentool.component';
+import { RotatetoolActions } from './rotatetool/rotatetool.action';
+import { RotatetoolComponent } from './rotatetool/rotatetool.component';
+import { RotatetoolEpics } from './rotatetool/rotatetool.epics';
 import { SelectiontoolActions } from './selectiontool/selectiontool.action';
 import { SelectiontoolComponent } from './selectiontool/selectiontool.component';
 import { SelectiontoolEpics } from './selectiontool/selectiontool.epics';
@@ -30,12 +33,14 @@ import { ToolboxEpics } from './toolbox.epics';
 		ToolDirective,
 		CanvastoolComponent,
 		DirectSelectiontoolComponent,
+		RotatetoolComponent,
 	],
 	entryComponents: [
 		PentoolComponent,
 		SelectiontoolComponent,
 		CanvastoolComponent,
 		DirectSelectiontoolComponent,
+		RotatetoolComponent,
 	],
 	providers: [
 		CanvastoolEpics,
@@ -47,6 +52,8 @@ import { ToolboxEpics } from './toolbox.epics';
 		SelectiontoolEpics,
 		SelectiontoolActions,
 		DirectSelectiontoolEpics,
+		RotatetoolEpics,
+		RotatetoolActions,
 	],
 	exports: [
 		ToolboxComponent,

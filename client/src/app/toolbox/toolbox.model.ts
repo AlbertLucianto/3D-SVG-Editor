@@ -6,6 +6,7 @@ export enum ToolName {
 	Selectiontool = 'SELECTIONTOOL',
 	Canvastool = 'CANVASTOOL',
 	DirectSelectiontool = 'DIRECTSELECTIONTOOL',
+	Rotatetool = 'ROTATETOOL',
 }
 
 export class ToolboxState extends Record({ selected: {} }) {

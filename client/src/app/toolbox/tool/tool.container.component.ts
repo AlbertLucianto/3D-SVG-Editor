@@ -16,6 +16,7 @@ import {
 import { CanvastoolComponent } from '../canvastool/canvastool.component';
 import { DirectSelectiontoolComponent } from '../directtool/directtool.component';
 import { PentoolComponent } from '../pentool/pentool.component';
+import { RotatetoolComponent } from '../rotatetool/rotatetool.component';
 import { SelectiontoolComponent } from '../selectiontool/selectiontool.component';
 import { ToolName } from '../toolbox.model';
 import { IToolContext, ToolBaseComponent } from './tool.base.component';
@@ -26,6 +27,7 @@ const mappings = {
 	[ToolName.Selectiontool]: SelectiontoolComponent,
 	[ToolName.Canvastool]: CanvastoolComponent,
 	[ToolName.DirectSelectiontool]: DirectSelectiontoolComponent,
+	[ToolName.Rotatetool]: RotatetoolComponent,
 };
 
 const getComponentType = (typeName: ToolName) => {

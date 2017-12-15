@@ -21,6 +21,7 @@ export class ToolboxComponent {
 		ToolName.DirectSelectiontool,
 		ToolName.Pentool,
 		ToolName.Canvastool,
+		ToolName.Rotatetool,
 	];
 	@select(['selected', 'name']) readonly selected$: Observable<ToolName>;
 
