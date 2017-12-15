@@ -28,7 +28,8 @@ export const pushHistory = (state: CanvasState): CanvasState => {
 	type HistoryType = Stack<List<Drawable>>;
 	return <CanvasState>state.update('history', (history: HistoryType) => {
 		const head = state.headHistory;
-		const newHistory = new Array(head).reduce<HistoryType>(acc => acc.pop(), history);
+		// .fill(anything) is required to be iterable, otherwise reduce stops rightaway
+		const newHistory = new Array(head).fill(true).reduce<HistoryType>(acc => acc.pop(), history);
 		return newHistory.push(state.root);
 	}).set('headHistory', 0);
 };
