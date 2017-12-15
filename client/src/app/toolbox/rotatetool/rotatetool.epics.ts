@@ -20,7 +20,7 @@ export class RotatetoolEpics {
 	private setRotatetoolTraitOnSelected = (): Epic<IToolboxGeneralAction, IAppState> => {
 		return (action$, store) => action$
 			.ofType(ToolboxActionType.TOOLBOX_SELECT_TOOL)
-			.filter(action => action.payload.toolName === ToolName.Selectiontool)
+			.filter(action => action.payload.toolName === ToolName.Rotatetool)
 			.map(action => this.toolboxActions.setToolTraitAction(createRotatetool()));
 	}
 }
