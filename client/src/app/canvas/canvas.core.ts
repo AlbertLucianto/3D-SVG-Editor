@@ -25,13 +25,22 @@ export const updateMoved = (state: CanvasState, position: IPosition): CanvasStat
 };
 
 export const pushHistory = (state: CanvasState): CanvasState => {
-	return <CanvasState>state.update('history', (history: Stack<List<Drawable>>) => history.push(state.root));
+	type HistoryType = Stack<List<Drawable>>;
+	return <CanvasState>state.update('history', (history: HistoryType) => {
+		const head = state.headHistory;
+		const newHistory = new Array(head).reduce<HistoryType>(acc => acc.pop(), history);
+		return newHistory.push(state.root);
+	}).set('headHistory', 0);
 };
 
-export const popHistory = (state: CanvasState): CanvasState => {
-	const lastRoot = state.history.peek();
-	return lastRoot ? <CanvasState>state
-		.set('root', lastRoot)
-		.update('history', (history: Stack<List<Drawable>>) => history.pop())
-		: state;
+export const undo = (state: CanvasState): CanvasState => {
+	const head = state.headHistory + 1;
+	const prevRoot = state.history.get(head);
+	return !!prevRoot ? <CanvasState>state.set('root', prevRoot).set('headHistory', head) : state;
+};
+
+export const redo = (state: CanvasState): CanvasState => {
+	const head = Math.max(state.headHistory - 1, 0);
+	const prevRoot = state.history.get(head);
+	return !!prevRoot ? <CanvasState>state.set('root', prevRoot).set('headHistory', head) : state;
 };

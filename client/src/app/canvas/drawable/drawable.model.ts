@@ -64,8 +64,8 @@ export abstract class Drawable extends RecordDrawable {
 			[...acc, target, 'children'] : [...acc, target],
 			['root'])
 
-			static genId = (): number => {
-				return Drawable.lastId++;
+	static genId = (): number => {
+		return Drawable.lastId++;
 	}
 
 	static genVersion = (): number => {

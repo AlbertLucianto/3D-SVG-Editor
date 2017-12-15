@@ -106,6 +106,7 @@ export interface ICanvasState {
 	selected: List<List<number>>;
 	isolate: List<number>;
 	history?: Stack<List<Drawable>>;
+	headHistory?: number;
 }
 
 const initCanvasState: ICanvasState = {
@@ -114,6 +115,7 @@ const initCanvasState: ICanvasState = {
 	selected: List<List<number>>([]),
 	isolate: List<number>([]),
 	history: Stack.of<List<Drawable>>(List<Drawable>([])),
+	headHistory: 0,
 };
 
 export class CanvasState extends Record(initCanvasState) implements ICanvasState {
@@ -122,6 +124,7 @@ export class CanvasState extends Record(initCanvasState) implements ICanvasState
 	selected: List<List<number>>;
 	isolate: List<number>;
 	history: Stack<List<Drawable>>;
+	headHistory: number;
 
 	constructor(initCanvas: ICanvasState) {
 		super(initCanvas);

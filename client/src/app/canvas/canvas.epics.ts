@@ -4,12 +4,11 @@ import { createEpicMiddleware, Epic } from 'redux-observable';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mapTo';
-import { Observable } from 'rxjs/Observable';
-import { raceStatic } from 'rxjs/operator/race';
 
 import { IAppState } from '../store/model';
 import { CanvasActions, CanvasActionType } from './canvas.action';
 import { IPosition } from './canvas.model';
+import { KeyboardShortcut } from './utils/keyboard/keyboard.model';
 
 const doneAction = { type: 'DONE', payload: undefined, meta: undefined };
 
@@ -21,6 +20,7 @@ export class CanvasEpics {
 		return [
 			createEpicMiddleware(this.updateTopLeftAfterMoved()),
 			createEpicMiddleware(this.undoStateOnKeyPairPressed()),
+			createEpicMiddleware(this.redoStateOnKeyPairPressed()),
 		];
 	}
 
@@ -41,23 +41,14 @@ export class CanvasEpics {
 	}
 
 	private undoStateOnKeyPairPressed = (): Epic<KeyboardEvent|FluxStandardAction<any, undefined>, IAppState> => {
-		return (action$, store) => Observable.fromEvent<KeyboardEvent>(document, 'keydown')
-			.throttle(() => Observable.fromEvent(document, 'keyup'))
-			.filter((e: KeyboardEvent) => {
-				const key = e.which || e.keyCode;
-				return key === 17 // Windows Ctrl key
-				|| key === 91 || key === 93; // Cmd key
-			})
-			.switchMap(() => raceStatic<KeyboardEvent|FluxStandardAction<any, undefined>>(
-				Observable.fromEvent<KeyboardEvent>(document, 'keydown')
-					.take(1)
-					.filter((e: KeyboardEvent) => {
-						const key = e.which || e.keyCode;
-						return key === 90; // Z key
-					})
-					.map(() => this.canvasActions.popHistory()),
-				Observable.fromEvent<KeyboardEvent>(document, 'keyup'),
-			))
+		return (action$, store) => KeyboardShortcut.create('cmd left+z')
+			.map(() => this.canvasActions.undo())
+			.mapTo(doneAction);
+	}
+
+	private redoStateOnKeyPairPressed = (): Epic<KeyboardEvent|FluxStandardAction<any, undefined>, IAppState> => {
+		return (action$, store) => KeyboardShortcut.create('cmd left+shift+z')
+			.map(() => this.canvasActions.redo())
 			.mapTo(doneAction);
 	}
 }

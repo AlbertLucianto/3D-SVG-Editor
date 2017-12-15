@@ -13,14 +13,16 @@ export enum CanvasActionType {
 	CANVAS_UPDATE_SCALE = 'CANVAS_UPDATE_SCALE',
 	CANVAS_UPDATE_MOVED = 'CANVAS_UPDATE_MOVED',
 	CANVAS_PUSH_HISTORY = 'CANVAS_PUSH_HISTORY',
-	CANVAS_POP_HISTORY = 'CANVAS_POP_HISTORY',
+	CANVAS_UNDO = 'CANVAS_UNDO',
+	CANVAS_REDO = 'CANVAS_REDO',
 }
 
 export type IUpdateTopLeftAction = FluxStandardAction<IPosition, undefined>;
 export type IUpdateScaleAction = FluxStandardAction<number, undefined>;
 export type IUpdateMovedAction = IUpdateTopLeftAction;
 export type IPushHistoryAction = FluxStandardAction<undefined, undefined>;
-export type IPopHistoryAction = IPushHistoryAction;
+export type IUndoAction = IPushHistoryAction;
+export type IRedoAction = IPushHistoryAction;
 
 @Injectable()
 export class CanvasActions {
@@ -53,8 +55,15 @@ export class CanvasActions {
 	})
 
 	@dispatch()
-	popHistory = (): IPopHistoryAction => ({
-		type: CanvasActionType.CANVAS_POP_HISTORY,
+	undo = (): IUndoAction => ({
+		type: CanvasActionType.CANVAS_UNDO,
+		payload: undefined,
+		meta: undefined,
+	})
+
+	@dispatch()
+	redo = (): IRedoAction => ({
+		type: CanvasActionType.CANVAS_REDO,
 		payload: undefined,
 		meta: undefined,
 	})
