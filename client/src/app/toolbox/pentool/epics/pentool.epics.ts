@@ -5,6 +5,7 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mapTo';
 
+import { CanvasActions } from '../../../canvas/canvas.action';
 import { PathActions } from '../../../canvas/path/path.action';
 import { IAppState } from '../../../store/model';
 import { IToolboxGeneralAction, ToolboxActions, ToolboxActionType } from '../../toolbox.action';
@@ -20,6 +21,7 @@ export class PentoolEpics {
 	constructor(
 		private toolboxActions: ToolboxActions,
 		private pathActions: PathActions,
+		private canvasActions: CanvasActions,
 		private drawEpics: PentoolDrawEpics) { }
 
 	public createEpics = () => {
@@ -43,6 +45,7 @@ export class PentoolEpics {
 				action.type === PentoolActionType.PENTOOL_MOUSE_DOWN_ON_ANCHOR
 				&& action.payload.idx === 0)
 			.map(action => this.pathActions.zipPathAction(action.payload.targetIn))
+			.do(() => this.canvasActions.pushHistory())
 			.mapTo(doneAction); // Preventing double dispatch
 	}
 }
