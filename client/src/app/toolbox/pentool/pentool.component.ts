@@ -13,7 +13,7 @@ import { ToolboxActions } from '../toolbox.action';
 	templateUrl: './pentool.component.html',
 	styleUrls: ['./pentool.component.scss'],
 	encapsulation: ViewEncapsulation.Emulated,
-	changeDetection: ChangeDetectionStrategy.Default,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PentoolComponent extends ToolBaseComponent {
 	hotKey = 'p';

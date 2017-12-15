@@ -13,7 +13,7 @@ import { ToolboxActions } from '../toolbox.action';
 	templateUrl: './selectiontool.component.html',
 	styleUrls: ['./selectiontool.component.scss'],
 	encapsulation: ViewEncapsulation.Emulated,
-	changeDetection: ChangeDetectionStrategy.Default,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectiontoolComponent extends ToolBaseComponent {
 	hotKey = 'v';

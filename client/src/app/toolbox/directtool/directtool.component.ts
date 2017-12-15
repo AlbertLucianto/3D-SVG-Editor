@@ -13,7 +13,7 @@ import { ToolboxActions } from '../toolbox.action';
 	templateUrl: './directtool.component.html',
 	styleUrls: ['./directtool.component.scss'],
 	encapsulation: ViewEncapsulation.Emulated,
-	changeDetection: ChangeDetectionStrategy.Default,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DirectSelectiontoolComponent extends ToolBaseComponent {
 	hotKey = 'a';

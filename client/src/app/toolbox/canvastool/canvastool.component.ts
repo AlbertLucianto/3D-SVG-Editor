@@ -13,7 +13,7 @@ import { ToolboxActions } from '../toolbox.action';
 	templateUrl: './canvastool.component.html',
 	styleUrls: ['./canvastool.component.scss'],
 	encapsulation: ViewEncapsulation.Emulated,
-	changeDetection: ChangeDetectionStrategy.Default,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CanvastoolComponent extends ToolBaseComponent {
 	hotKey = 'h';
