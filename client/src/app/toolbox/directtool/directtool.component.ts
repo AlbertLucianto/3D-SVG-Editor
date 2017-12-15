@@ -1,6 +1,5 @@
 import { dispatch } from '@angular-redux/store';
 import {
-	AfterContentChecked,
 	ChangeDetectionStrategy,
 	Component,
 	ViewEncapsulation,
@@ -16,7 +15,7 @@ import { ToolboxActions } from '../toolbox.action';
 	encapsulation: ViewEncapsulation.Emulated,
 	changeDetection: ChangeDetectionStrategy.Default,
 })
-export class DirectSelectiontoolComponent extends ToolBaseComponent implements AfterContentChecked {
+export class DirectSelectiontoolComponent extends ToolBaseComponent {
 	hotKey = 'a';
 
 	constructor(
