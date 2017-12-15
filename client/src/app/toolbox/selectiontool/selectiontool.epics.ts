@@ -91,7 +91,6 @@ export class SelectiontoolEpics {
 				const key = e.which || e.keyCode;
 				return key === 8; // Delete key
 			})
-			.do(() => this.canvasActions.pushHistory())
 			.do(() => store.getState().canvas.selected.forEach(targetIn =>
 				this.drawableActions.deleteDrawableAction(targetIn.toArray())))
 			.do(() => {
@@ -99,6 +98,7 @@ export class SelectiontoolEpics {
 				if (parentIn) { this.drawableActions.refreshAllRoutePathIn(parentIn.slice(0, -1).toArray()); }
 			})
 			.map(() => this.drawableActions.deselectAllAction())
+			.do(() => this.canvasActions.pushHistory())
 			.mapTo(doneAction);
 	}
 
@@ -114,7 +114,7 @@ export class SelectiontoolEpics {
 				return action$
 				.ofType(SelectiontoolActionType.SELECTIONTOOL_MOUSE_MOVE_ON_CANVAS)
 				.do((moveAction: IMouseMoveOnCanvasAction) => {
-					if (moveSteps++ === MOVE_STEP_PUSH_HISTORY) { this.canvasActions.pushHistory(); } // Undoable
+					moveSteps++;
 					const drawableMoved = calcDrawableMove(moveAction.payload, lastCursorPos, scale);
 					store.getState().canvas.selected.forEach(targetIn => { // Can be optimised later using GPU.js
 						this.drawableActions.updatePosition(
@@ -126,7 +126,11 @@ export class SelectiontoolEpics {
 					});
 					lastCursorPos = moveAction.payload;
 				})
-				.takeUntil(Observable.fromEvent(document, 'mouseup'));
+				.takeUntil(Observable
+					.fromEvent(document, 'mouseup')
+					.do(() => {
+						if (moveSteps >= MOVE_STEP_PUSH_HISTORY) { this.canvasActions.pushHistory(); } // Undoable
+					}));
 			})
 			.mapTo(doneAction);
 	}
