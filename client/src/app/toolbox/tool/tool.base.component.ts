@@ -13,6 +13,10 @@ export abstract class ToolBaseComponent implements AfterContentChecked, OnInit {
 	appElementRef: ElementRef;
 	context: IToolContext;
 	abstract hotKey: string;
+	/**
+	 * Store the previous active state for ChangeDetectionStrategy purpose to markForCheck
+	 */
+	protected old: boolean;
 	protected abstract selectTool: (...params: Array<any>) => Action;
 	/**
 	 * Required implementation for handler after hotkey is pressed
@@ -32,6 +36,7 @@ export abstract class ToolBaseComponent implements AfterContentChecked, OnInit {
 	}
 
 	ngAfterContentChecked() {
+		this.old = this.context.isActive;
 		if (this.context.isActive) {
 			this.setCursorAfterSelected();
 		}

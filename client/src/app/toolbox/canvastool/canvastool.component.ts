@@ -1,7 +1,9 @@
 import { dispatch } from '@angular-redux/store';
 import {
 	ChangeDetectionStrategy,
+	ChangeDetectorRef,
 	Component,
+	DoCheck,
 	ViewEncapsulation,
 } from '@angular/core';
 
@@ -15,15 +17,20 @@ import { ToolboxActions } from '../toolbox.action';
 	encapsulation: ViewEncapsulation.Emulated,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CanvastoolComponent extends ToolBaseComponent {
+export class CanvastoolComponent extends ToolBaseComponent implements DoCheck {
 	hotKey = 'h';
 
 	constructor(
-		private toolboxActions: ToolboxActions) { super(); }
+		private toolboxActions: ToolboxActions,
+		private cdRef: ChangeDetectorRef) { super(); }
 
 	setCursorAfterSelected() {
 		this.appElementRef.nativeElement.style.cursor = '-webkit-grab';
 		this.appElementRef.nativeElement.style.cursor = 'grab';
+	}
+
+	ngDoCheck() {
+		if (this.old !== this.context.isActive) { this.cdRef.markForCheck(); }
 	}
 
 	afterHotKeyDown = () => { this.selectTool(); };
